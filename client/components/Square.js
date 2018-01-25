@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export default class Square extends Component {
   static propTypes = {
-    occupied: PropTypes.bool
+    black: PropTypes.bool
   };
 
   render() {
@@ -13,8 +13,7 @@ export default class Square extends Component {
     const stroke = black ? 'white' : 'black';
 
     return (
-      <div
-        style={{
+      <div style={{
           backgroundColor: fill,
           color: stroke,
           width: '100%',
