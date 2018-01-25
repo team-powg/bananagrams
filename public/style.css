@@ -20,3 +20,8 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#horse {
+  width: 20px;
+  height 20px;
+}
