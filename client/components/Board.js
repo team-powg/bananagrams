@@ -8,10 +8,6 @@ import Square from './Square';
 import Tile from './Tile';
 
 export default class Board extends Component {
-  constructor(){
-    super()
-    this.renderSquare = this.renderSquare.bind(this)
-  }
 
   static propTypes = {
     tilePosition: PropTypes.arrayOf(
@@ -47,8 +43,8 @@ export default class Board extends Component {
 
     return (
       <div style={{
-        width: '100%',
-        height: '100%',
+        width: '100vw',
+        height: '100vh',
         display: 'flex',
         flexWrap: 'wrap'
       }}>
