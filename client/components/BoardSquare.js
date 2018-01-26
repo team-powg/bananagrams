@@ -5,7 +5,9 @@ import { ItemTypes } from './DnD/Constants';
 import { DropTarget } from 'react-dnd';
 
 const squareTarget = {
-  drop (props) {
+  drop (props, monitor) {
+
+    // console.log('props in squaretarget', props)
     const {movePiece, position: {x, y} } = props
     movePiece(x, y)
   }
@@ -13,6 +15,7 @@ const squareTarget = {
 
 function collect(connect, monitor) {
   return {
+    item: monitor.getItem(),
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
   };
@@ -36,6 +39,7 @@ class BoardSquare extends Component {
   }
 
   render() {
+    console.log('item', this.props.item)
     const { position: {x, y}, connectDropTarget, isOver } = this.props;
     const black = (x + y) % 2 === 1;
     const dropStyle = {
