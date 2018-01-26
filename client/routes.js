@@ -6,6 +6,7 @@ import history from './history'
 import {Main, Login, Signup, UserHome, Board, Home, Rules} from './components'
 import {me} from './store'
 
+
 /**
  * COMPONENT
  */
@@ -21,9 +22,10 @@ class Routes extends Component {
       <Router history={history}>
         <Main>
           <Switch>
+          <Route exact path="/" component={MainMenu} />
+          <Route exact path="/game" component={Board} />
           <Route exact path="/" component={Home} />
-          <Route exact path="/rules" component={Rules} />
-          <Route exact path="/board" component={Board} />
+          <Route path="/rules" component={Rules}/>
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
@@ -31,12 +33,12 @@ class Routes extends Component {
               isLoggedIn &&
                 <Switch>
                   {/* Routes placed here are only available after logging in */}
-                  <Route path="/home" component={Home} />
+                  <Route path="/home" component={MainMenu} />
                 </Switch>
             }
             {/* Displays our Login component as a fallback */}
             <Route component={Login} />
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={MainMenu} />
           </Switch>
         </Main>
       </Router>
