@@ -4,8 +4,9 @@ import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import tilePositionReducer from './tilepositionreducer'
+import tileLetters from './tileLetters'
 
-const reducer = combineReducers({user, tilePositionReducer})
+const reducer = combineReducers({user, tilePositionReducer, tileLetters})
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
   createLogger({collapsed: true})

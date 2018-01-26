@@ -1,5 +1,5 @@
 export const ItemTypes = {
-  TILE: 'tile'
+  TILE: 'tile',
 };
 
 export const MOVE_TILE = 'MOVE_TILE'
