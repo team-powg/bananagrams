@@ -6,12 +6,6 @@ import history from './history'
 import {Main, Login, Signup, MainMenu, Board} from './components'
 import {me} from './store'
 
-// import {observe} from './components/Game'
-
-// observe(tilePosition =>
-//   <Board  />
-//   )
-
 
 /**
  * COMPONENT
@@ -22,14 +16,14 @@ class Routes extends Component {
   }
 
   render () {
-    const {isLoggedIn, tilePosition} = this.props
+    const {isLoggedIn} = this.props
 
     return (
       <Router history={history}>
         <Main>
           <Switch>
           <Route exact path="/" component={MainMenu} />
-          <Route exact path="/game" component={Board} tilePosition={tilePosition} />
+          <Route exact path="/game" component={Board} />
 
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />

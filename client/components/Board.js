@@ -1,19 +1,22 @@
 // Connected to the redux store, owns Squares and Tiles
 // Knows all the tiles, their values, and their coordinates
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
+import {setTilePosition} from '../store/tilepositionreducer';
 
 export class Board extends Component {
-
   static propTypes = {
-    tilePosition: PropTypes.arrayOf(
-      PropTypes.number.isRequired
-    ).isRequired
+    setTilePosition: PropTypes.func.isRequired
   };
+
+  movePiece = (x, y) => {
+    this.props.setTilePosition(x, y)
+  }
 
   renderSquare(i) {
     const x = i % 8;
@@ -21,8 +24,9 @@ export class Board extends Component {
     return (
       <div key={i}
            style={{ width: '12.5%', height: '12.5%' }}>
-        <BoardSquare x={x}
-                     y={y}>
+        <BoardSquare
+          movePiece={this.movePiece}
+          position={{x, y}}>
           {this.renderPiece(x, y)}
         </BoardSquare>
       </div>
@@ -30,36 +34,9 @@ export class Board extends Component {
   }
 
   renderPiece(x, y) {
-    const [tileX, tileY] = this.props.tilePosition;
+    const {tileX, tileY} = this.props.tilePositionReducer.position;
     if (x === tileX && y === tileY) {
       return <Tile />;
-    }
-  }
-
-  // renderSquare(i) {
-  //   const x = i % 8;
-  //   const y = Math.floor(i / 8);
-  //   const black = (x + y) % 2 === 1;
-
-  //   const [tileX, tileY] = this.props.tilePosition;
-  //   const piece = (x === tileX && y === tileY) ?
-  //     <Tile /> :
-  //     null;
-
-  //   return (
-  //     <div key={i}
-  //       style={{ width: '12.5%', height: '12.5%' }}
-  //       onClick={() => this.handleSquareClick(x, y)}>
-  //       <Square black={black}>
-  //         {piece}
-  //       </Square>
-  //     </div>
-  //   );
-  // }
-
-  handleSquareClick(toX, toY) {
-    if (canMoveTile(toX, toY)) {
-      moveTile(toX, toY);
     }
   }
 
@@ -81,4 +58,10 @@ export class Board extends Component {
     );
   }
 }
-export default DragDropContext(HTML5Backend)(Board);
+
+const mapStateToProps = ({tilePositionReducer}) => ({tilePositionReducer})
+Board = DragDropContext(HTML5Backend)(Board);
+Board = connect(mapStateToProps, {setTilePosition})(Board)
+
+export default Board
+
