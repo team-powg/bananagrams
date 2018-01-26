@@ -12,21 +12,23 @@ export class MainMenu extends Component {
   }
 
   assignNumPlayers(evt) {
+    evt.preventDefault()
     console.log(evt.target.value)
     this.setState({
-      numPlayers: evt.target.value
+      numPlayers: +evt.target.value
     })
-    console.log("CLICKED: ", this.state.numPlayers)
+
   }
   render () {
+    console.log("STATE: ", this.state)
     return (
       <div className="main">
         <h1>Team Name</h1>
         <form className="choose-player">
-          <button className="btn" value="1" onClick={() => this.assignNumPlayers()}>1 Player</button>
-          <button className="btn" value="2" >2 Players</button>
-          <button className="btn" value="3" >3 Players</button>
-          <button className="btn" value="4">4 Players</button>
+          <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
+          <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
+          <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
+          <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
         </form>
         <div>
         <button className="start-btn">CREATE GAME</button>
