@@ -21,6 +21,11 @@ form div {
   display: inline-block;
 }
 
+#yates {
+  /* justify-content: center; */
+  text-align: center
+  /* padding-left: 50px; */
+}
 
 #horse {
   width: 20px;

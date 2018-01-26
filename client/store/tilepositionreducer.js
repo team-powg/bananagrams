@@ -11,7 +11,7 @@ export const setTilePosition = (tileX, tileY) => {
 }
 
 // Reducer
-function tilePositionReducer (state = {position: {tileX: 7, tileY: 7}}, action) {
+function tilePositionReducer (state = {position: {tileX: 3, tileY: 3}}, action) {
   const {position} = action
   switch (action.type) {
     case MOVE_TILE:

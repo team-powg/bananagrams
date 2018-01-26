@@ -8,11 +8,41 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
 import {setTilePosition} from '../store/tilepositionreducer';
+import firebase from '../firebase.js'
+
 
 export class Board extends Component {
+  constructor() {
+    super()
+    this.state = {
+      currentGame: ''
+    }
+
+
+  }
   static propTypes = {
     setTilePosition: PropTypes.func.isRequired
   };
+
+componentDidMount() {
+  var gameRef = firebase.database().ref('games');
+gameRef.on('value', function(snapshot) {
+    snapshot.forEach((childSnapshot) => {
+      var childData = childSnapshot.val();
+      console.log("STATE: ", childData)
+    });
+});
+  // const gameRef = firebase.database().ref('games')
+  // gameRef.on('value', snapshot => {
+  //   console.log(value)
+  // })
+
+  // gameRef.on('value', snapshot => {
+  //   this.setState({currentGame: snapshot.val()})
+  // })
+  // console.log("STATE: ", this.state)
+}
+
 
   movePiece = (x, y) => {
     this.props.setTilePosition(x, y)

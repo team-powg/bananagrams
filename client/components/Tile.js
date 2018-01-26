@@ -20,13 +20,15 @@ class Tile extends Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
     return connectDragSource(
-      <div style={{
+      <div id="yates" style={{
         opacity: isDragging ? 0.5 : 1,
-        fontSize: 25,
+        fontSize: 40,
         fontWeight: 'bold',
-        cursor: 'move'
+        cursor: 'move',
+
       }}>
-        ♘
+        {/* ♘*/}
+        <img src={`/tiles/B.png`} />
       </div>
     );
   }
