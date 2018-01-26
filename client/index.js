@@ -5,7 +5,7 @@ import store from './store'
 import Board from './components/Board'
 
 import { observe } from './components/Game';
-//import Routes from './routes'
+import Routes from './routes'
 
 // establishes socket connection
 import './socket'
@@ -13,7 +13,7 @@ import './socket'
 observe(tilePosition =>
   ReactDOM.render(
     <Provider store={store}>
-      <Board tilePosition={tilePosition} />
+      <Routes />
     </Provider>,
     document.getElementById('app')
   )
