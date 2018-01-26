@@ -1,21 +1,13 @@
 // Connected to the redux store, owns Squares and Tiles
 // Knows all the tiles, their values, and their coordinates
-// import Tiles
-// import Squares
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Square from './Square';
 import Tile from './Tile';
-
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
 
 export class Board extends Component {
-  constructor() {
-    super()
-    this.handleSquareClick = this.handleSquareClick.bind(this);
-  }
 
   static propTypes = {
     tilePosition: PropTypes.arrayOf(
