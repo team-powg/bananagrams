@@ -8,9 +8,8 @@ export default class Square extends Component {
   };
 
   render() {
-    const { black } = this.props;
-    const fill = black ? 'black' : 'white';
-    const stroke = black ? 'white' : 'black';
+    const fill = '#41eef4';
+    const stroke = '#41eef4';
 
     return (
       <div style={{
