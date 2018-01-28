@@ -24,20 +24,16 @@ class Tile extends Component {
     // console.log('tileletters', this.props.tileLetters)
     return connectDragSource(
 
-      <div style={{
-        height: '100%',
-
       <div id="yates" style={{
-
+        height: '100%',
         opacity: isDragging ? 0.5 : 1,
-        fontSize: 40,
+        fontSize: 30,
         fontWeight: 'bold',
         cursor: 'move',
-
       }}>
 
 
-        <img src={`/tiles/B.png`} />
+        <img style={{height: '100%', width: '100%'}} src={`/tiles/P.png`} />
 
       </div>
     );

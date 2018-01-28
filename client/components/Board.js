@@ -53,7 +53,11 @@ gameRef.on('value', function(snapshot) {
     const y = Math.floor(i / 8);
     return (
       <div key={i}
-           style={{ width: '12.5%', height: '12.5%' }}>
+           style={{
+            width: '12.5%',
+            height: '12.5%',
+            border: '1px solid black' //#f4a941
+             }}>
         <BoardSquare
           movePiece={this.movePiece}
           position={{x, y}}>
@@ -78,8 +82,9 @@ gameRef.on('value', function(snapshot) {
 
     return (
       <div style={{
-        width: '100vw',
-        height: '100vh',
+        width: '650px',
+        height: '650px',
+        margin: '0 auto',
         display: 'flex',
         flexWrap: 'wrap'
       }}>
