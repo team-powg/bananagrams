@@ -25,10 +25,12 @@ function collect(connect, monitor) {
 class Tile extends Component {
   render() {
     const { connectDragSource, isDragging, tileLetter } = this.props;
+    // REVIEW: discipline of deleting log messages
     // console.log('tileletters', this.props.tileLetters)
     // console.log('tileletter', tileLetter)
     return connectDragSource(
 
+      // REVIEW: id="yates"?
       <div id="yates" style={{
         height: '100%',
         opacity: isDragging ? 0.5 : 1,

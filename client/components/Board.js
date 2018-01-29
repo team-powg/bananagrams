@@ -12,6 +12,36 @@ import PlayerTilePouch from './PlayerTilePouch';
 import firebase from '../firebase.js'
 
 
+// In some reducer file
+// const database = firebase.database()
+//
+// // dispatch this when you componentDidMount
+// const refCache = {}
+// const listenForGameThunk = (gameId) => (dispatch) => {
+//   const gamePath = `games/${gameId}`
+//   const handler = (snapshot) => {
+//     dispatch(updateGameDataActionCreator(snapshot.val()))
+//   }
+//   const gameRef = database.ref(`games/${gameId}`)
+//   refCache[gamePath] = { handler, gameRef }
+//   gameRef.on('value', handler)
+// }
+//
+// const stopListeningForGame (gameId) => {
+//   const gamePath = `games/${gameId}`
+//   const { handler, gameRef } = refCache[gamePath]
+//   gameRef.off('value', handler)
+//   delete refCache[gamePath]
+// }
+//
+// componentsWillMount () {
+//   this.props.listenForGameThunk(this.props.gameId)
+// }
+// componentWillUnmount () {
+//   this.props.stopListeningForGame(this.props.gameId)
+// }
+
+
 export class Board extends Component {
   constructor() {
     super()
@@ -21,6 +51,8 @@ export class Board extends Component {
       playerOnePot: ''
 
     }
+    // REVIEW: arrow methods
+    //          this is used for `movePiece`
     this.grabTiles = this.grabTiles.bind(this)
   }
 
@@ -32,6 +64,7 @@ export class Board extends Component {
     this.setState({
       currentGame: this.props.match.params.currentGame
     })
+    // REVIEW: cleanup on unmount/thunks to put state indo redux
     var gameRef = firebase.database().ref('games');
     gameRef.on('child_added', (snapshot, prevChildKey) => {
       var newGame = snapshot.val();
@@ -50,15 +83,18 @@ export class Board extends Component {
     const x = i % 8;
     const y = Math.floor(i / 8);
     return (
+      {/* indentation */}
       <div key={i}
            style={{
             width: '12.5%',
             height: '12.5%',
             border: '1px solid black' //#f4a941
              }}>
+          {/* REVIEW: indentation */}
         <BoardSquare
           movePiece={this.movePiece}
           position={{ x, y }}>
+          {/* REVIEW: indentation */}
           {this.renderPiece(x, y)}
         </BoardSquare>
       </div>
@@ -71,6 +107,10 @@ export class Board extends Component {
     if (x === tileX && y === tileY) {
       return <Tile />;
     }
+    // there is an implicit else return undefined here
+    //else {
+    //  return undefined
+    //}
   }
 
   grabTiles(evt) {
@@ -88,6 +128,9 @@ export class Board extends Component {
       pot: beginningPot,
       playerOnePot: playerOnePot
     })
+
+    //this.props.updatePotThunkCreator(this.state.currentGame, this.state.pot)
+
     firebase.database().ref('games').child(this.state.currentGame)
     .update({
       pot: this.state.pot,

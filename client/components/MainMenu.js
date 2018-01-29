@@ -9,8 +9,11 @@ export class MainMenu extends Component {
     this.state = {
       numPlayers: 1,
       currentGame: '',
+      // REVIEW: this data seems important enough to put it somewhere else
+      //         a "constant" somewhere
       pot: 'AAAAAAAAAAAAABBBCCCDDDDDDEEEEEEEEEEEEEEEEEEFFFGGGGHHHIIIIIIIIIIIIJJKKLLLLLMMMNNNNNNNNOOOOOOOOOOOPPPQQRRRRRRRRRSSSSSSTTTTTTTTTUUUUUUVVVWWWXXYYYZZ'
     }
+    // REVIEW: arrow methods
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
