@@ -11,7 +11,7 @@ export const setTilePosition = (tileX, tileY) => {
 }
 
 // Reducer
-function tilePositionReducer (state = {position: {tileX: 3, tileY: 3}}, action) {
+function squareToSquareMove (state = {position: {tileX: null, tileY: null}}, action) {
   const {position} = action
   switch (action.type) {
     case MOVE_TILE:
@@ -24,4 +24,7 @@ function tilePositionReducer (state = {position: {tileX: 3, tileY: 3}}, action) 
   }
 }
 
-export default tilePositionReducer
+export default squareToSquareMove
+
+
+// position: {tileX: 3, tileY: 3}

@@ -6,8 +6,7 @@ import { DropTarget } from 'react-dnd';
 
 const squareTarget = {
   drop (props, monitor) {
-
-    // console.log('props in squaretarget', props)
+    console.log('propsforsquare', props)
     const {movePiece, position: {x, y} } = props
     movePiece(x, y)
   }
@@ -39,8 +38,8 @@ class BoardSquare extends Component {
   }
 
   render() {
-    const { position: {x, y}, connectDropTarget, isOver } = this.props;
-    const black = (x + y) % 2 === 1;
+    const { position: {x, y}, connectDropTarget, isOver, item } = this.props;
+    console.log('item', item)
     const dropStyle = {
       position: 'relative',
       width: '100%',
@@ -49,7 +48,7 @@ class BoardSquare extends Component {
 
     return connectDropTarget(
       <div style={dropStyle}>
-        <Square black={black}>
+        <Square>
           {this.props.children}
         </Square>
         {isOver &&

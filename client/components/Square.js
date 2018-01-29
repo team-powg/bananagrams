@@ -3,11 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class Square extends Component {
-  static propTypes = {
-    black: PropTypes.bool
-  };
-
   render() {
+    console.log('square', this.props.children)
     const fill = '#41eef4';
     const stroke = '#41eef4';
 

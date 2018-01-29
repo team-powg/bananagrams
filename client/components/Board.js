@@ -7,7 +7,8 @@ import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
-import { setTilePosition } from '../store/tilepositionreducer';
+import { setTilePosition } from '../store/squareToSquareMove';
+import PlayerTilePouch from './PlayerTilePouch';
 import firebase from '../firebase.js'
 
 
@@ -65,7 +66,8 @@ export class Board extends Component {
   }
 
   renderPiece(x, y) {
-    const { tileX, tileY } = this.props.tilePositionReducer.position;
+    const { tileX, tileY } = this.props.squareToSquareMove.position;
+    console.log(this.props.squareToSquareMove.position, 'position')
     if (x === tileX && y === tileY) {
       return <Tile />;
     }
@@ -112,17 +114,15 @@ export class Board extends Component {
         <div>
           <button className="btn" id="grab-tiles" onClick={(evt) => this.grabTiles(evt)}>Grab Tiles</button>
         </div>
+        <div >
+          <PlayerTilePouch playerOnePot={this.state.playerOnePot} />
+        </div>
       </div>
-      /*
-      <div >
-        <PlayerTilePouch />
-      </div>
-      */
     );
   }
 }
 
-const mapStateToProps = ({ tilePositionReducer }) => ({ tilePositionReducer })
+const mapStateToProps = ({ squareToSquareMove }) => ({ squareToSquareMove })
 Board = DragDropContext(HTML5Backend)(Board);
 Board = connect(mapStateToProps, { setTilePosition })(Board)
 
