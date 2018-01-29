@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import firebase from '../firebase.js'
-
+import { connect } from 'react-redux';
+import store, { makeGame } from '../store';
+import gameLetter from '../HelperStuff'
 
 export class MainMenu extends Component {
   constructor(props) {
@@ -9,7 +11,7 @@ export class MainMenu extends Component {
     this.state = {
       numPlayers: 1,
       currentGame: '',
-      pot: 'AAAAAAAAAAAAABBBCCCDDDDDDEEEEEEEEEEEEEEEEEEFFFGGGGHHHIIIIIIIIIIIIJJKKLLLLLMMMNNNNNNNNOOOOOOOOOOOPPPQQRRRRRRRRRSSSSSSTTTTTTTTTUUUUUUVVVWWWXXYYYZZ'
+      pot: gameLetter
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -41,12 +43,16 @@ export class MainMenu extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    firebase.database().ref('games').child(this.state.currentGame).set({
-      currentGame: this.state.currentGame,
-      pot: this.state.pot,
-      players: this.totalPlayers(this.state.numPlayers)
-    })
+    const currentGame = this.state.currentGame
+    const pot = this.state.pot
+    const players = this.totalPlayers(this.state.numPlayers)
+    const newPlayerGame = makeGame(currentGame, pot, players)
+    store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
+
+    console.log('currentGAme:', currentGame)
+    console.log('pot:', pot)
+    console.log('newPlayerGAme:', newPlayerGame)
   }
 
   generateGameId() {
@@ -59,6 +65,7 @@ export class MainMenu extends Component {
   }
 
   render() {
+    console.log('pot', this.state.pot)
     return (
       <div className="main">
         <h1>Team Name</h1>
@@ -91,6 +98,6 @@ export class MainMenu extends Component {
   }
 }
 
+const mapDispatchToProps = { makeGame }
 
-
-export default MainMenu
+export default connect(null, mapDispatchToProps)(MainMenu)
