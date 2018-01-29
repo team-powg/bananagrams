@@ -39,7 +39,6 @@ class BoardSquare extends Component {
 
   render() {
     const { position: {x, y}, connectDropTarget, isOver, item } = this.props;
-    console.log('item', item)
     const dropStyle = {
       position: 'relative',
       width: '100%',

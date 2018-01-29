@@ -4,9 +4,9 @@ import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import squareToSquareMove from './squareToSquareMove'
-import tileLetters from './tileLetters'
+import selectedTile from './selectedTile'
 
-const reducer = combineReducers({user, squareToSquareMove, tileLetters})
+const reducer = combineReducers({user, squareToSquareMove, selectedTile})
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
   createLogger({collapsed: true})

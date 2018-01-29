@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ItemTypes } from './DnD/Constants';
 import { DragSource } from 'react-dnd';
-import { getAllLetters } from '../store/tileLetters'
+import { getSelectedTile } from '../store/selectedTile'
 
 const tileSource = {
   beginDrag(props) {
-    console.log('tilesource', props)
     return {
       letter: props.tileLetter,
       tileImage: `/tiles/${props.tileLetter}.png`
@@ -25,8 +24,7 @@ function collect(connect, monitor) {
 class Tile extends Component {
   render() {
     const { connectDragSource, isDragging, tileLetter } = this.props;
-    // console.log('tileletters', this.props.tileLetters)
-    // console.log('tileletter', tileLetter)
+
     return connectDragSource(
 
       <div id="yates" style={{
@@ -50,11 +48,13 @@ Tile.propTypes = {
   isDragging: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = ({tileLetters}) => ({
-tileLetters
-})
+/*****  CONTAINER ******/
+
+const mapStateToProps = ({selectedTile}) => ({
+selectedTile })
+
 Tile = DragSource(ItemTypes.TILE, tileSource, collect)(Tile);
 
-Tile = connect(mapStateToProps, {getAllLetters})(Tile)
+Tile = connect(mapStateToProps, {getSelectedTile})(Tile)
 
 export default Tile

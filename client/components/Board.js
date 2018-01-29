@@ -41,35 +41,33 @@ export class Board extends Component {
     });
   }
 
-
-  movePiece = (x, y) => {
-    this.props.setTilePosition(x, y)
-  }
-
   renderSquare(i) {
     const x = i % 8;
     const y = Math.floor(i / 8);
     return (
       <div key={i}
-           style={{
-            width: '12.5%',
-            height: '12.5%',
-            border: '1px solid black' //#f4a941
-             }}>
-        <BoardSquare
-          movePiece={this.movePiece}
-          position={{ x, y }}>
-          {this.renderPiece(x, y)}
-        </BoardSquare>
+      style={{
+        width: '12.5%',
+        height: '12.5%',
+        border: '1px solid black'
+      }}>
+      <BoardSquare
+      movePiece={this.movePiece}
+      position={{ x, y }}>
+      {this.renderPiece(x, y)}
+      </BoardSquare>
       </div>
     );
   }
 
+  movePiece = (x, y) => {
+    this.props.setTilePosition(x, y)
+  }
+
   renderPiece(x, y) {
     const { tileX, tileY } = this.props.squareToSquareMove.position;
-    console.log(this.props.squareToSquareMove.position, 'position')
     if (x === tileX && y === tileY) {
-      return <Tile />;
+      return <Tile tileLetter={'B'} />;
     }
   }
 
@@ -99,8 +97,6 @@ export class Board extends Component {
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
     }
-    // console.log("POT: ", this.state.pot.length)
-    // console.log("Player One POt: ", this.state.playerOnePot.length)
 
     return (
       <div style={{
