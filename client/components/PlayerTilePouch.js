@@ -22,6 +22,8 @@ export class PlayerTilePouch extends Component {
    const tileSelection = this.props.playerOnePot
    return (
      <div style={{
+       backgroundColor: '#966F33',
+       border: '3px solid black',
        width: '80vw',
        height: '200px',
        margin: '0 auto',
@@ -47,4 +49,4 @@ export class PlayerTilePouch extends Component {
 const mapDispatch = ({selectTile})
 
   // <Tile tileLetter={tile} />
-  export default connect(null, mapDispatch)(PlayerTilePouch)
+export default connect(null, mapDispatch)(PlayerTilePouch)
