@@ -23,7 +23,7 @@ class Routes extends Component {
         <Main>
           <Switch>
           <Route exact path="/" component={MainMenu} />
-          <Route exact path="/game" component={Board} />
+          <Route exact path="/game/:currentGame" component={Board} />
           <Route path="/rules" component={Rules} />
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
