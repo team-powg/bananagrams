@@ -90,6 +90,11 @@ gameRef.on('value', function(snapshot) {
       }}>
         {squares}
       </div>
+      /*
+      <div >
+        <PlayerTilePouch />
+      </div>
+      */
     );
   }
 }
