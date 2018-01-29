@@ -51,25 +51,28 @@ export class Board extends Component {
     const y = Math.floor(i / 8);
     return (
       <div key={i}
-        style={{
-          width: '12.5%',
-          height: '12.5%',
-          border: '1px solid black' //#f4a941
-        }}>
-        <BoardSquare
-          movePiece={this.movePiece}
-          position={{ x, y }}>
-          {this.renderPiece(x, y)}
-        </BoardSquare>
+      style={{
+        width: '12.5%',
+        height: '12.5%',
+        border: '1px solid black'
+      }}>
+      <BoardSquare
+      movePiece={this.movePiece}
+      position={{ x, y }}>
+      {this.renderPiece(x, y)}
+      </BoardSquare>
       </div>
     );
   }
 
+  movePiece = (x, y) => {
+    this.props.setTilePosition(x, y)
+  }
+
   renderPiece(x, y) {
     const { tileX, tileY } = this.props.squareToSquareMove.position;
-    console.log(this.props.squareToSquareMove.position, 'position')
     if (x === tileX && y === tileY) {
-      return <Tile />;
+      return <Tile tileLetter={'B'} />;
     }
   }
 

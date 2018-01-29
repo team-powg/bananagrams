@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 export default class Square extends Component {
   render() {
-    console.log('square', this.props.children)
     const fill = '#41eef4';
     const stroke = '#41eef4';
 
+    console.log('props', this.props)
     return (
       <div style={{
           backgroundColor: fill,
