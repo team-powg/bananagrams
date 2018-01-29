@@ -1,29 +1,34 @@
-import axios from 'axios'
-import history from '../history'
+import firebase from '../firebase'
 
 
+
+/* ACTION TYPES */
 const CREATE_GAME = 'CREATE_GAME'
 
 
-const createGame = players => ({ type: CREATE_GAME, players })
+/* ACTION CREATORS */
+const createGame = game => ({ type: CREATE_GAME, game })
 
 
-export const  = () =>
+/* THUNK CREATORS */
+
+export const makeGame = (currentGame, pot, players) =>
   dispatch =>
-    axios.get('/api/users/orders/')
-      .then(res => res.data)
-      .then(result => {
-        dispatch(createGame(result))
-      })
-      .catch(err => console.log(err))
+  firebase.database().ref('games').child(currentGame).set({
+    currentGame,
+    pot,
+    players
+  })
 
 
 
-export default function (players = 0, action) {
+/* REDUCER */
+
+export default function (game = 0, action) {
   switch (action.type) {
     case CREATE_GAME:
-      return action.players
+      return action.game
     default:
-      return players
+      return game
   }
 }

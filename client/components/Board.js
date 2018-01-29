@@ -80,11 +80,16 @@ export class Board extends Component {
     evt.preventDefault()
     var beginningPot = this.state.pot;
     var playerOnePot = [];
+    console.log("FIRST beginningPot", beginningPot)
     while (playerOnePot.length < 21) {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      console.log('randomLetter:', randomLetter)
       var pos = await beginningPot.indexOf(randomLetter);
+      console.log('pos:', pos)
       playerOnePot.push(randomLetter);
-      beginningPot = beginningPot.substring(0, pos) + beginningPot.substring(pos + 1);
+      console.log("playerOnePot", playerOnePot)
+      beginningPot.splice((randomLetter.id - 1), 1);
+      console.log('pot length', beginningPot.length)
     }
     this.setState({
       playerOnePot: playerOnePot
