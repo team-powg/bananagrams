@@ -50,7 +50,11 @@ export class Board extends Component {
     const y = Math.floor(i / 8);
     return (
       <div key={i}
-        style={{ width: '12.5%', height: '12.5%' }}>
+           style={{
+            width: '12.5%',
+            height: '12.5%',
+            border: '1px solid black' //#f4a941
+             }}>
         <BoardSquare
           movePiece={this.movePiece}
           position={{ x, y }}>
@@ -98,8 +102,9 @@ export class Board extends Component {
 
     return (
       <div style={{
-        width: '100vw',
-        height: '100vh',
+        width: '650px',
+        height: '650px',
+        margin: '0 auto',
         display: 'flex',
         flexWrap: 'wrap'
       }}>
@@ -108,6 +113,11 @@ export class Board extends Component {
           <button className="btn" id="grab-tiles" onClick={(evt) => this.grabTiles(evt)}>Grab Tiles</button>
         </div>
       </div>
+      /*
+      <div >
+        <PlayerTilePouch />
+      </div>
+      */
     );
   }
 }

@@ -26,16 +26,15 @@ class Tile extends Component {
 
       <div id="yates" style={{
         height: '100%',
-
         opacity: isDragging ? 0.5 : 1,
-        fontSize: 40,
+        fontSize: 30,
         fontWeight: 'bold',
         cursor: 'move',
-
       }}>
 
 
-        <img src={`/tiles/A.png`} />
+
+        <img style={{height: '100%', width: '100%'}} src={`/tiles/P.png`} />
 
       </div>
     );
