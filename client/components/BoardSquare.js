@@ -45,7 +45,7 @@ class BoardSquare extends Component {
 
     return connectDropTarget(
       <div style={dropStyle}>
-        <Square >
+        <Square>
           {this.props.children}
         </Square>
         {isOver &&
