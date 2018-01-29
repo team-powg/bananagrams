@@ -7,7 +7,11 @@ import { getAllLetters } from '../store/tileLetters'
 
 const tileSource = {
   beginDrag(props) {
-    return {letter: props.tileLetters };
+    console.log('tilesource', props)
+    return {
+      letter: props.tileLetter,
+      tileImage: `/tiles/${props.tileLetter}.png`
+      };
   }
 };
 
@@ -20,8 +24,9 @@ function collect(connect, monitor) {
 
 class Tile extends Component {
   render() {
-    const { connectDragSource, isDragging } = this.props;
+    const { connectDragSource, isDragging, tileLetter } = this.props;
     // console.log('tileletters', this.props.tileLetters)
+    // console.log('tileletter', tileLetter)
     return connectDragSource(
 
       <div id="yates" style={{
@@ -31,11 +36,10 @@ class Tile extends Component {
         fontWeight: 'bold',
         cursor: 'move',
       }}>
-
-
-
-        <img style={{height: '100%', width: '100%'}} src={`/tiles/P.png`} />
-
+        {
+         tileLetter &&
+         <img src={`/tiles/${tileLetter}.png`} />
+        }
       </div>
     );
   }
