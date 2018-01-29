@@ -7,34 +7,51 @@ export class MainMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numPlayers: ''
+      numPlayers: 1,
+      currentGame: '',
+      pot: 'AAAAAAAAAAAAABBBCCCDDDDDDEEEEEEEEEEEEEEEEEEFFFGGGGHHHIIIIIIIIIIIIJJKKLLLLLMMMNNNNNNNNOOOOOOOOOOOPPPQQRRRRRRRRRSSSSSSTTTTTTTTTUUUUUUVVVWWWXXYYYZZ'
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.totalPlayers = this.totalPlayers.bind(this)
   }
 
   assignNumPlayers(evt) {
     evt.preventDefault()
-    console.log(evt.target.value)
     this.setState({
       numPlayers: +evt.target.value
     })
-
   }
 
+  totalPlayers(num) {
+    var players = []
+    var start = 1
+    while (start <= num) {
+      players.push("player " + start)
+      start ++
+    }
+    return players
+  }
 
+  componentDidMount() {
+    this.setState({
+      currentGame: this.generateGameId()
+    })
+  }
 
-  handleSubmit() {
-    const gameId = { currentGame: this.generateGameId() }
-    const gameRef = firebase.database().ref('games')
-    gameRef.push(gameId)
-    this.props.history.push('/game')
+  handleSubmit(evt) {
+    evt.preventDefault()
+    firebase.database().ref('games').child(this.state.currentGame).set({
+      currentGame: this.state.currentGame,
+      pot: this.state.pot,
+      players: this.totalPlayers(this.state.numPlayers)
+    })
+    this.props.history.push(`/game/${this.state.currentGame}`)
   }
 
   generateGameId() {
     var text = ''
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-
     for (var i = 0; i < 5; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length))
     }
@@ -42,7 +59,6 @@ export class MainMenu extends Component {
   }
 
   render() {
-    // console.log("STATE: ", this.state)
     return (
       <div className="main">
         <h1>Team Name</h1>

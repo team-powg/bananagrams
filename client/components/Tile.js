@@ -33,6 +33,7 @@ class Tile extends Component {
       }}>
 
 
+
         <img style={{height: '100%', width: '100%'}} src={`/tiles/P.png`} />
 
       </div>

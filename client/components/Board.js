@@ -7,7 +7,7 @@ import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
-import {setTilePosition} from '../store/tilepositionreducer';
+import { setTilePosition } from '../store/tilepositionreducer';
 import firebase from '../firebase.js'
 
 
@@ -15,33 +15,30 @@ export class Board extends Component {
   constructor() {
     super()
     this.state = {
-      currentGame: ''
+      currentGame: '',
+      pot: '',
+      playerOnePot: ''
+
     }
-
-
+    this.grabTiles = this.grabTiles.bind(this)
   }
+
   static propTypes = {
     setTilePosition: PropTypes.func.isRequired
   };
 
-componentDidMount() {
-  var gameRef = firebase.database().ref('games');
-gameRef.on('value', function(snapshot) {
-    snapshot.forEach((childSnapshot) => {
-      var childData = childSnapshot.val();
-      console.log("STATE: ", childData)
+  componentDidMount() {
+    this.setState({
+      currentGame: this.props.match.params.currentGame
+    })
+    var gameRef = firebase.database().ref('games');
+    gameRef.on('child_added', (snapshot, prevChildKey) => {
+      var newGame = snapshot.val();
+      return this.setState({
+        pot: newGame.pot
+      })
     });
-});
-  // const gameRef = firebase.database().ref('games')
-  // gameRef.on('value', snapshot => {
-  //   console.log(value)
-  // })
-
-  // gameRef.on('value', snapshot => {
-  //   this.setState({currentGame: snapshot.val()})
-  // })
-  // console.log("STATE: ", this.state)
-}
+  }
 
 
   movePiece = (x, y) => {
@@ -60,7 +57,7 @@ gameRef.on('value', function(snapshot) {
              }}>
         <BoardSquare
           movePiece={this.movePiece}
-          position={{x, y}}>
+          position={{ x, y }}>
           {this.renderPiece(x, y)}
         </BoardSquare>
       </div>
@@ -68,10 +65,31 @@ gameRef.on('value', function(snapshot) {
   }
 
   renderPiece(x, y) {
-    const {tileX, tileY} = this.props.tilePositionReducer.position;
+    const { tileX, tileY } = this.props.tilePositionReducer.position;
     if (x === tileX && y === tileY) {
       return <Tile />;
     }
+  }
+
+  grabTiles(evt) {
+    evt.preventDefault()
+    var beginningPot = this.state.pot;
+    var playerOnePot = [];
+    while (playerOnePot.length < 21) {
+      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = beginningPot.indexOf(randomLetter);
+      playerOnePot.push(randomLetter);
+      beginningPot = beginningPot.substring(0, pos) + beginningPot.substring(pos + 1);
+    }
+    // console.log(beginningPot.length)
+    this.setState({
+      pot: beginningPot,
+      playerOnePot: playerOnePot
+    })
+    firebase.database().ref('games').child(this.state.currentGame)
+    .update({
+      pot: this.state.pot,
+    })
   }
 
   render() {
@@ -79,6 +97,8 @@ gameRef.on('value', function(snapshot) {
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
     }
+    console.log("POT: ", this.state.pot.length)
+    console.log("Player One POt: ", this.state.playerOnePot.length)
 
     return (
       <div style={{
@@ -89,6 +109,9 @@ gameRef.on('value', function(snapshot) {
         flexWrap: 'wrap'
       }}>
         {squares}
+        <div>
+          <button className="btn" id="grab-tiles" onClick={(evt) => this.grabTiles(evt)}>Grab Tiles</button>
+        </div>
       </div>
       /*
       <div >
@@ -99,9 +122,9 @@ gameRef.on('value', function(snapshot) {
   }
 }
 
-const mapStateToProps = ({tilePositionReducer}) => ({tilePositionReducer})
+const mapStateToProps = ({ tilePositionReducer }) => ({ tilePositionReducer })
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, {setTilePosition})(Board)
+Board = connect(mapStateToProps, { setTilePosition })(Board)
 
 export default Board
 
