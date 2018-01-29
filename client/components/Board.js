@@ -97,8 +97,8 @@ export class Board extends Component {
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
     }
-    console.log("POT: ", this.state.pot.length)
-    console.log("Player One POt: ", this.state.playerOnePot.length)
+    // console.log("POT: ", this.state.pot.length)
+    // console.log("Player One POt: ", this.state.playerOnePot.length)
 
     return (
       <div style={{
