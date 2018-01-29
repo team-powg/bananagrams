@@ -60,6 +60,20 @@ form div {
   outline: none
 }
 
+#grab-tiles:disabled {
+  -webkit-border-radius: 3;
+  -moz-border-radius: 3;
+  border-radius: 3px;
+  font-family: Arial;
+  font-weight: bold;
+  color: black;
+  font-size: 20px;
+  background: #504949;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  outline: none
+}
+
 .btn {
   -webkit-border-radius: 28;
   -moz-border-radius: 28;

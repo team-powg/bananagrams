@@ -18,10 +18,11 @@ export class Board extends Component {
     this.state = {
       currentGame: '',
       pot: '',
-      playerOnePot: ''
-
+      playerOnePot: '',
+      disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
+    // this.className = this.className.bind(this)
   }
 
   static propTypes = {
@@ -32,13 +33,17 @@ export class Board extends Component {
     this.setState({
       currentGame: this.props.match.params.currentGame
     })
-    var gameRef = firebase.database().ref('games');
-    gameRef.on('child_added', (snapshot, prevChildKey) => {
+    var gameRef = firebase.database().ref(`games/${this.props.match.params.currentGame}` );
+    gameRef.on('value', (snapshot) => {
       var newGame = snapshot.val();
       return this.setState({
         pot: newGame.pot
       })
     });
+  }
+
+  movePiece = (x, y) => {
+    this.props.setTilePosition(x, y)
   }
 
   renderSquare(i) {
@@ -71,28 +76,34 @@ export class Board extends Component {
     }
   }
 
-  grabTiles(evt) {
+  async grabTiles(evt) {
     evt.preventDefault()
     var beginningPot = this.state.pot;
     var playerOnePot = [];
     while (playerOnePot.length < 21) {
-      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      var pos = beginningPot.indexOf(randomLetter);
+      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = await beginningPot.indexOf(randomLetter);
       playerOnePot.push(randomLetter);
       beginningPot = beginningPot.substring(0, pos) + beginningPot.substring(pos + 1);
     }
-    // console.log(beginningPot.length)
     this.setState({
-      pot: beginningPot,
       playerOnePot: playerOnePot
     })
-    firebase.database().ref('games').child(this.state.currentGame)
-    .update({
-      pot: this.state.pot,
-    })
+
+    await firebase.database().ref('games').child(this.state.currentGame)
+      .update({
+        pot: beginningPot,
+      })
+      console.log(" NEW POT: ", this.state.pot.length)
+      console.log(" Player Pot: ", this.state.playerOnePot.length)
+     this.setState({
+       disabled: true
+     })
   }
 
   render() {
+    // console.log("STATE: ", this.state.pot.length)
+    // console.log("Player pot: ", this.state.playerOnePot.length)
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
@@ -108,7 +119,7 @@ export class Board extends Component {
       }}>
         {squares}
         <div>
-          <button className="btn" id="grab-tiles" onClick={(evt) => this.grabTiles(evt)}>Grab Tiles</button>
+          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
         </div>
         <div >
           <PlayerTilePouch playerOnePot={this.state.playerOnePot} />
