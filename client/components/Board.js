@@ -54,16 +54,10 @@ gameRef.on('value', function(snapshot) {
     return (
       <div key={i}
            style={{
-<<<<<<< Updated upstream
             width: '12.5%',
             height: '12.5%',
             border: '1px solid black' //#f4a941
              }}>
-=======
-              width: '12.5%',
-              height: '12.5%'
-              }}>
->>>>>>> Stashed changes
         <BoardSquare
           movePiece={this.movePiece}
           position={{x, y}}>
