@@ -1,28 +1,30 @@
-import axios from 'axios'
-import history from '../history'
 import firebase from '../firebase'
 
 
-const CREATE_POT = 'CREATE_POT'
+/* ACTION TYPES */
+const GENERATE_POT = 'GENERATE_POT'
+
+/* ACTION CREATORS */
+const generatePot = pot => ({ type: GENERATE_POT, pot })
+
+/* THUNK CREATOR */
+export const updatePot = (gameId, beginningPot) =>
+  dispatch => {
+    firebase.database().ref('games').child(gameId)
+    .update({
+      pot: beginningPot,
+    })
+    dispatch(generatePot( beginningPot ))
+  }
 
 
-const createGame = pot => ({ type: CREATE_POT, pot })
-
-
-export const = () =>
-  dispatch =>
-    axios.get('/api/users/orders/')
-      .then(res => res.data)
-      .then(result => {
-        dispatch(createGame(result))
-      })
-      .catch(err => console.log(err))
 
 
 
+/* REDUCER */
 export default function (pot = [], action) {
   switch (action.type) {
-    case CREATE_POT:
+    case GENERATE_POT:
       return action.pot
     default:
       return pot

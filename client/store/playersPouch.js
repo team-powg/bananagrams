@@ -33,7 +33,11 @@ function playersPouch(state = [], action) {
     case REMOVE_TILE_FROM_POUCH:
       return state.filter(tile => tile.id !== action.id);
     case ADD_TILE_TO_POUCH:
-      return [action.tile, ...state]
+      if (action.tile !== {}) {
+        return [action.tile, ...state]
+      } else {
+        return null
+      }
     default:
       return state;
   }

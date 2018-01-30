@@ -50,7 +50,9 @@ export class MainMenu extends Component {
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
+
   }
+
 
   generateGameId() {
     var text = ''
@@ -63,7 +65,7 @@ export class MainMenu extends Component {
 
   render() {
     var x = challenge('probably');
-    // console.log(x)
+
     return (
       <div className="main">
         <h1>Team Name</h1>

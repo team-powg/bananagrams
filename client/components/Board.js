@@ -11,13 +11,13 @@ import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
 import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
-
+import store, { updatePot } from '../store';
 
 export class Board extends Component {
   constructor() {
     super()
     this.state = {
-      currentGame: '',
+      gameId: '',
       pot: '',
       disabled: false
     }
@@ -30,15 +30,9 @@ export class Board extends Component {
 
   componentDidMount() {
     this.setState({
-      currentGame: this.props.match.params.currentGame
+      gameId: this.props.match.params.currentGame,
+      pot: this.props.createGame.pot
     })
-    var gameRef = firebase.database().ref(`games/${this.props.match.params.currentGame}` );
-    gameRef.on('value', (snapshot) => {
-      var newGame = snapshot.val();
-      return this.setState({
-        pot: newGame.pot
-      })
-    });
   }
 
   movePiece = (x, y) => {
@@ -83,10 +77,22 @@ export class Board extends Component {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
       var pos = await beginningPot.indexOf(randomLetter);
       playerOnePot.push(randomLetter);
+
       beginningPot.splice((randomLetter.id - 1), 1);
+
+      beginningPot.splice(pos, 1);
+
     }
 
+    this.setState({
+      playerOnePot: playerOnePot,
+      pot: beginningPot,
+      disabled: true
+    })
+    let generateNewPot = updatePot(this.state.gameId, beginningPot)
+    store.dispatch(generateNewPot)
     this.props.getAllPlayerTiles(playerOnePot)
+
 
     await firebase.database().ref('games').child(this.state.currentGame)
       .update({
@@ -95,6 +101,7 @@ export class Board extends Component {
      this.setState({
        disabled: true
      })
+
   }
 
   render() {
@@ -123,9 +130,14 @@ export class Board extends Component {
   }
 }
 
-const mapStateToProps = ({ squareToSquareMove }) => ({ squareToSquareMove })
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles }
+
+const mapStateToProps = ({ squareToSquareMove, createGame }) => ({ squareToSquareMove,
+createGame })
+
+
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, { setTilePosition, getAllPlayerTiles })(Board)
+Board = connect(mapStateToProps, mapDispatchToProps)(Board)
 
 export default Board
 

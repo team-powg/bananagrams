@@ -23,7 +23,7 @@ function selectedTileReducer (state = {}, action) {
     case SELECT_TILE:
       return action.tile
     case REMOVE_SELECTED_TILE:
-      return {};
+      return null;
     default:
       return state
   }
