@@ -5,6 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
+
 import createGame from './createGame';
 
 const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile})
