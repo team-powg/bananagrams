@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
-// import tileLetters from './tileLetters'
+
 import createGame from './createGame';
 
 const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile})
@@ -19,3 +19,4 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './createGame'
+
