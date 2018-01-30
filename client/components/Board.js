@@ -53,6 +53,8 @@ export class Board extends Component {
       movePiece={this.movePiece}
       position={{ x, y }}>
       {this.renderPiece(x, y)}
+      {this['coords']=[x, y]}
+      {this['bool']=''}
       </BoardSquare>
       </div>
     );
@@ -72,6 +74,7 @@ export class Board extends Component {
   async grabTiles(evt) {
     evt.preventDefault()
     var beginningPot = this.state.pot;
+    console.log('beginning pot', this.state)
     var playerOnePot = [];
     while (playerOnePot.length < 21) {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
