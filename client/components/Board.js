@@ -9,6 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
 import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
+import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
 import store, { updatePot } from '../store';
 
@@ -18,7 +19,6 @@ export class Board extends Component {
     this.state = {
       gameId: '',
       pot: '',
-      playerOnePot: '',
       disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
@@ -79,6 +79,7 @@ export class Board extends Component {
       playerOnePot.push(randomLetter);
       beginningPot.splice(pos, 1);
     }
+
     this.setState({
       playerOnePot: playerOnePot,
       pot: beginningPot,
@@ -86,6 +87,7 @@ export class Board extends Component {
     })
     let generateNewPot = updatePot(this.state.gameId, beginningPot)
     store.dispatch(generateNewPot)
+    this.props.getAllPlayerTiles(playerOnePot)
   }
 
   render() {
@@ -114,7 +116,7 @@ export class Board extends Component {
   }
 }
 
-const mapDispatchToProps = { updatePot, setTilePosition }
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles }
 
 const mapStateToProps = ({ squareToSquareMove, createGame }) => ({ squareToSquareMove,
 createGame })

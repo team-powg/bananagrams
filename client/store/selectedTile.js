@@ -5,7 +5,6 @@ const REMOVE_SELECTED_TILE = 'REMOVE_SELECTED_TILE';
 
 // Action
 export const selectTile = (tile) => {
-  console.log('reduxtile', tile)
   return {
     type: SELECT_TILE,
     tile
@@ -14,18 +13,17 @@ export const selectTile = (tile) => {
 
 export const removeSelectedTile = () => {
   return {
-    type: REMOVE_SELECTED_TILE,
-    payload: ''
+    type: REMOVE_SELECTED_TILE
   }
 }
 
 // Reducer
-function selectedTileReducer (state = '', action) {
+function selectedTileReducer (state = {}, action) {
   switch (action.type) {
     case SELECT_TILE:
       return action.tile
     case REMOVE_SELECTED_TILE:
-      return action.payload;
+      return null;
     default:
       return state
   }

@@ -5,48 +5,45 @@ import axios from "axios";
 /**
  * COMPONENT
  */
-export class WordChallenge extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      words: []
-    };
+// export function WordChallenge (wordsArr) {
 
-    this.challenge = this.challenge.bind(this);
-  }
 
-  challenge() {
+// }
+
+export function challenge(word) {
+  const merriamUrl = "https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + word + "?key=aa4c94ba-b93e-4f26-ba4a-764254860248";
+
     //Merriam api
     axios
       .get(
-        "https://www.dictionaryapi.com/api/v1/references/collegiate/xml/hypocrite?key=[aa4c94ba-b93e-4f26-ba4a-764254860248]"
+        merriamUrl
       )
       .then(res => {
         console.log(res.data);
       });
   }
 
-  render() {
-    console.log("THIS STATE: ", this.state);
+//   render() {
+//     console.log("THIS STATE: ", this.state);
 
-    return <div>Hello</div>;
-  }
-}
+//     return <div>Hello</div>;
+//   }
+// }
 
 /**
  * CONTAINER
  */
-const mapState = state => {
-  return {
-    words
-  };
-};
+// const mapState = state => {
+//   return {
+//     words
+//   };
+// };
 
-const mapStateToProps = ({ challenge }) => ({ challenge })
-WordChallenge = connect(mapStateToProps)(WordChallenge)
+// const mapStateToProps = ({ challenge }) => ({ challenge })
+// WordChallenge = connect(mapStateToProps)(WordChallenge)
 
 
-export default WordChallenge
+// export default WordChallenge
 
 /*
 import React, { Component } from "react";

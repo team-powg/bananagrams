@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase.js'
 import { connect } from 'react-redux';
 import store, { makeGame } from '../store';
-import gameLetter from '../HelperStuff'
+import gameLetter from '../HelperStuff';
+import {challenge} from './WordChallenge';
 
 export class MainMenu extends Component {
   constructor(props) {
@@ -50,7 +51,6 @@ export class MainMenu extends Component {
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
 
-  }
 
   generateGameId() {
     var text = ''
@@ -62,7 +62,7 @@ export class MainMenu extends Component {
   }
 
   render() {
-    console.log('this.props in mainmenu', this.props)
+    var x = challenge('probably');
     return (
       <div className="main">
         <h1>Team Name</h1>
