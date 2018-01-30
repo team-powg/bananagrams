@@ -8,18 +8,21 @@ import { removeTileFromPouch, addTileToPouch } from "../store/playersPouch";
 export class Square extends Component {
   constructor(props) {
     super();
-    this.state = { tile: {} };
+    this.state = { tile: null };
     this.clickHandler = this.clickHandler.bind(this);
   }
 
   clickHandler() {
-    if (!this.state.tile) {
+    console.log('selected tile in square', this.props.selectedTile)
+    if (!this.state.tile && this.props.selectedTile) {
       this.setState({ tile: this.props.selectedTile });
       this.props.removeTileFromPouch(this.props.selectedTile.id);
       this.props.removeSelectedTile();
-    } else {
+    } else if (this.state.tile) {
       this.props.addTileToPouch(this.state.tile);
-      this.setState({ tile: {} });
+      this.setState({ tile: null });
+    } else {
+      console.log('weird things are happening')
     }
   }
 
