@@ -50,9 +50,6 @@ export class MainMenu extends Component {
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
 
-    console.log('currentGAme:', currentGame)
-    console.log('pot:', pot)
-    console.log('newPlayerGAme:', newPlayerGame)
   }
 
   generateGameId() {
@@ -65,7 +62,7 @@ export class MainMenu extends Component {
   }
 
   render() {
-    console.log('pot', this.state.pot)
+    console.log('this.props in mainmenu', this.props)
     return (
       <div className="main">
         <h1>Team Name</h1>
