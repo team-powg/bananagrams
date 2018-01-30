@@ -11,17 +11,17 @@ import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
 import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
-import store, { updatePot } from '../store';
+import store, { updatePot, peelTile, addTileToPouch } from '../store';
 
 export class Board extends Component {
   constructor() {
     super()
     this.state = {
       gameId: '',
-      pot: '',
       disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
+    this.peel = this.peel.bind(this)
   }
 
   static propTypes = {
@@ -31,7 +31,6 @@ export class Board extends Component {
   componentDidMount() {
     this.setState({
       gameId: this.props.match.params.currentGame,
-      pot: this.props.createGame.pot
     })
   }
 
@@ -71,21 +70,31 @@ export class Board extends Component {
     }
   }
 
+  async peel(evt) {
+    evt.preventDefault()
+    var beginningPot = this.props.createGame.pot;
+    var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+    var pos = await beginningPot.indexOf(randomLetter);
+    beginningPot.splice(pos, 1)
+    this.props.addTileToPouch(randomLetter)
+    let getPeeledPot = peelTile(this.state.gameId, beginningPot)
+    store.dispatch(getPeeledPot)
+    //leave room to assign peeled tiles to opponents
+    //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
+
+  }
+
   async grabTiles(evt) {
     evt.preventDefault()
-    var beginningPot = this.state.pot;
-    console.log('beginning pot', this.state)
+    var beginningPot = this.props.createGame.pot;
     var playerOnePot = [];
     while (playerOnePot.length < 21) {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
       var pos = await beginningPot.indexOf(randomLetter);
       playerOnePot.push(randomLetter);
-      beginningPot.splice(pos, 1);
+      beginningPot.splice(pos, 1)
     }
-
     this.setState({
-      playerOnePot: playerOnePot,
-      pot: beginningPot,
       disabled: true
     })
     let generateNewPot = updatePot(this.state.gameId, beginningPot)
@@ -94,6 +103,8 @@ export class Board extends Component {
   }
 
   render() {
+    console.log("PROPS: ", this.props.createGame)
+    // console.log("STATE POT: ", this.state.pot)
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
@@ -110,6 +121,7 @@ export class Board extends Component {
         {squares}
         <div>
           <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
+          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
         </div>
         <div >
           <PlayerTilePouch playerOnePot={this.state.playerOnePot} />
@@ -119,7 +131,7 @@ export class Board extends Component {
   }
 }
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles }
+const mapDispatchToProps = { updatePot, peelTile, setTilePosition, getAllPlayerTiles, addTileToPouch }
 
 const mapStateToProps = ({ squareToSquareMove, createGame }) => ({ squareToSquareMove,
 createGame })
