@@ -1,7 +1,6 @@
 // Component that holds and displays all of the unused tiles assigned to player
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import Tile from './Tile';
 import {selectTile} from '../store/selectedTile';
 
 
@@ -12,14 +11,15 @@ export class PlayerTilePouch extends Component {
   }
 
   clickHandler(evt) {
-    const tileLetter = evt;
-    console.log('tileletter', tileLetter)
-    this.props.selectTile(evt);
+    const tileObj = evt;
+    console.log('tileletter', tileObj)
+    this.props.selectTile(tileObj);
   }
 
  render() {
    //all tiles from player pot
    const tileSelection = this.props.playerOnePot
+   console.log('tileselection', tileSelection)
    return (
      <div style={{
        backgroundColor: '#966F33',
@@ -31,10 +31,10 @@ export class PlayerTilePouch extends Component {
        flexWrap: 'wrap'
      }}>
      {
-       tileSelection && tileSelection.map((tile, i) => {
+       tileSelection && tileSelection.map(tile => {
          return (
-           <div key={i} >
-             <img style={{ width: '40px'}} src={`/tiles/${tile}.png`} onClick={() => this.clickHandler(tile)} />
+           <div key={tile.id} >
+             <img style={{ width: '40px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
            </div>
            )
          })
@@ -48,5 +48,4 @@ export class PlayerTilePouch extends Component {
 
 const mapDispatch = ({selectTile})
 
-  // <Tile tileLetter={tile} />
 export default connect(null, mapDispatch)(PlayerTilePouch)
