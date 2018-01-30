@@ -52,6 +52,8 @@ export class Board extends Component {
       movePiece={this.movePiece}
       position={{ x, y }}>
       {this.renderPiece(x, y)}
+      {this['coords']=[x, y]}
+      {this['bool']=''}
       </BoardSquare>
       </div>
     );
