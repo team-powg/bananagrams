@@ -50,7 +50,7 @@ export class MainMenu extends Component {
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
-
+  }
 
   generateGameId() {
     var text = ''
