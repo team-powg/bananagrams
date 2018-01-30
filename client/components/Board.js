@@ -9,6 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
 import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
+import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
 
 
@@ -18,11 +19,9 @@ export class Board extends Component {
     this.state = {
       currentGame: '',
       pot: '',
-      playerOnePot: [],
       disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
-    // this.className = this.className.bind(this)
   }
 
   static propTypes = {
@@ -92,16 +91,14 @@ export class Board extends Component {
       beginningPot.splice((randomLetter.id - 1), 1);
       console.log('pot length', beginningPot.length)
     }
-    this.setState({
-      playerOnePot: playerOnePot
-    })
+
+    this.props.getAllPlayerTiles(playerOnePot)
 
     await firebase.database().ref('games').child(this.state.currentGame)
       .update({
         pot: beginningPot,
       })
       console.log(" NEW POT: ", this.state.pot.length)
-      console.log(" Player Pot: ", this.state.playerOnePot.length)
      this.setState({
        disabled: true
      })
@@ -137,7 +134,7 @@ export class Board extends Component {
 
 const mapStateToProps = ({ squareToSquareMove }) => ({ squareToSquareMove })
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, { setTilePosition })(Board)
+Board = connect(mapStateToProps, { setTilePosition, getAllPlayerTiles })(Board)
 
 export default Board
 

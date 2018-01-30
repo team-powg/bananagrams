@@ -6,8 +6,9 @@ import user from './user'
 import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
 import createGame from './createGame';
+import playersPouch from './playersPouch';
 
-const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile})
+const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch})
 
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
