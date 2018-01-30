@@ -12,14 +12,12 @@ export class PlayerTilePouch extends Component {
 
   clickHandler(evt) {
     const tileObj = evt;
-    console.log('tileletter', tileObj)
     this.props.selectTile(tileObj);
   }
 
  render() {
    //all tiles from player pot
    const tileSelection = this.props.playersPouch
-   console.log('playersPOUCH', this.props.playersPouch)
    return (
      <div style={{
        backgroundColor: '#966F33',

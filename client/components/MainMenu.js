@@ -50,10 +50,6 @@ export class MainMenu extends Component {
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
-
-    // console.log('currentGAme:', currentGame)
-    // console.log('pot:', pot)
-    // console.log('newPlayerGAme:', newPlayerGame)
   }
 
   generateGameId() {
@@ -67,8 +63,7 @@ export class MainMenu extends Component {
 
   render() {
     var x = challenge('probably');
-    console.log(x)
-    // console.log('pot', this.state.pot)
+    // console.log(x)
     return (
       <div className="main">
         <h1>Team Name</h1>

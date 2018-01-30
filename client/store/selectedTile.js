@@ -5,7 +5,6 @@ const REMOVE_SELECTED_TILE = 'REMOVE_SELECTED_TILE';
 
 // Action
 export const selectTile = (tile) => {
-  console.log('reduxtile', tile)
   return {
     type: SELECT_TILE,
     tile

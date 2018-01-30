@@ -79,17 +79,11 @@ export class Board extends Component {
     evt.preventDefault()
     var beginningPot = this.state.pot;
     var playerOnePot = [];
-    console.log("FIRST beginningPot", beginningPot)
     while (playerOnePot.length < 21) {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      console.log('randomLetter:', randomLetter)
       var pos = await beginningPot.indexOf(randomLetter);
-      console.log('pos:', pos)
       playerOnePot.push(randomLetter);
-      console.log("playerOnePot", playerOnePot.length)
-      console.log("RANDOM LETTER ID: ", randomLetter.id)
       beginningPot.splice((randomLetter.id - 1), 1);
-      console.log('pot length', beginningPot.length)
     }
 
     this.props.getAllPlayerTiles(playerOnePot)
@@ -98,15 +92,12 @@ export class Board extends Component {
       .update({
         pot: beginningPot,
       })
-      console.log(" NEW POT: ", this.state.pot.length)
      this.setState({
        disabled: true
      })
   }
 
   render() {
-    // console.log("STATE: ", this.state.pot.length)
-    // console.log("Player pot: ", this.state.playerOnePot.length)
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
