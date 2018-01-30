@@ -18,8 +18,8 @@ export class PlayerTilePouch extends Component {
 
  render() {
    //all tiles from player pot
-   const tileSelection = this.props.playerOnePot
-   console.log('tileselection', tileSelection)
+   const tileSelection = this.props.playersPouch
+   console.log('playersPOUCH', this.props.playersPouch)
    return (
      <div style={{
        backgroundColor: '#966F33',
@@ -47,5 +47,6 @@ export class PlayerTilePouch extends Component {
 /***** CONTAINER ****/
 
 const mapDispatch = ({selectTile})
+const mapState = ({playersPouch}) => ({playersPouch})
 
-export default connect(null, mapDispatch)(PlayerTilePouch)
+export default connect(mapState, mapDispatch)(PlayerTilePouch)
