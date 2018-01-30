@@ -54,7 +54,7 @@ export class Board extends Component {
       style={{
         width: '12.5%',
         height: '12.5%',
-        border: '1px dotted rgba(0, 0, 0, .2)'
+        border: '1px solid black'
       }}>
       <BoardSquare
       movePiece={this.movePiece}
@@ -87,7 +87,8 @@ export class Board extends Component {
       var pos = await beginningPot.indexOf(randomLetter);
       console.log('pos:', pos)
       playerOnePot.push(randomLetter);
-      console.log("playerOnePot", playerOnePot)
+      console.log("playerOnePot", playerOnePot.length)
+      console.log("RANDOM LETTER ID: ", randomLetter.id)
       beginningPot.splice((randomLetter.id - 1), 1);
       console.log('pot length', beginningPot.length)
     }
@@ -116,7 +117,6 @@ export class Board extends Component {
 
     return (
       <div style={{
-        backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
         width: '650px',
         height: '650px',
         margin: '0 auto',
