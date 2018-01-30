@@ -7,12 +7,12 @@ import { removeSelectedTile } from "../store/selectedTile";
 export class Square extends Component {
   constructor(props) {
     super();
-    this.state = { letter: '' };
+    this.state = { img: '' };
     this.clickHandler = this.clickHandler.bind(this);
   }
 
   clickHandler() {
-    this.setState({ letter: this.props.selectedTile });
+    this.setState({ img: this.props.selectedTile.img });
     this.props.removeSelectedTile()
   }
 
@@ -23,13 +23,12 @@ export class Square extends Component {
         style={{
           width: "100%",
           height: "100%"
-        }}
-      >
+        }}>
         <div>
           {
-            this.state.letter && <img
+            this.state.img && <img
               style={{ width: "100%" }}
-              src={`/tiles/${this.state.letter}.png`}
+              src={this.state.img}
             />
           }
         </div>

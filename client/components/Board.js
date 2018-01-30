@@ -18,7 +18,7 @@ export class Board extends Component {
     this.state = {
       currentGame: '',
       pot: '',
-      playerOnePot: '',
+      playerOnePot: [],
       disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
