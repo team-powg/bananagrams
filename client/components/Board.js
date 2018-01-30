@@ -11,13 +11,13 @@ import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
 import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
-
+import store, { updatePot } from '../store';
 
 export class Board extends Component {
   constructor() {
     super()
     this.state = {
-      currentGame: '',
+      gameId: '',
       pot: '',
       disabled: false
     }
@@ -30,15 +30,9 @@ export class Board extends Component {
 
   componentDidMount() {
     this.setState({
-      currentGame: this.props.match.params.currentGame
+      gameId: this.props.match.params.currentGame,
+      pot: this.props.createGame.pot
     })
-    var gameRef = firebase.database().ref(`games/${this.props.match.params.currentGame}` );
-    gameRef.on('value', (snapshot) => {
-      var newGame = snapshot.val();
-      return this.setState({
-        pot: newGame.pot
-      })
-    });
   }
 
   movePiece = (x, y) => {
@@ -79,34 +73,24 @@ export class Board extends Component {
     evt.preventDefault()
     var beginningPot = this.state.pot;
     var playerOnePot = [];
-    console.log("FIRST beginningPot", beginningPot)
     while (playerOnePot.length < 21) {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      console.log('randomLetter:', randomLetter)
       var pos = await beginningPot.indexOf(randomLetter);
-      console.log('pos:', pos)
       playerOnePot.push(randomLetter);
-      console.log("playerOnePot", playerOnePot.length)
-      console.log("RANDOM LETTER ID: ", randomLetter.id)
-      beginningPot.splice((randomLetter.id - 1), 1);
-      console.log('pot length', beginningPot.length)
+      beginningPot.splice(pos, 1);
     }
 
+    this.setState({
+      playerOnePot: playerOnePot,
+      pot: beginningPot,
+      disabled: true
+    })
+    let generateNewPot = updatePot(this.state.gameId, beginningPot)
+    store.dispatch(generateNewPot)
     this.props.getAllPlayerTiles(playerOnePot)
-
-    await firebase.database().ref('games').child(this.state.currentGame)
-      .update({
-        pot: beginningPot,
-      })
-      console.log(" NEW POT: ", this.state.pot.length)
-     this.setState({
-       disabled: true
-     })
   }
 
   render() {
-    // console.log("STATE: ", this.state.pot.length)
-    // console.log("Player pot: ", this.state.playerOnePot.length)
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
@@ -132,9 +116,14 @@ export class Board extends Component {
   }
 }
 
-const mapStateToProps = ({ squareToSquareMove }) => ({ squareToSquareMove })
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles }
+
+const mapStateToProps = ({ squareToSquareMove, createGame }) => ({ squareToSquareMove,
+createGame })
+
+
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, { setTilePosition, getAllPlayerTiles })(Board)
+Board = connect(mapStateToProps, mapDispatchToProps)(Board)
 
 export default Board
 
