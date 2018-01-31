@@ -127,8 +127,6 @@ export class Board extends Component {
   }
 
   render() {
-    console.log("PROPS: ", this.props)
-    // console.log("STATE POT: ", this.state.pot)
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
@@ -146,8 +144,8 @@ export class Board extends Component {
         {squares}
         <div>
           <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
-          <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} /*disabled={this.state.disabled === true}*/>Dump Tile</button>
-          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
+          <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
+          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
         </div>
         <div >
           <PlayerTilePouch playerOnePot={this.state.playerOnePot} />
@@ -160,8 +158,7 @@ export class Board extends Component {
 
 const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch }
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile  }) => ({ squareToSquareMove,
-createGame, selectedTile, dumpTile })
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch })
 
 
 Board = DragDropContext(HTML5Backend)(Board);
