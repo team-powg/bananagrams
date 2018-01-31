@@ -9,6 +9,7 @@ import createPot from './createInitialPot'
 import createGame from './createGame';
 import playersPouch from './playersPouch';
 
+
 const reducer = combineReducers({user, squareToSquareMove, createGame, createPot, selectedTile, playersPouch})
 
 const middleware = composeWithDevTools(applyMiddleware(
@@ -21,3 +22,5 @@ export default store
 export * from './user'
 export * from './createGame'
 export * from './createInitialPot'
+export * from './playersPouch'
+

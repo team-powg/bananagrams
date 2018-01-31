@@ -47,7 +47,7 @@ form div {
   background-color: rgb(221, 221, 3)
 }
 
-#grab-tiles {
+#grab-tiles, #dump-tiles, #peel-tiles {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;
@@ -61,7 +61,7 @@ form div {
   outline: none
 }
 
-#grab-tiles:disabled {
+#grab-tiles:disabled, #peel-tiles:disabled {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;
@@ -74,6 +74,8 @@ form div {
   text-decoration: none;
   outline: none
 }
+
+
 
 .btn {
   -webkit-border-radius: 28;

@@ -50,10 +50,10 @@ export class MainMenu extends Component {
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
-
+  }
 
   generateGameId() {
-    var text = ''
+    var text = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     for (var i = 0; i < 5; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length))
@@ -93,7 +93,8 @@ export class MainMenu extends Component {
       </div>
     )
   }
-}
+  }
+
 
 const mapDispatchToProps = { makeGame }
 
