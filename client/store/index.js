@@ -5,12 +5,13 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
-import createPot from './createInitialPot'
+// import updateGlobalPot from './updateGlobalPot'
 import createGame from './createGame';
 import playersPouch from './playersPouch';
 
 
-const reducer = combineReducers({user, squareToSquareMove, createGame, createPot, selectedTile, playersPouch})
+
+const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch})
 
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
@@ -21,6 +22,6 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './createGame'
-export * from './createInitialPot'
+// export * from './createInitialPot'
 export * from './playersPouch'
 
