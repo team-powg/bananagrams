@@ -40,13 +40,13 @@ export class Board extends Component {
   }
 
   renderSquare(i) {
-    const x = i % 8;
-    const y = Math.floor(i / 8);
+    const x = i % 10;
+    const y = Math.floor(i / 10);
     return (
       <div key={i}
       style={{
-        width: '12.5%',
-        height: '12.5%',
+        width: '50px',
+        height: '50px',
         border: '1px dotted rgba(0, 0, 0, .2)'
       }}>
       <BoardSquare
@@ -67,7 +67,7 @@ export class Board extends Component {
   renderPiece(x, y) {
     const { tileX, tileY } = this.props.squareToSquareMove.position;
     if (x === tileX && y === tileY) {
-      return <Tile tileLetter={'B'} />;
+      return <Tile />;
     }
   }
 
@@ -82,7 +82,6 @@ export class Board extends Component {
     store.dispatch(getPeeledPot)
     //leave room to assign peeled tiles to opponents
     //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
-
   }
 
   async grabTiles(evt) {
@@ -114,7 +113,6 @@ export class Board extends Component {
     var count = 0
     while (count < 3) {
       var randomLetter = await currentPot[Math.floor(Math.random() * currentPot.length)];
-      console.log('random letter', randomLetter)
 
       var pos = await currentPot.indexOf(randomLetter);
       this.props.addTileToPouch(randomLetter)
@@ -128,20 +126,21 @@ export class Board extends Component {
 
   render() {
     const squares = [];
-    for (let i = 0; i < 64; i++) {
+    for (let i = 0; i < 100; i++) {
       squares.push(this.renderSquare(i));
     }
-    console.log('selected tile', this.props.selectedTile)
     return (
+      <div>
       <div style={{
         backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
-        width: '650px',
-        height: '650px',
+        width: '500px',
+        height: '500px',
         margin: '0 auto',
         display: 'flex',
         flexWrap: 'wrap'
       }}>
         {squares}
+        </div>
         <div>
           <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
           <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>

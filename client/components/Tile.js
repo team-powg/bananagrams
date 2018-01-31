@@ -36,7 +36,7 @@ class Tile extends Component {
       }}>
         {
          tileLetter &&
-         <img src={`/tiles/${tileLetter}.png`} />
+         <img style={{height: '50px'}}src={`/tiles/${tileLetter}.png`} />
         }
       </div>
     );
