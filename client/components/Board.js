@@ -10,8 +10,7 @@ import BoardSquare from './BoardSquare';
 import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
 import { getAllPlayerTiles } from '../store/playersPouch'
-import firebase from '../firebase.js'
-import store, { updatePot, addTileToPouch, peelTile} from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch } from '../store';
 
 
 export class Board extends Component {
@@ -108,9 +107,9 @@ export class Board extends Component {
   async dumpTiles(evt){
     evt.preventDefault()
     var selectedTile = this.props.selectedTile;
-    var currentPot = this.props.createGame.pot
-    currentPot.push(selectedTile)
-
+    var currentPot = this.props.createGame.pot;
+    currentPot.push(selectedTile);
+    this.props.removeTileFromPouch(selectedTile.id)
     console.log('current pot', currentPot)
     var count = 0
     while (count < 3) {
@@ -123,12 +122,12 @@ export class Board extends Component {
       count++;
     }
 
-    let swapTile = dumpTile(this.states.gameId, currentPot)
+    let swapTile = dumpTile(this.state.gameId, currentPot)
     store.dispatch(swapTile)
   }
 
   render() {
-    console.log("PROPS: ", this.props.createGame)
+    console.log("PROPS: ", this.props)
     // console.log("STATE POT: ", this.state.pot)
     const squares = [];
     for (let i = 0; i < 64; i++) {
@@ -159,9 +158,9 @@ export class Board extends Component {
 }
 
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile }
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch }
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, dumpTile }) => ({ squareToSquareMove,
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile  }) => ({ squareToSquareMove,
 createGame, selectedTile, dumpTile })
 
 

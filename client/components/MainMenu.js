@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import firebase from '../firebase.js'
 import { connect } from 'react-redux';
 import store, { makeGame } from '../store';
 import gameLetter from '../HelperStuff';
@@ -17,6 +16,7 @@ export class MainMenu extends Component {
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
+    this.generateGameId = this.generateGameId.bind(this)
   }
 
   assignNumPlayers(evt) {
@@ -41,7 +41,6 @@ export class MainMenu extends Component {
       currentGame: this.generateGameId()
     })
   }
-
   handleSubmit(evt) {
     evt.preventDefault()
     const currentGame = this.state.currentGame
@@ -58,9 +57,12 @@ export class MainMenu extends Component {
     for (var i = 0; i < 5; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length))
     }
+    return text
+  }
 
     render() {
       var x = challenge('probably');
+      console.log("STATE: ", this.state.currentGame)
       return (
         <div className="main">
           <h1>Team Name</h1>
