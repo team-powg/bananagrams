@@ -11,7 +11,8 @@ import { setTilePosition } from '../store/squareToSquareMove';
 import PlayerTilePouch from './PlayerTilePouch';
 import { getAllPlayerTiles } from '../store/playersPouch'
 import firebase from '../firebase.js'
-import store, { updatePot, peelTile, addTileToPouch } from '../store';
+import store, { updatePot, addTileToPouch, peelTile} from '../store';
+
 
 export class Board extends Component {
   constructor() {
@@ -21,6 +22,7 @@ export class Board extends Component {
       disabled: false
     }
     this.grabTiles = this.grabTiles.bind(this)
+    this.dumpTiles = this.dumpTiles.bind(this)
     this.peel = this.peel.bind(this)
   }
 
@@ -102,6 +104,29 @@ export class Board extends Component {
     this.props.getAllPlayerTiles(playerOnePot)
   }
 
+
+  async dumpTiles(evt){
+    evt.preventDefault()
+    var selectedTile = this.props.selectedTile;
+    var currentPot = this.props.createGame.pot
+    currentPot.push(selectedTile)
+
+    console.log('current pot', currentPot)
+    var count = 0
+    while (count < 3) {
+      var randomLetter = await currentPot[Math.floor(Math.random() * currentPot.length)];
+      console.log('random letter', randomLetter)
+
+      var pos = await currentPot.indexOf(randomLetter);
+      this.props.addTileToPouch(randomLetter)
+      currentPot.splice(pos, 1);
+      count++;
+    }
+
+    let swapTile = dumpTile(this.states.gameId, currentPot)
+    store.dispatch(swapTile)
+  }
+
   render() {
     console.log("PROPS: ", this.props.createGame)
     // console.log("STATE POT: ", this.state.pot)
@@ -109,7 +134,7 @@ export class Board extends Component {
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
     }
-
+    console.log('selected tile', this.props.selectedTile)
     return (
       <div style={{
         backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
@@ -122,6 +147,7 @@ export class Board extends Component {
         {squares}
         <div>
           <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
+          <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} /*disabled={this.state.disabled === true}*/>Dump Tile</button>
           <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
         </div>
         <div >
@@ -132,10 +158,11 @@ export class Board extends Component {
   }
 }
 
-const mapDispatchToProps = { updatePot, peelTile, setTilePosition, getAllPlayerTiles, addTileToPouch }
 
-const mapStateToProps = ({ squareToSquareMove, createGame }) => ({ squareToSquareMove,
-createGame })
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile }
+
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, dumpTile }) => ({ squareToSquareMove,
+createGame, selectedTile, dumpTile })
 
 
 Board = DragDropContext(HTML5Backend)(Board);

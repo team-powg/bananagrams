@@ -52,13 +52,11 @@ export class MainMenu extends Component {
     this.props.history.push(`/game/${this.state.currentGame}`)
   }
 
-    generateGameId() {
-      var text = ''
-      var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      for (var i = 0; i < 5; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length))
-      }
-      return text
+  generateGameId() {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    for (var i = 0; i < 5; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
     }
 
     render() {
@@ -94,6 +92,7 @@ export class MainMenu extends Component {
       )
     }
   }
+
 
 
 const mapDispatchToProps = { makeGame }
