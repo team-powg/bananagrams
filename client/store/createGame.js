@@ -22,6 +22,9 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
       pot,
       players
     })
+    console.log('   CURRENT GAME   ', currentGame)
+    firebase.database().ref(`games/${currentGame}`).child('BRUCE')
+      .set('BRUCE')
     dispatch(createGame({ currentGame, pot, players }))
   }
 
