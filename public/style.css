@@ -57,6 +57,10 @@ form div {
   outline: none
 }
 
+#peel-tiles {
+background:#EFC31A!important;
+}
+
 #grab-tiles:disabled, #peel-tiles:disabled {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;

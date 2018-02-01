@@ -12,6 +12,7 @@ import { getAllPlayerTiles } from '../store/playersPouch';
 import PlayerTilePouch from './PlayerTilePouch';
 import GlobalPotDisplay from './GlobalPotDisplay';
 import OtherPlayersBoardView from './OtherPlayersBoardView';
+import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
 import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch } from '../store';
@@ -159,6 +160,7 @@ export class Board extends Component {
           </div>
           <div>
           <PlayerTilePouch />
+          <SelectedTileDisplay />
             <div style={{
               display: 'flex',
               flexDirection: 'row',

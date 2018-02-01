@@ -24,7 +24,7 @@ export class PlayerTilePouch extends Component {
        backgroundColor: '#966F33',
        border: '1px solid black',
        width: '300px',
-       height: '74vh',
+       height: '60vh',
        margin: '0px 0px 5px 5px'
      }}>
       <div style={{
