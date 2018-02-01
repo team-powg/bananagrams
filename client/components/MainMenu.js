@@ -10,8 +10,9 @@ export class MainMenu extends Component {
     super(props)
     this.state = {
       numPlayers: 1,
-      currentGame: '',
-      pot: gameLetter
+      currentGameId: '',
+      pot: gameLetter,
+      bool: true
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -22,7 +23,8 @@ export class MainMenu extends Component {
   assignNumPlayers(evt) {
     evt.preventDefault()
     this.setState({
-      numPlayers: +evt.target.value
+      numPlayers: +evt.target.value,
+      bool: false
     })
   }
 
@@ -36,65 +38,64 @@ export class MainMenu extends Component {
     return players
   }
 
-  componentDidMount() {
-    this.setState({
-      currentGame: this.generateGameId()
-    })
+  generateGameId() {
+    let gameIdStr = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    for (let i = 0; i < 5; i++) {
+      gameIdStr += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    this.setState({ currentGameId: gameIdStr })
   }
-  handleSubmit(evt) {
+
+ async handleSubmit(evt) {
     evt.preventDefault()
-    const currentGame = this.state.currentGame
+    await this.generateGameId()
+    console.log('current', this.state.currentGameId)
+    const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
-    this.props.history.push(`/game/${this.state.currentGame}`)
+    this.props.history.push({
+      pathname: `/waitingroom/${this.state.currentGameId}`,
+      state: { players: this.state.numPlayers, gameId: this.state.currentGameId}
+    })
   }
 
-  generateGameId() {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    for (var i = 0; i < 5; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    return text
-  }
-
-    render() {
-      var x = challenge('probably');
-      console.log("STATE: ", this.state.currentGame)
-      return (
-        <div className="main">
-          <h1>Team Name</h1>
-          <form className="choose-player">
-            <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
-            <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
-            <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
-            <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
-          </form>
-          <form onSubmit={this.handleSubmit} id="new-game">
-            <div>
-              <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
-            </div>
-          </form>
+  render() {
+    let x = challenge('probably');
+    return (
+      <div className="main">
+        <h1>Team Name</h1>
+        <form className="choose-player">
+          <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
+          <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
+          <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
+          <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
+        </form>
+        <form onSubmit={this.handleSubmit} id="new-game">
           <div>
-            <form>
-
-              <input type="text" name="name" placeholder="Enter game id" />
-              <button>Join Game</button>
-
-            </form>
+            <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
           </div>
-          <div>
-            <Link to='/rules'>
-              <button>Rules</button>
-            </Link>
-          </div>
+        </form>
+        <div>
+          <form>
+            <input type="text" name="name" placeholder="Enter game id" />
+            <button>Join Game</button>
+          </form>
         </div>
+        <div>
+          <Link to='/rules'>
+            <button>Rules</button>
+          </Link>
+        </div>
+      </div>
       )
     }
   }
 
+
+/********* CONTAINER *********/
 
 
 const mapDispatchToProps = { makeGame }
