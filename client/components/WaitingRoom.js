@@ -11,23 +11,21 @@ class WaitingRoom extends Component {
   }
 
 startGameHandler() {
-  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {
-    // const { players, currentGame } = this.props.createGame
-    // console.log(players)
-    console.log("PROP CREATE GAME: ", this.props.createGame)
+    const { players, currentGame } = this.props.createGame
     return (
       <div style={{
         textAlign: 'center'
       }}>
         <span>Waiting Room</span>
         <div>
-          Waiting on  amount of players...
+          Waiting on {players.length} amount of players...
         </div>
         <div>
-          Game Id is ...
+          Game Id is {currentGame}
         </div>
         <div>
           <form onSubmit={this.startGameHandler}>

@@ -51,7 +51,6 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
-
   joinGameChange(evt) {
     const gameId = evt.target.value
     this.setState({joinGame: gameId})
