@@ -12,12 +12,16 @@ export class MainMenu extends Component {
       numPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
-      bool: true
+      bool: true,
+      joinGame: '',
+      errors: ''
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
     this.generateGameId = this.generateGameId.bind(this)
+    this.joinGameSubmit = this.joinGameSubmit.bind(this)
+    this.joinGameChange = this.joinGameChange.bind(this)
   }
 
   assignNumPlayers(evt) {
@@ -47,10 +51,22 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
+  joinGameChange(evt) {
+    const gameId = evt.target.value
+    this.setState({joinGame: gameId})
+  }
+
+  joinGameSubmit() {
+    if (this.state.joinGame) {
+      this.props.history.push(`/waitingroom/${this.state.joinGame}`)
+    } else {
+      this.setState({errors: 'Please enter a game id'})
+    }
+  }
+
  async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
-    console.log('current', this.state.currentGameId)
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
@@ -92,9 +108,12 @@ export class MainMenu extends Component {
         </div>
         <div style={{fontSize: '2em', textAlign: 'center'}}>
           <span>Join A Game</span>
-          <form>
-            <input type="text" name="name" placeholder="Enter game id" />
-            <button>Join Game</button>
+          <form onSubmit={this.joinGameSubmit}>
+            <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
+            <button type="submit">Join Game</button>
+            {
+              this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
+            }
           </form>
         </div>
         <div style={{fontSize: '2em', textAlign: 'center'}}>
