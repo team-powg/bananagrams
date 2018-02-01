@@ -43,7 +43,7 @@ form div {
   background-color: rgb(221, 221, 3)
 }
 
-#grab-tiles, #dump-tiles, #peel-tiles {
+#grab-tiles, #dump-tiles, #peel-tiles, #submit-tiles, #challenge-winner {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;
@@ -61,7 +61,7 @@ form div {
 background:#EFC31A!important;
 }
 
-#grab-tiles:disabled, #peel-tiles:disabled {
+#grab-tiles:disabled, #peel-tiles:disabled, #submit-tiles:disabled, #dump-tiles:disabled {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;

@@ -2,6 +2,7 @@
 // Knows all the tiles, their values, and their coordinates
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
@@ -171,6 +172,10 @@ export class Board extends Component {
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
+
+              <Link to={`/game/${this.state.gameId}/winner`}>
+                <button className="btn" id="submit-tiles" refs="btn" disabled={this.props.playersPouch.length > 0}>Submit Game</button>
+              </Link>
             </div>
           </div>
         </div>
