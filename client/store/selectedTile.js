@@ -13,7 +13,7 @@ export const selectTile = (tile) => {
 
 export const removeSelectedTile = () => {
   return {
-    type: REMOVE_SELECTED_TILE
+    type: REMOVE_SELECTED_TILE,
   }
 }
 

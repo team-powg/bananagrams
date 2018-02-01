@@ -51,8 +51,35 @@ const createApp = () => {
   app.use(passport.initialize())
   app.use(passport.session())
 
+  app.use((req, res, next) => {
+    console.log("FIRST SESSION ID: ", req.sessionID)
+    if (!req.session.cookie.id) {
+      req.session.cookie.id = req.sessionID
+      console.log("SESSION ID: ", req.session.cookie.id)
+    } else ( console.log("COOKIE: ", req.session))
+   return next()
+  })
+
+//   app.use(function(req, res, next) {
+//     var session_id = (req.body && req.body.sid) || req.query && req.query.sid
+//     req.sessionStore && req.sessionStore.get(session_id, function(err, session) {
+//         if (session) {
+//             // createSession() re-assigns req.session
+//             req.sessionStore.createSession(req, session)
+//         }
+//         return next()
+//     })
+// })
+
   // auth and api routes
   app.use('/auth', require('./auth'))
+
+  app.use('/api', (req, res, next) => {
+    console.log('SESSION: ', req.session);
+    next(500)
+  })
+
+
   app.use('/api', require('./api'))
 
   // static file-serving middleware

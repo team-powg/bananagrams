@@ -5,7 +5,7 @@
 body {
   font-family: sans-serif;
   height: 100%;
-  background-color: #83AAE6;
+  background-color: #27586B;
 }
 
 a {
@@ -32,10 +32,6 @@ form div {
   /* padding-left: 50px; */
 }
 
-#horse {
-  width: 20px;
-  height 20px;
-}
 /* MAIN */
 .main {
   height: 100%;
@@ -47,7 +43,7 @@ form div {
   background-color: rgb(221, 221, 3)
 }
 
-#grab-tiles {
+#grab-tiles, #dump-tiles, #peel-tiles {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;
@@ -55,13 +51,17 @@ form div {
   font-weight: bold;
   color: black;
   font-size: 20px;
-  background: #ae00ff;
+  background: #68979B;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   outline: none
 }
 
-#grab-tiles:disabled {
+#peel-tiles {
+background:#EFC31A!important;
+}
+
+#grab-tiles:disabled, #peel-tiles:disabled {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
   border-radius: 3px;
@@ -74,6 +74,8 @@ form div {
   text-decoration: none;
   outline: none
 }
+
+
 
 .btn {
   -webkit-border-radius: 28;

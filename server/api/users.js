@@ -8,6 +8,7 @@ router.get('/', (req, res, next) => {
     // users' passwords are encrypted, it won't help if we just
     // send everything to anyone who asks!
     attributes: ['id', 'email']
+
   })
     .then(users => res.json(users))
     .catch(next)

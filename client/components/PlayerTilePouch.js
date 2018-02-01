@@ -18,25 +18,28 @@ export class PlayerTilePouch extends Component {
  render() {
    //all tiles from player pot
    const tileSelection = this.props.playersPouch
+
    return (
      <div style={{
        backgroundColor: '#966F33',
-       border: '3px solid black',
-       width: '80vw',
-       height: '200px',
-       margin: '0 auto',
-       display: 'flex',
-       flexWrap: 'wrap'
+       border: '1px solid black',
+       width: '300px',
+       height: '60vh',
+       margin: '0px 0px 5px 5px'
      }}>
-     {
-       tileSelection && tileSelection.map(tile => {
-         return (
-           <div key={tile.id} >
-             <img style={{ width: '40px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
-           </div>
-           )
-         })
-       }
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap'
+      }}>
+      { tileSelection && tileSelection.map(tile => {
+          return (
+            <div key={tile.id} >
+              <img style={{ height: '40px', margin: '2px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
+            </div>
+            )
+          })
+        }
+        </div>
        </div>
      )
     }
@@ -44,7 +47,7 @@ export class PlayerTilePouch extends Component {
 
 /***** CONTAINER ****/
 
-const mapDispatch = ({selectTile})
 const mapState = ({playersPouch}) => ({playersPouch})
+const mapDispatch = ({selectTile})
 
 export default connect(mapState, mapDispatch)(PlayerTilePouch)
