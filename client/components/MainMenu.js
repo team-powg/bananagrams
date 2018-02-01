@@ -49,7 +49,7 @@ export class MainMenu extends Component {
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/game/${this.state.currentGame}`)
-  }
+
 
   generateGameId() {
     var text = '';
@@ -77,6 +77,7 @@ export class MainMenu extends Component {
               <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
             </div>
           </form>
+
           <div>
             <form>
 

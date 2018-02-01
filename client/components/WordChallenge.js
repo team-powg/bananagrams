@@ -24,7 +24,6 @@ export function challenge(word) {
   }
 
 //   render() {
-//     console.log("THIS STATE: ", this.state);
 
 //     return <div>Hello</div>;
 //   }
@@ -102,9 +101,6 @@ export class MainMenu extends Component {
     store.dispatch(newPlayerGame);
     this.props.history.push(`/game/${this.state.currentGame}`);
 
-    // console.log('currentGAme:', currentGame)
-    // console.log('pot:', pot)
-    // console.log('newPlayerGAme:', newPlayerGame)
   }
 
   generateGameId() {
@@ -122,21 +118,18 @@ export class MainMenu extends Component {
     const word = document.getElementById('challengeFieldValue').value;
     const merriamUrl = "https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + word + "?key=aa4c94ba-b93e-4f26-ba4a-764254860248";
     return async function getWord(word) {
-      console.log(word);
       await axios
         .get(
           merriamUrl
         )
         .then(res => {
 
-          console.log('   RES    ',res.data);
           return <div>res.data</div>
         });
     }();
   }
 
   render() {
-    // console.log('pot', this.state.pot)
     return (
       <div className="main">
         <h1>Team Name</h1>

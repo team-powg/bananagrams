@@ -95,7 +95,7 @@ export class Board extends Component {
       var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
       var pos = await beginningPot.indexOf(randomLetter);
       playerOnePot.push(randomLetter);
-      beginningPot.splice(pos, 1)
+
     }
     this.setState({
       disabled: true
@@ -103,6 +103,16 @@ export class Board extends Component {
     let generateNewPot = updatePot(this.state.gameId, beginningPot)
     store.dispatch(generateNewPot)
     this.props.getAllPlayerTiles(playerOnePot)
+
+
+    await firebase.database().ref('games').child(this.state.currentGame)
+      .update({
+        pot: beginningPot,
+      })
+     this.setState({
+       disabled: true
+     })
+
   }
 
 
