@@ -65,28 +65,50 @@ export class MainMenu extends Component {
   render() {
     let x = challenge('probably');
     return (
-      <div className="main">
-        <h1>Team Name</h1>
-        <form className="choose-player">
-          <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
-          <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
-          <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
-          <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
-        </form>
-        <form onSubmit={this.handleSubmit} id="new-game">
+      <div className="main" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <div style={{fontSize: '2em'}}>
+          <h1>Bananagrams</h1>
+        </div>
+        <div style={{fontSize: '2em'}}>
+          <span>Start A New Game</span>
+        </div>
+        <div style={{fontSize: '1em', textAlign: 'center'}}>
+          <br />
+          <form className="choose-player">
+            <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
+            <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
+            <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
+            <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
+          </form>
+          <form onSubmit={this.handleSubmit} id="new-game">
           <div>
             <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
           </div>
         </form>
-        <div>
+        </div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Join A Game</span>
           <form>
             <input type="text" name="name" placeholder="Enter game id" />
             <button>Join Game</button>
           </form>
         </div>
-        <div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <br />
+          <span>Learn The Rules</span>
           <Link to='/rules'>
             <button>Rules</button>
+          </Link>
+        </div>
+        <br />
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Check Out Your Stats</span>
+          <Link to=''>
+            <button>Stats</button>
           </Link>
         </div>
       </div>
