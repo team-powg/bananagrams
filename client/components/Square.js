@@ -13,7 +13,6 @@ export class Square extends Component {
   }
 
   clickHandler() {
-    console.log('selected tile in square', this.props.selectedTile)
     if (!this.state.tile && this.props.selectedTile) {
       this.setState({ tile: this.props.selectedTile });
       this.props.removeTileFromPouch(this.props.selectedTile.id);
