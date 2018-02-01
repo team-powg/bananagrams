@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame } from '../store';
+import store, { makeGame, updatePot } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -9,7 +9,7 @@ export class MainMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numPlayers: 1,
+      numpPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
       bool: true
@@ -18,6 +18,7 @@ export class MainMenu extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
     this.generateGameId = this.generateGameId.bind(this)
+    // this.grabTiles = this.grabTiles.bind(this)
   }
 
   assignNumPlayers(evt) {
@@ -32,7 +33,7 @@ export class MainMenu extends Component {
     var players = []
     var start = 1
     while (start <= num) {
-      players.push("player " + start)
+      players.push("Player " + start)
       start++
     }
     return players
@@ -47,6 +48,21 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
+    async grabTiles(evt) {
+    evt.preventDefault()
+    var beginningPot = this.state.pot;
+    var playerPot = [];
+    while (playerPot.length < 21) {
+      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = await beginningPot.indexOf(randomLetter);
+      playerPot.push(randomLetter);
+      beginningPot.splice(pos, 1)
+    }
+    let generateNewPot = updatePot(this.state.gameId, beginningPot)
+    store.dispatch(generateNewPot)
+    this.props.getAllPlayerTiles(playerPot)
+  }
+
  async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
@@ -54,6 +70,9 @@ export class MainMenu extends Component {
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
+    // for(var i in players) {
+
+    // }
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push({
@@ -98,6 +117,6 @@ export class MainMenu extends Component {
 /********* CONTAINER *********/
 
 
-const mapDispatchToProps = { makeGame }
+const mapDispatchToProps = { makeGame, updatePot }
 
 export default connect(null, mapDispatchToProps)(MainMenu)

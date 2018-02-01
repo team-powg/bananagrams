@@ -87,23 +87,23 @@ export class Board extends Component {
     //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
   }
 
-  async grabTiles(evt) {
-    evt.preventDefault()
-    var beginningPot = this.props.createGame.pot;
-    var playerOnePot = [];
-    while (playerOnePot.length < 21) {
-      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      var pos = await beginningPot.indexOf(randomLetter);
-      playerOnePot.push(randomLetter);
-      beginningPot.splice(pos, 1)
-    }
-    this.setState({
-      disabled: true
-    })
-    let generateNewPot = updatePot(this.state.gameId, beginningPot)
-    store.dispatch(generateNewPot)
-    this.props.getAllPlayerTiles(playerOnePot)
-  }
+  // async grabTiles(evt) {
+  //   evt.preventDefault()
+  //   var beginningPot = this.props.createGame.pot;
+  //   var playerOnePot = [];
+  //   while (playerOnePot.length < 21) {
+  //     var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+  //     var pos = await beginningPot.indexOf(randomLetter);
+  //     playerOnePot.push(randomLetter);
+  //     beginningPot.splice(pos, 1)
+  //   }
+  //   this.setState({
+  //     disabled: true
+  //   })
+  //   let generateNewPot = updatePot(this.state.gameId, beginningPot)
+  //   store.dispatch(generateNewPot)
+  //   this.props.getAllPlayerTiles(playerOnePot)
+  // }
 
 
   async dumpTiles(evt){
