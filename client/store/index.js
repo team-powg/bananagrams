@@ -24,4 +24,5 @@ export * from './user'
 export * from './createGame'
 // export * from './createInitialPot'
 export * from './playersPouch'
+export * from './selectedTile'
 

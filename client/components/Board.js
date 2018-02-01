@@ -15,7 +15,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch } from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile } from '../store';
 
 
 export class Board extends Component {
@@ -112,6 +112,7 @@ export class Board extends Component {
     var currentPot = this.props.createGame.pot;
     currentPot.push(selectedTile);
     this.props.removeTileFromPouch(selectedTile.id)
+    this.props.removeSelectedTile()
     console.log('current pot', currentPot)
     var count = 0
     while (count < 3) {
@@ -127,6 +128,7 @@ export class Board extends Component {
   }
 
   render() {
+    console.log("PROPS: ", this.props)
     const squares = [];
     for (let i = 0; i < 100; i++) {
       squares.push(this.renderSquare(i));
@@ -180,7 +182,7 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch }
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile }
 
 const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch })
 
