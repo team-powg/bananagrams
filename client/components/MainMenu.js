@@ -72,10 +72,7 @@ export class MainMenu extends Component {
     const players = this.totalPlayers(this.state.numPlayers)
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
-    this.props.history.push({
-      pathname: `/waitingroom/${this.state.currentGameId}`,
-      state: { players: this.state.numPlayers, gameId: this.state.currentGameId}
-    })
+    this.props.history.push(`/waitingroom/${this.state.currentGameId}`)
   }
 
   render() {

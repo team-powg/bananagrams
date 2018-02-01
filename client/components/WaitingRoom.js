@@ -11,25 +11,23 @@ class WaitingRoom extends Component {
   }
 
 startGameHandler() {
-  const {gameId, players} = this.props.location.state
-  this.props.history.push({
-    pathname: `/game/${gameId}`,
-    state: { players: players, gameId: gameId }
-  })
+  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {
-    const {gameId, players} = this.props.location.state
+    const { players, currentGame } = this.props.createGame
+    console.log(players)
+
     return (
       <div style={{
         textAlign: 'center'
       }}>
         <span>Waiting Room</span>
         <div>
-          Waiting on {players} amount of players...
+          Waiting on {players.length} amount of players...
         </div>
         <div>
-          Game Id is {gameId}
+          Game Id is {currentGame}
         </div>
         <div>
           <form onSubmit={this.startGameHandler}>
@@ -44,7 +42,9 @@ startGameHandler() {
 
 /********** CONTAINER *********/
 
-export default connect(null, null)(WaitingRoom)
+const mapState = ({createGame}) => ({createGame})
+
+export default connect(mapState, null)(WaitingRoom)
 
 
 // Create number of players
