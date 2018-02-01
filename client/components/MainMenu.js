@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame, updatePot } from '../store';
+import store, { makeGame, updatePot, findGame } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -12,13 +12,16 @@ export class MainMenu extends Component {
       numpPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
-      bool: true
+      bool: true,
+      joinGame: '',
+      errors: ''
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
     this.generateGameId = this.generateGameId.bind(this)
-    // this.grabTiles = this.grabTiles.bind(this)
+    this.joinGameSubmit = this.joinGameSubmit.bind(this)
+    this.joinGameChange = this.joinGameChange.bind(this)
   }
 
   assignNumPlayers(evt) {
@@ -30,10 +33,10 @@ export class MainMenu extends Component {
   }
 
   totalPlayers(num) {
-    var players = []
+    var players = {}
     var start = 1
     while (start <= num) {
-      players.push("Player " + start)
+      players["Player " + start ] = "Player " + start
       start++
     }
     return players
@@ -48,25 +51,24 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
-    async grabTiles(evt) {
-    evt.preventDefault()
-    var beginningPot = this.state.pot;
-    var playerPot = [];
-    while (playerPot.length < 21) {
-      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      var pos = await beginningPot.indexOf(randomLetter);
-      playerPot.push(randomLetter);
-      beginningPot.splice(pos, 1)
+
+  joinGameChange(evt) {
+    const gameId = evt.target.value
+    this.setState({joinGame: gameId})
+  }
+
+  joinGameSubmit() {
+    if (this.state.joinGame) {
+      this.props.findGame(this.state.joinGame)
+      this.props.history.push(`/waitingroom/${this.state.joinGame}`)
+    } else {
+      this.setState({errors: 'Please enter a game id'})
     }
-    let generateNewPot = updatePot(this.state.gameId, beginningPot)
-    store.dispatch(generateNewPot)
-    this.props.getAllPlayerTiles(playerPot)
   }
 
  async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
-    console.log('current', this.state.currentGameId)
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
@@ -75,37 +77,60 @@ export class MainMenu extends Component {
     // }
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
-    this.props.history.push({
-      pathname: `/waitingroom/${this.state.currentGameId}`,
-      state: { players: this.state.numPlayers, gameId: this.state.currentGameId}
-    })
+    this.props.history.push(`/waitingroom/${this.state.currentGameId}`)
   }
 
   render() {
+    console.log("PROPS FIND GAME: ", this.props.findGame)
     let x = challenge('probably');
     return (
-      <div className="main">
-        <h1>Team Name</h1>
-        <form className="choose-player">
-          <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
-          <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
-          <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
-          <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
-        </form>
-        <form onSubmit={this.handleSubmit} id="new-game">
+      <div className="main" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <div style={{fontSize: '2em'}}>
+          <h1>Bananagrams</h1>
+        </div>
+        <div style={{fontSize: '2em'}}>
+          <span>Start A New Game</span>
+        </div>
+        <div style={{fontSize: '1em', textAlign: 'center'}}>
+          <br />
+          <form className="choose-player">
+            <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
+            <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
+            <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
+            <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
+          </form>
+          <form onSubmit={this.handleSubmit} id="new-game">
           <div>
             <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
           </div>
         </form>
-        <div>
-          <form>
-            <input type="text" name="name" placeholder="Enter game id" />
-            <button>Join Game</button>
+        </div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Join A Game</span>
+          <form onSubmit={this.joinGameSubmit}>
+            <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
+            <button type="submit">Join Game</button>
+            {
+              this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
+            }
           </form>
         </div>
-        <div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <br />
+          <span>Learn The Rules</span>
           <Link to='/rules'>
             <button>Rules</button>
+          </Link>
+        </div>
+        <br />
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Check Out Your Stats</span>
+          <Link to=''>
+            <button>Stats</button>
           </Link>
         </div>
       </div>
@@ -117,6 +142,6 @@ export class MainMenu extends Component {
 /********* CONTAINER *********/
 
 
-const mapDispatchToProps = { makeGame, updatePot }
+const mapDispatchToProps = { makeGame, updatePot, findGame }
 
 export default connect(null, mapDispatchToProps)(MainMenu)

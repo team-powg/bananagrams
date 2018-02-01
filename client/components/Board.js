@@ -2,6 +2,7 @@
 // Knows all the tiles, their values, and their coordinates
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
@@ -87,23 +88,23 @@ export class Board extends Component {
     //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
   }
 
-  // async grabTiles(evt) {
-  //   evt.preventDefault()
-  //   var beginningPot = this.props.createGame.pot;
-  //   var playerOnePot = [];
-  //   while (playerOnePot.length < 21) {
-  //     var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-  //     var pos = await beginningPot.indexOf(randomLetter);
-  //     playerOnePot.push(randomLetter);
-  //     beginningPot.splice(pos, 1)
-  //   }
-  //   this.setState({
-  //     disabled: true
-  //   })
-  //   let generateNewPot = updatePot(this.state.gameId, beginningPot)
-  //   store.dispatch(generateNewPot)
-  //   this.props.getAllPlayerTiles(playerOnePot)
-  // }
+  async grabTiles(evt) {
+    evt.preventDefault()
+    var beginningPot = this.props.createGame.pot;
+    var playerOnePot = [];
+    while (playerOnePot.length < 21) {
+      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = await beginningPot.indexOf(randomLetter);
+      playerOnePot.push(randomLetter);
+      beginningPot.splice(pos, 1)
+    }
+    this.setState({
+      disabled: true
+    })
+    let generateNewPot = updatePot(this.state.gameId, beginningPot)
+    store.dispatch(generateNewPot)
+    this.props.getAllPlayerTiles(playerOnePot)
+  }
 
 
   async dumpTiles(evt){
@@ -171,6 +172,10 @@ export class Board extends Component {
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
+
+              <Link to={`/game/${this.state.gameId}/winner`}>
+                <button className="btn" id="submit-tiles" refs="btn" disabled={this.props.playersPouch.length > 0}>Submit Game</button>
+              </Link>
             </div>
           </div>
         </div>
