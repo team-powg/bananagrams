@@ -6,7 +6,7 @@ class GlobalPotDisplay extends Component {
     return (
       <div>
         {
-          this.props.createGame && <div style={{
+          this.props && this.props.createGame && <div style={{
             border: '1px solid black',
             backgroundColor: '#6D92A0',
             width: 'auto',
