@@ -8,8 +8,13 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import BoardSquare from './BoardSquare';
 import { setTilePosition } from '../store/squareToSquareMove';
+import { getAllPlayerTiles } from '../store/playersPouch';
 import PlayerTilePouch from './PlayerTilePouch';
-import { getAllPlayerTiles } from '../store/playersPouch'
+import GlobalPotDisplay from './GlobalPotDisplay';
+import OtherPlayersBoardView from './OtherPlayersBoardView';
+import SelectedTileDisplay from './SelectedTileDisplay';
+import GameHeader from './GameHeader';
+import GameFooter from './GameFooter';
 import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch } from '../store';
 
 
@@ -30,9 +35,7 @@ export class Board extends Component {
   };
 
   componentDidMount() {
-    this.setState({
-      gameId: this.props.match.params.currentGame,
-    })
+    this.setState({gameId: this.props.match.params.currentGame})
   }
 
   movePiece = (x, y) => {
@@ -113,7 +116,6 @@ export class Board extends Component {
     var count = 0
     while (count < 3) {
       var randomLetter = await currentPot[Math.floor(Math.random() * currentPot.length)];
-
       var pos = await currentPot.indexOf(randomLetter);
       this.props.addTileToPouch(randomLetter)
       currentPot.splice(pos, 1);
@@ -130,35 +132,57 @@ export class Board extends Component {
       squares.push(this.renderSquare(i));
     }
     return (
-      <div>
       <div style={{
-        backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
-        width: '500px',
-        height: '500px',
-        margin: '0 auto',
         display: 'flex',
-        flexWrap: 'wrap'
+        flexDirection: 'column'
       }}>
-        {squares}
+        <GameHeader gameId={this.state.gameId} />
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'stretch',
+          justifyContent: 'space-between'
+        }}>
+          <div>
+            <GlobalPotDisplay />
+            <OtherPlayersBoardView />
+          </div>
+          <div style={{
+            backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
+            width: '620px',
+            height: '500px',
+            margin: '0 auto',
+            border: '1px solid black',
+            display: 'flex',
+            flexWrap: 'wrap'
+          }}>
+            {squares}
+          </div>
+          <div>
+          <PlayerTilePouch />
+          <SelectedTileDisplay />
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              margin: '0px 0px 0px 5px'
+            }}>
+              <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
+              <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
+              <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
+            </div>
+          </div>
         </div>
-        <div>
-          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
-          <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
-          <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
-        </div>
-        <div >
-          <PlayerTilePouch playerOnePot={this.state.playerOnePot} />
-        </div>
+        <GameFooter />
       </div>
     );
   }
 }
 
+/******** CONTAINER **********/
 
 const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch }
 
 const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch })
-
 
 Board = DragDropContext(HTML5Backend)(Board);
 Board = connect(mapStateToProps, mapDispatchToProps)(Board)
