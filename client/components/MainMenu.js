@@ -12,12 +12,16 @@ export class MainMenu extends Component {
       numPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
-      bool: true
+      bool: true,
+      joinGame: '',
+      errors: ''
     }
     this.assignNumPlayers = this.assignNumPlayers.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.totalPlayers = this.totalPlayers.bind(this)
     this.generateGameId = this.generateGameId.bind(this)
+    this.joinGameSubmit = this.joinGameSubmit.bind(this)
+    this.joinGameChange = this.joinGameChange.bind(this)
   }
 
   assignNumPlayers(evt) {
@@ -47,10 +51,22 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
+  joinGameChange(evt) {
+    const gameId = evt.target.value
+    this.setState({joinGame: gameId})
+  }
+
+  joinGameSubmit() {
+    if (this.state.joinGame) {
+      this.props.history.push(`/waitingroom/${this.state.joinGame}`)
+    } else {
+      this.setState({errors: 'Please enter a game id'})
+    }
+  }
+
  async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
-    console.log('current', this.state.currentGameId)
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
@@ -65,28 +81,53 @@ export class MainMenu extends Component {
   render() {
     let x = challenge('probably');
     return (
-      <div className="main">
-        <h1>Team Name</h1>
-        <form className="choose-player">
-          <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
-          <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
-          <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
-          <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
-        </form>
-        <form onSubmit={this.handleSubmit} id="new-game">
+      <div className="main" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <div style={{fontSize: '2em'}}>
+          <h1>Bananagrams</h1>
+        </div>
+        <div style={{fontSize: '2em'}}>
+          <span>Start A New Game</span>
+        </div>
+        <div style={{fontSize: '1em', textAlign: 'center'}}>
+          <br />
+          <form className="choose-player">
+            <button className="btn" value="1" onClick={(evt) => this.assignNumPlayers(evt)}>1 Player</button>
+            <button className="btn" value="2" onClick={(evt) => this.assignNumPlayers(evt)}>2 Players</button>
+            <button className="btn" value="3" onClick={(evt) => this.assignNumPlayers(evt)}>3 Players</button>
+            <button className="btn" value="4" onClick={(evt) => this.assignNumPlayers(evt)}>4 Players</button>
+          </form>
+          <form onSubmit={this.handleSubmit} id="new-game">
           <div>
             <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
           </div>
         </form>
-        <div>
-          <form>
-            <input type="text" name="name" placeholder="Enter game id" />
-            <button>Join Game</button>
+        </div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Join A Game</span>
+          <form onSubmit={this.joinGameSubmit}>
+            <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
+            <button type="submit">Join Game</button>
+            {
+              this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
+            }
           </form>
         </div>
-        <div>
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <br />
+          <span>Learn The Rules</span>
           <Link to='/rules'>
             <button>Rules</button>
+          </Link>
+        </div>
+        <br />
+        <div style={{fontSize: '2em', textAlign: 'center'}}>
+          <span>Check Out Your Stats</span>
+          <Link to=''>
+            <button>Stats</button>
           </Link>
         </div>
       </div>
