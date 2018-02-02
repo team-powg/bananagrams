@@ -24,7 +24,6 @@ export class Square extends Component {
     if (!this.state.tile && this.props.selectedTile) {
       const currentTile = this.props.selectedTile;
       const updatedTile = this.assignCoords(currentTile);
-
       this.setState({ tile: this.props.selectedTile });
       this.props.removeTileFromPouch(this.props.selectedTile.id);
       this.props.removeSelectedTile();

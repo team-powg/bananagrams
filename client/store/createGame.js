@@ -35,7 +35,6 @@ async dispatch => {
     .update({
       pot
     })
-    console.log("POT: ", pot)
     dispatch(generatePot( pot ))
   }
 
@@ -45,7 +44,6 @@ async dispatch => {
     .update({
       pot
     })
-    console.log("POT: ", pot)
     dispatch(peelGlobalPot( pot ))
   }
 
