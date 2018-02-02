@@ -35,17 +35,15 @@ export const addCoordsToTile = coords => {
   }
 }
 
-export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerId) =>
+export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerNumber ) =>
   dispatch => {
-    var selectedPlayer = firebase.database()
+    var player = `Player ${playerNumber}`;
+    console.log('     PLAYER NUMBER', playerNumber)
+    console.log(player)
+    firebase.database().ref(`games/${gameId}/players/${player}`).child('playerPot')
+    .set(indivPot)
+    dispatch(getAllPlayerTiles(indivPot))
 
-
-    firebase.database().ref(`games/${gameId}/players/`)
-    .update({
-      pot
-    })
-    console.log("POT: ", pot)
-    dispatch(generatePot( pot ))
 }
 
 // Reducer

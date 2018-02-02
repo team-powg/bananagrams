@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { assignPlayerTilesToFirebasePotThunk } from '../store'
+import { assignPlayerTilesToFirebasePotThunk, updatePot } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -16,16 +16,20 @@ class WaitingRoom extends Component {
     var beginningPot = this.props.createGame.pot;
     var playerPot = [];
     var numberOfPlayers = Object.keys(this.props.createGame.players).length
-    console.log('numberOfPlayers', numberOfPlayers)
-    while (playerPot.length < 21) {
-      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      var pos = beginningPot.indexOf(randomLetter);
-      playerPot.push(randomLetter);
-      beginningPot.splice(pos, 1)
+    console.log('this.props.createGame.players', this.props.createGame.players)
+    var playerObj = this.props.createGame.players;
+    var count;
+    var gameId = this.props.createGame.currentGame;
+
+    for (var player in playerObj) {
+      let playerPot = beginningPot.splice(0, 21);
+      if (!count) {
+        count = 1
+      } else count++;
+      this.props.assignPlayerTilesToFirebasePotThunk(playerPot, gameId, count);
     }
-    // let generateNewPot = updatePot(this.props.createGame.currentGame, beginningPot)
-    // store.dispatch(generateNewPot)
-    // this.props.getAllPlayerTiles(playerPot)
+    this.props.updatePot(gameId, beginningPot);
+
   }
 
 startGameHandler(evt) {
@@ -65,8 +69,8 @@ startGameHandler(evt) {
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user}) => ({createGame, user})
-
-export default connect(mapState, null)(WaitingRoom)
+const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot}
+export default connect(mapState, mapDispatch)(WaitingRoom)
 
 
 // createGame.players.filter(player => player.id === user)
