@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { assignPlayerTilesToFirebasePotThunk } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -8,10 +9,33 @@ class WaitingRoom extends Component {
       bool: false
     }
     this.startGameHandler = this.startGameHandler.bind(this)
+    this.disperseTiles = this.disperseTiles.bind(this);
   }
 
-startGameHandler() {
-  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  disperseTiles(evt) {
+    var beginningPot = this.props.createGame.pot;
+    var playerPot = [];
+    var numberOfPlayers = Object.keys(this.props.createGame.players).length
+    console.log('numberOfPlayers', numberOfPlayers)
+    while (playerPot.length < 21) {
+      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = beginningPot.indexOf(randomLetter);
+      playerPot.push(randomLetter);
+      beginningPot.splice(pos, 1)
+    }
+    // let generateNewPot = updatePot(this.props.createGame.currentGame, beginningPot)
+    // store.dispatch(generateNewPot)
+    // this.props.getAllPlayerTiles(playerPot)
+  }
+
+startGameHandler(evt) {
+  evt.preventDefault()
+  const playerId = this.props.user;
+  const gameId = this.props.createGame.currentGame;
+  // const indivPot;
+  this.disperseTiles();
+  // assignPlayerTilesToFirebasePotThunk() // indivPot, gameId, playerId
+  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {

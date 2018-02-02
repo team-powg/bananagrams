@@ -1,7 +1,10 @@
+import firebase from '../firebase';
+
 // Action Type
 const GET_ALL_PLAYER_TILES = "GET_ALL_PLAYER_TILES";
 const REMOVE_TILE_FROM_POUCH = "REMOVE_TILE_FROM_POUCH";
 const ADD_TILE_TO_POUCH = "ADD_TILE_TO_POUCH";
+const ADD_COORDS_TO_TILE = "ADD_COORDS_TO_TILE";
 
 // Action
 export const getAllPlayerTiles = tiles => {
@@ -25,6 +28,26 @@ export const addTileToPouch = tile => {
   };
 };
 
+export const addCoordsToTile = coords => {
+  return {
+    type: ADD_COORDS_TO_TILE,
+    coords
+  }
+}
+
+export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerId) =>
+  dispatch => {
+    var selectedPlayer = firebase.database()
+
+
+    firebase.database().ref(`games/${gameId}/players/`)
+    .update({
+      pot
+    })
+    console.log("POT: ", pot)
+    dispatch(generatePot( pot ))
+}
+
 // Reducer
 function playersPouch(state = [], action) {
   switch (action.type) {
@@ -38,6 +61,8 @@ function playersPouch(state = [], action) {
       } else {
         return null
       }
+    // case: ADD_COORDS_TO_TILE:
+    //   return coords
     default:
       return state;
   }
