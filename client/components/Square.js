@@ -10,11 +10,20 @@ export class Square extends Component {
     super();
     this.state = { tile: null };
     this.clickHandler = this.clickHandler.bind(this);
+    this.assignCoords = this.assignCoords.bind(this)
+  }
+
+  assignCoords(tile) {
+  tile.x = this.props.children[1][0];
+  tile.y = this.props.children[1][1];
+  return tile;
   }
 
   clickHandler() {
     if (!this.state.tile && this.props.selectedTile) {
-      this.setState({ tile: this.props.selectedTile });
+      const currentTile = this.props.selectedTile;
+      const updatedTile = this.assignCoords(currentTile);
+      this.setState({ tile: updatedTile });
       this.props.removeTileFromPouch(this.props.selectedTile.id);
       this.props.removeSelectedTile();
     } else if (this.state.tile) {
