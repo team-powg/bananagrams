@@ -23,7 +23,8 @@ async dispatch => {
     pot,
     players
   })
-  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set(userId) //Set Player 1 ID here
+  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
+  .set(userId) //Set Player 1 ID here
   dispatch(createGame({ currentGame, pot, players }))
 }
 
@@ -59,16 +60,18 @@ async dispatch => {
   }
 
   export const findGame = (gameId, userId) =>
-  dispatch => {
-    firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
+  async dispatch => {
+     await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
       dispatch(createGame(snapshot.val()))
     })
-    firebase.database().ref(`games/${gameId}/players`).once('value', snapshot => {
-      console.log(snapshot.val())
+     await firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
       var allPlayers = snapshot.val()
+      var counter = false
       for (var i in allPlayers) {
-        if (typeof allPlayers[i] !== 'object') {
-         firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id').set(userId)
+        if (!allPlayers[i].id && counter === false) {
+          counter = true
+          await firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id')
+          .set(userId)
         }
       }
     })
