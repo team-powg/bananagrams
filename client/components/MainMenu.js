@@ -85,7 +85,7 @@ export class MainMenu extends Component {
 
   render() {
     console.log('session', this.props.user)
-    let x = challenge('probably');
+    // let x = challenge('probably');
     return (
       <div className="main" style={{
         display: 'flex',

@@ -88,23 +88,23 @@ export class Board extends Component {
     //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
   }
 
-  async grabTiles(evt) {
-    evt.preventDefault()
-    var beginningPot = this.props.createGame.pot;
-    var playerOnePot = [];
-    while (playerOnePot.length < 21) {
-      var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-      var pos = await beginningPot.indexOf(randomLetter);
-      playerOnePot.push(randomLetter);
-      beginningPot.splice(pos, 1)
-    }
-    this.setState({
-      disabled: true
-    })
-    let generateNewPot = updatePot(this.state.gameId, beginningPot)
-    store.dispatch(generateNewPot)
-    this.props.getAllPlayerTiles(playerOnePot)
-  }
+  // async grabTiles(evt) {
+  //   evt.preventDefault()
+  //   var beginningPot = this.props.createGame.pot;
+  //   var playerOnePot = [];
+  //   while (playerOnePot.length < 21) {
+  //     var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
+  //     var pos = await beginningPot.indexOf(randomLetter);
+  //     playerOnePot.push(randomLetter);
+  //     beginningPot.splice(pos, 1)
+  //   }
+  //   this.setState({
+  //     disabled: true
+  //   })
+  //   let generateNewPot = updatePot(this.state.gameId, beginningPot)
+  //   store.dispatch(generateNewPot)
+  //   this.props.getAllPlayerTiles(playerOnePot)
+  // }
 
 
   async dumpTiles(evt){
@@ -169,7 +169,7 @@ export class Board extends Component {
               flexDirection: 'row',
               margin: '0px 0px 0px 5px'
             }}>
-              <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button>
+              {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
 
