@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame } from '../store';
+import store, { makeGame, updatePot, findGame } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -9,7 +9,7 @@ export class MainMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numPlayers: 1,
+      numpPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
       bool: true,
@@ -33,10 +33,10 @@ export class MainMenu extends Component {
   }
 
   totalPlayers(num) {
-    var players = []
+    var players = {}
     var start = 1
     while (start <= num) {
-      players.push("player " + start)
+      players["Player " + start ] = "Player " + start
       start++
     }
     return players
@@ -58,6 +58,7 @@ export class MainMenu extends Component {
 
   joinGameSubmit() {
     if (this.state.joinGame) {
+      this.props.findGame(this.state.joinGame)
       this.props.history.push(`/waitingroom/${this.state.joinGame}`)
     } else {
       this.setState({errors: 'Please enter a game id'})
@@ -70,12 +71,16 @@ export class MainMenu extends Component {
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
+    // for(var i in players) {
+
+    // }
     const newPlayerGame = makeGame(currentGame, pot, players)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/waitingroom/${this.state.currentGameId}`)
   }
 
   render() {
+    console.log("PROPS FIND GAME: ", this.props.findGame)
     let x = challenge('probably');
     return (
       <div className="main" style={{
@@ -136,6 +141,6 @@ export class MainMenu extends Component {
 /********* CONTAINER *********/
 
 
-const mapDispatchToProps = { makeGame }
+const mapDispatchToProps = { makeGame, updatePot, findGame }
 
 export default connect(null, mapDispatchToProps)(MainMenu)

@@ -16,8 +16,6 @@ startGameHandler() {
 
   render() {
     const { players, currentGame } = this.props.createGame
-    console.log(players)
-
     return (
       <div style={{
         textAlign: 'center'

@@ -23,6 +23,7 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
       players
     })
     console.log('   CURRENT GAME   ', currentGame)
+    // await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set("1") //Set Player 1 ID here
     firebase.database().ref(`games/${currentGame}`).child('BRUCE')
       .set('BRUCE')
     dispatch(createGame({ currentGame, pot, players }))
@@ -30,7 +31,7 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
 
   export const updatePot = (gameId, pot) =>
   dispatch => {
-    firebase.database().ref('games').child(gameId)
+    firebase.database().ref(`games/${gameId}`)
     .update({
       pot
     })
@@ -56,6 +57,22 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
       pot
     })
     dispatch(swapTile( pot ))
+  }
+
+  export const findGame = (gameId) =>
+  dispatch => {
+    firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
+      dispatch(createGame(snapshot.val()))
+    })
+    firebase.database().ref(`games/${gameId}/players`).once('value', snapshot => {
+      console.log(snapshot.val())
+      var allPlayers = snapshot.val()
+      for (var i in allPlayers) {
+        if (typeof allPlayers[i] !== 'object') {
+         firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id').set('2')
+        }
+      }
+    })
   }
 
 
