@@ -14,6 +14,7 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
 
 
 /* THUNK CREATORS */
+
   export const makeGame = (currentGame, pot, players) =>
   dispatch => {
     firebase.database().ref('games').child(currentGame)
@@ -28,6 +29,7 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
       .set('BRUCE')
     dispatch(createGame({ currentGame, pot, players }))
   }
+
 
   export const updatePot = (gameId, pot) =>
   dispatch => {
