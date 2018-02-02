@@ -11,21 +11,21 @@ class WaitingRoom extends Component {
   }
 
 startGameHandler() {
-  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {
-    const { players, currentGame } = this.props.createGame
+    // const { players, currentGame } = this.props.createGame
     return (
       <div style={{
         textAlign: 'center'
       }}>
         <span>Waiting Room</span>
         <div>
-          Waiting on {players.length} amount of players...
+          Waiting on amount of players...
         </div>
         <div>
-          Game Id is {currentGame}
+          Game Id is
         </div>
         <div>
           <form onSubmit={this.startGameHandler}>
@@ -40,10 +40,12 @@ startGameHandler() {
 
 /********** CONTAINER *********/
 
-const mapState = ({createGame}) => ({createGame})
+const mapState = ({createGame, user}) => ({createGame, user})
 
 export default connect(mapState, null)(WaitingRoom)
 
+
+// createGame.players.filter(player => player.id === user)
 
 // Create number of players
 // Action dispatcher that will send their session ID to the playersArray through reducer to FB to Redux

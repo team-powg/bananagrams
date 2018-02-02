@@ -14,8 +14,8 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
 
 
 /* THUNK CREATORS */
+export const makeGame = (currentGame, pot, players, userId) =>
 
-export const makeGame = (currentGame, pot, players) =>
 async dispatch => {
   await firebase.database().ref('games').child(currentGame)
   .set({
@@ -23,7 +23,7 @@ async dispatch => {
     pot,
     players
   })
-  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set("1") //Set Player 1 ID here
+  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set(userId) //Set Player 1 ID here
   dispatch(createGame({ currentGame, pot, players }))
 }
 
@@ -58,7 +58,7 @@ async dispatch => {
     dispatch(swapTile( pot ))
   }
 
-  export const findGame = (gameId) =>
+  export const findGame = (gameId, userId) =>
   dispatch => {
     firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
       dispatch(createGame(snapshot.val()))
@@ -68,7 +68,7 @@ async dispatch => {
       var allPlayers = snapshot.val()
       for (var i in allPlayers) {
         if (typeof allPlayers[i] !== 'object') {
-         firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id').set('2')
+         firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id').set(userId)
         }
       }
     })
