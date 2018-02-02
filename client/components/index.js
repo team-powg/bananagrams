@@ -11,6 +11,3 @@ export {default as Board} from './Board'
 export {default as MainMenu} from './MainMenu'
 export {default as WinnersPage} from './WinnersPage'
 export {default as WaitingRoom} from './WaitingRoom'
-
-
-

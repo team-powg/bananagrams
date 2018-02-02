@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Route, Switch, Router} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import {Main, Login, Signup, Board, MainMenu, Rules, WinnersPage, WaitingRoom} from './components'
+import {Main, Login, Signup, Board, MainMenu, Rules, WaitingRoom} from './components'
 import {me} from './store'
 
 
@@ -11,9 +11,10 @@ import {me} from './store'
  * COMPONENT
  */
 class Routes extends Component {
-  componentDidMount () {
-    this.props.loadInitialData()
-  }
+  // componentDidMount () {
+  //   this.props.loadInitialData()
+  // }
+  // FIX TOMORROW!!!!
 
   render () {
     const {isLoggedIn} = this.props
@@ -24,7 +25,6 @@ class Routes extends Component {
           <Switch>
           <Route exact path="/" component={MainMenu} />
           <Route exact path="/game/:currentGame" component={Board} />
-          <Route exact path="/game/:currentGame/winner" component={WinnersPage} />
           <Route path="/rules" component={Rules} />
           <Route exact path="/waitingroom/:currentGame" component={WaitingRoom} />
             {/* Routes placed here are available to all visitors */}
