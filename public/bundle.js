@@ -21903,9 +21903,6 @@ var _Constants = __webpack_require__(144);
 // Action
 
 var setTilePosition = exports.setTilePosition = function setTilePosition(tileX, tileY) {
-  // console.log("         *******************************")
-  // await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set("1") //Set Player 1 ID here
-  // firebase.database().ref(`games/${currentGame}`).child('BRUCE')
   return {
     type: _Constants.MOVE_TILE,
     position: { tileX: tileX, tileY: tileY }
@@ -21918,8 +21915,6 @@ function squareToSquareMove() {
   var action = arguments[1];
   var position = action.position;
 
-  console.log("action*****", action);
-  console.log("position ******", position);
   switch (action.type) {
     case _Constants.MOVE_TILE:
       return _extends({}, state, {
@@ -40995,6 +40990,10 @@ var Board = exports.Board = function (_Component) {
       _this.props.setTilePosition(x, y);
     };
 
+    _this.movePiece = function (x, y) {
+      _this.props.setTilePosition(x, y);
+    };
+
     _this.state = {
       gameId: '',
       disabled: false
@@ -41019,8 +41018,8 @@ var Board = exports.Board = function (_Component) {
         'div',
         { key: i,
           style: {
-            width: '10%',
-            height: '10%',
+            width: '50px',
+            height: '50px',
             border: '1px dotted rgba(0, 0, 0, .2)'
           } },
         _react2.default.createElement(
@@ -41213,7 +41212,7 @@ var Board = exports.Board = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      // console.log("PROPS: ", this.props)
+      console.log("PROPS: ", this.props);
       var squares = [];
       for (var i = 0; i < 100; i++) {
         squares.push(this.renderSquare(i));
@@ -41613,7 +41612,7 @@ var MainMenu = exports.MainMenu = function (_Component) {
     var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, props));
 
     _this.state = {
-      numpPlayers: 1,
+      numPlayers: 1,
       currentGameId: '',
       pot: _HelperStuff2.default,
       bool: true,
@@ -41630,6 +41629,11 @@ var MainMenu = exports.MainMenu = function (_Component) {
   }
 
   _createClass(MainMenu, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.getSessionIdThunk();
+    }
+  }, {
     key: 'assignNumPlayers',
     value: function assignNumPlayers(evt) {
       evt.preventDefault();
@@ -41668,8 +41672,9 @@ var MainMenu = exports.MainMenu = function (_Component) {
   }, {
     key: 'joinGameSubmit',
     value: function joinGameSubmit() {
-      if (this.state.joinGame) {
-        this.props.findGame(this.state.joinGame);
+      var userId = this.props.user;
+      if (this.state.joinGame && userId) {
+        this.props.findGame(this.state.joinGame, userId);
         this.props.history.push('/waitingroom/' + this.state.joinGame);
       } else {
         this.setState({ errors: 'Please enter a game id' });
@@ -41679,7 +41684,7 @@ var MainMenu = exports.MainMenu = function (_Component) {
     key: 'handleSubmit',
     value: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(evt) {
-        var currentGame, pot, players, newPlayerGame;
+        var currentGame, pot, players, userId, newPlayerGame;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -41692,16 +41697,15 @@ var MainMenu = exports.MainMenu = function (_Component) {
                 currentGame = this.state.currentGameId;
                 pot = this.state.pot;
                 players = this.totalPlayers(this.state.numPlayers);
-                // for(var i in players) {
+                userId = this.props.user;
 
-                // }
-
-                newPlayerGame = (0, _store.makeGame)(currentGame, pot, players);
+                console.log('user', userId);
+                newPlayerGame = (0, _store.makeGame)(currentGame, pot, players, userId);
 
                 _store2.default.dispatch(newPlayerGame);
-                this.props.history.push('/waitingroom/' + this.state.currentGameId);
+                this.props.history.push('/waitingroom/' + currentGame);
 
-              case 9:
+              case 11:
               case 'end':
                 return _context.stop();
             }
@@ -41720,7 +41724,7 @@ var MainMenu = exports.MainMenu = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      console.log("PROPS FIND GAME: ", this.props.findGame);
+      console.log('session', this.props.user);
       var x = (0, _WordChallenge.challenge)('probably');
       return _react2.default.createElement(
         'div',
@@ -41872,9 +41876,14 @@ var MainMenu = exports.MainMenu = function (_Component) {
 
 /********* CONTAINER *********/
 
-var mapDispatchToProps = { makeGame: _store.makeGame, updatePot: _store.updatePot, findGame: _store.findGame };
+var mapState = function mapState(_ref2) {
+  var user = _ref2.user;
+  return { user: user };
+};
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(MainMenu);
+var mapDispatchToProps = { makeGame: _store.makeGame, updatePot: _store.updatePot, findGame: _store.findGame, getSessionIdThunk: _store.getSessionIdThunk };
+
+exports.default = (0, _reactRedux.connect)(mapState, mapDispatchToProps)(MainMenu);
 
 /***/ }),
 /* 446 */
@@ -42132,15 +42141,9 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(18);
 
-var _squareToSquareMove = __webpack_require__(245);
-
 var _selectedTile = __webpack_require__(101);
 
 var _playersPouch = __webpack_require__(145);
-
-var _firebase = __webpack_require__(459);
-
-var _firebase2 = _interopRequireDefault(_firebase);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42161,21 +42164,26 @@ var Square = exports.Square = function (_Component) {
 
     _this.state = { tile: null };
     _this.clickHandler = _this.clickHandler.bind(_this);
+    _this.assignCoords = _this.assignCoords.bind(_this);
     return _this;
   }
 
   _createClass(Square, [{
+    key: "assignCoords",
+    value: function assignCoords(tile) {
+      tile.x = this.props.children[1][0];
+      tile.y = this.props.children[1][1];
+      return tile;
+    }
+  }, {
     key: "clickHandler",
     value: function clickHandler() {
       if (!this.state.tile && this.props.selectedTile) {
-        console.log('*******************SQUARE.JS');
-        // await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set("1") //Set Player 1 ID here
-        // firebase.database().ref(`games/${currentGame}`).child('BRUCE')
-        console.log("--->>>>>", this.props.selectedTile);
-        (0, _squareToSquareMove.setTilePosition)(this.props.children[1][0], this.props.children[1][1]);
-        console.log("children", this.props.children);
-
-        this.setState({ tile: this.props.selectedTile });
+        var currentTile = this.props.selectedTile;
+        var updatedTile = this.assignCoords(currentTile);
+        this.setState({ tile: updatedTile });
+        // firebase
+        console.log('UPDATED TILE', updatedTile);
         this.props.removeTileFromPouch(this.props.selectedTile.id);
         this.props.removeSelectedTile();
       } else if (this.state.tile) {
@@ -42376,10 +42384,7 @@ var WaitingRoom = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props$createGame = this.props.createGame,
-          players = _props$createGame.players,
-          currentGame = _props$createGame.currentGame;
-
+      // const { players, currentGame } = this.props.createGame
       return _react2.default.createElement(
         'div',
         { style: {
@@ -42393,15 +42398,12 @@ var WaitingRoom = function (_Component) {
         _react2.default.createElement(
           'div',
           null,
-          'Waiting on ',
-          players.length,
-          ' amount of players...'
+          'Waiting on amount of players...'
         ),
         _react2.default.createElement(
           'div',
           null,
-          'Game Id is ',
-          currentGame
+          'Game Id is'
         ),
         _react2.default.createElement(
           'div',
@@ -42426,11 +42428,14 @@ var WaitingRoom = function (_Component) {
 /********** CONTAINER *********/
 
 var mapState = function mapState(_ref) {
-  var createGame = _ref.createGame;
-  return { createGame: createGame };
+  var createGame = _ref.createGame,
+      user = _ref.user;
+  return { createGame: createGame, user: user };
 };
 
 exports.default = (0, _reactRedux.connect)(mapState, null)(WaitingRoom);
+
+// createGame.players.filter(player => player.id === user)
 
 // Create number of players
 // Action dispatcher that will send their session ID to the playersArray through reducer to FB to Redux
@@ -42542,7 +42547,8 @@ function challenge(word) {
   _axios2.default.get(merriamUrl).then(function (res) {
     if (res.data.includes('<suggestion>')) {
       console.log(word.toUpperCase() + " ISN'T A WORD.");
-    } else console.log("All words are valid in Merriam-Webster's dictionary. Challenge failed.");
+      console.log("You're either trying to cheat or you're stupid.");
+    } else console.log("All words are valid in Merriam-Webster's dictionary. Challenge failed, stupid.");
   });
 }
 
@@ -43123,12 +43129,13 @@ var Routes = function (_Component) {
   }
 
   _createClass(Routes, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.props.loadInitialData();
-    }
-  }, {
     key: 'render',
+
+    // componentDidMount () {
+    //   this.props.loadInitialData()
+    // }
+    // FIX TOMORROW!!!!
+
     value: function render() {
       var isLoggedIn = this.props.isLoggedIn;
 
@@ -43144,7 +43151,6 @@ var Routes = function (_Component) {
             null,
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _components.MainMenu }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/game/:currentGame', component: _components.Board }),
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/game/:currentGame/winner', component: _components.WinnersPage }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/rules', component: _components.Rules }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/waitingroom/:currentGame', component: _components.WaitingRoom }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _components.Login }),
@@ -43235,8 +43241,6 @@ exports.findGame = exports.dumpTile = exports.peelTile = exports.updatePot = exp
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 exports.default = function () {
   var game = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments[1];
@@ -43261,6 +43265,8 @@ var _firebase2 = _interopRequireDefault(_firebase);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 /* ACTION TYPES */
 var CREATE_GAME = 'CREATE_GAME';
 var SWAP_TILE = 'SWAP_TILE';
@@ -43282,19 +43288,53 @@ var peelGlobalPot = function peelGlobalPot(pot) {
 };
 
 /* THUNK CREATORS */
-var makeGame = exports.makeGame = function makeGame(currentGame, pot, players) {
-  return function (dispatch) {
-    _firebase2.default.database().ref('games').child(currentGame).set({
-      currentGame: currentGame,
-      pot: pot,
-      players: players
-    });
-    console.log('   CURRENT GAME   ', currentGame);
-    // await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id').set("1") //Set Player 1 ID here
-    // firebase.database().ref(`games/${currentGame}`).child('BRUCE')
-    // .set('BRUCE')
-    dispatch(createGame({ currentGame: currentGame, pot: pot, players: players }));
-  };
+// export const makeGame = (currentGame, pot, players) =>
+// dispatch => {
+//   firebase.database().ref('games').child(currentGame)
+//   .set({
+//     currentGame,
+//     pot,
+//     players
+//   })
+//   console.log('   CURRENT GAME   ', currentGame)
+//   firebase.database().ref(`games/${currentGame}`).child('BRUCE')
+//     .set('BRUCE')
+//   dispatch(createGame({ currentGame, pot, players }))
+// }
+var makeGame = exports.makeGame = function makeGame(currentGame, pot, players, userId) {
+  return function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _firebase2.default.database().ref('games').child(currentGame).set({
+                currentGame: currentGame,
+                pot: pot,
+                players: players
+              });
+
+            case 2:
+              _context.next = 4;
+              return _firebase2.default.database().ref('games/' + currentGame + '/players/Player 1').child('id').set(userId);
+
+            case 4:
+              //Set Player 1 ID here
+              dispatch(createGame({ currentGame: currentGame, pot: pot, players: players }));
+
+            case 5:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 };
 
 var updatePot = exports.updatePot = function updatePot(gameId, pot) {
@@ -43326,21 +43366,77 @@ var dumpTile = exports.dumpTile = function dumpTile(gameId, pot) {
   };
 };
 
-var findGame = exports.findGame = function findGame(gameId) {
-  return function (dispatch) {
-    _firebase2.default.database().ref('games/' + gameId).once('value', function (snapshot) {
-      dispatch(createGame(snapshot.val()));
-    });
-    _firebase2.default.database().ref('games/' + gameId + '/players').once('value', function (snapshot) {
-      console.log(snapshot.val());
-      var allPlayers = snapshot.val();
-      for (var i in allPlayers) {
-        if (_typeof(allPlayers[i]) !== 'object') {
-          _firebase2.default.database().ref('games/' + gameId + '/players/' + allPlayers[i]).child('id').set('2');
+var findGame = exports.findGame = function findGame(gameId, userId) {
+  return function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch) {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return _firebase2.default.database().ref('games/' + gameId).once('value', function (snapshot) {
+                dispatch(createGame(snapshot.val()));
+              });
+
+            case 2:
+              _context3.next = 4;
+              return _firebase2.default.database().ref('games/' + gameId + '/players').once('value', function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(snapshot) {
+                  var allPlayers, counter, i;
+                  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          allPlayers = snapshot.val();
+                          counter = false;
+                          _context2.t0 = regeneratorRuntime.keys(allPlayers);
+
+                        case 3:
+                          if ((_context2.t1 = _context2.t0()).done) {
+                            _context2.next = 11;
+                            break;
+                          }
+
+                          i = _context2.t1.value;
+
+                          if (!(!allPlayers[i].id && counter === false)) {
+                            _context2.next = 9;
+                            break;
+                          }
+
+                          counter = true;
+                          _context2.next = 9;
+                          return _firebase2.default.database().ref('games/' + gameId + '/players/' + allPlayers[i]).child('id').set(userId);
+
+                        case 9:
+                          _context2.next = 3;
+                          break;
+
+                        case 11:
+                        case 'end':
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2, undefined);
+                }));
+
+                return function (_x3) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+
+            case 4:
+            case 'end':
+              return _context3.stop();
+          }
         }
-      }
-    });
-  };
+      }, _callee3, undefined);
+    }));
+
+    return function (_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
 };
 
 /* REDUCER */
@@ -43355,7 +43451,7 @@ var findGame = exports.findGame = function findGame(gameId) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.auth = exports.me = undefined;
+exports.logout = exports.auth = exports.me = exports.getSessionIdThunk = undefined;
 
 exports.default = function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultUser;
@@ -43364,10 +43460,10 @@ exports.default = function () {
   switch (action.type) {
     case GET_USER:
       return action.user;
-    // case GET_CURRENT_SESSION:
-    //   return action.user
     case REMOVE_USER:
       return defaultUser;
+    case GET_SESSION_ID:
+      return action.sessionId;
     default:
       return state;
   }
@@ -43388,7 +43484,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var GET_USER = 'GET_USER';
 var REMOVE_USER = 'REMOVE_USER';
-// const GET_CURRENT_SESSION = 'GET_CURRENT_SESSION'
+var GET_SESSION_ID = 'GET_SESSION_ID';
 
 /**
  * INITIAL STATE
@@ -43398,19 +43494,29 @@ var defaultUser = {};
 /**
  * ACTION CREATORS
  */
-// const getCurrentSession = user => ({type: GET_CURRENT_SESSION, user})
-// const getUser = user => ({type: GET_USER, user})
+
+var getUser = function getUser(user) {
+  return { type: GET_USER, user: user };
+};
 var removeUser = function removeUser() {
   return { type: REMOVE_USER };
 };
-
+var getSessionId = function getSessionId(sessionId) {
+  return { type: GET_SESSION_ID, sessionId: sessionId };
+};
 /**
  * THUNK CREATORS
  */
 
-// export const setCookieSession = () => {
-//   dispatch
-// }
+var getSessionIdThunk = exports.getSessionIdThunk = function getSessionIdThunk() {
+  return function (dispatch) {
+    return _axios2.default.get('/sessions').then(function (res) {
+      return dispatch(getSessionId(res.data));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
+};
 
 var me = exports.me = function me() {
   return function (dispatch) {
