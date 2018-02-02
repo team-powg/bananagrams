@@ -5,11 +5,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
-// import updateGlobalPot from './updateGlobalPot'
 import createGame from './createGame';
 import playersPouch from './playersPouch';
-
-
 
 const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch})
 
@@ -22,7 +19,6 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './createGame'
-// export * from './createInitialPot'
 export * from './playersPouch'
 export * from './selectedTile'
 

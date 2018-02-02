@@ -84,15 +84,12 @@ export class MainMenu extends Component {
     }
     const players = this.totalPlayers(this.state.numPlayers)
     const userId = this.props.user
-    console.log('user', userId)
     const newPlayerGame = makeGame(currentGame, randomizedPot, players, userId)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/waitingroom/${currentGame}`)
   }
 
   render() {
-    console.log('session', this.props.user)
-    // let x = challenge('probably');
     return (
       <div className="main" style={{
         display: 'flex',
@@ -148,9 +145,7 @@ export class MainMenu extends Component {
     }
   }
 
-
 /********* CONTAINER *********/
-
 
 const mapState = ({user}) => ({user})
 

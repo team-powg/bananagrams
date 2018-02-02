@@ -16,7 +16,6 @@ class WaitingRoom extends Component {
     var beginningPot = this.props.createGame.pot;
     var playerPot = [];
     var numberOfPlayers = Object.keys(this.props.createGame.players).length
-    console.log('this.props.createGame.players', this.props.createGame.players)
     var playerObj = this.props.createGame.players;
     var count;
     var gameId = this.props.createGame.currentGame;
@@ -29,21 +28,16 @@ class WaitingRoom extends Component {
       this.props.assignPlayerTilesToFirebasePotThunk(playerPot, gameId, count);
     }
     this.props.updatePot(gameId, beginningPot);
-
   }
 
 startGameHandler(evt) {
   evt.preventDefault()
   const playerId = this.props.user;
   const gameId = this.props.createGame.currentGame;
-  // const indivPot;
   this.disperseTiles();
-  // assignPlayerTilesToFirebasePotThunk() // indivPot, gameId, playerId
-  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {
-    // const { players, currentGame } = this.props.createGame
     return (
       <div style={{
         textAlign: 'center'
@@ -65,15 +59,11 @@ startGameHandler(evt) {
   }
 }
 
-
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user}) => ({createGame, user})
 const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot}
 export default connect(mapState, mapDispatch)(WaitingRoom)
-
-
-// createGame.players.filter(player => player.id === user)
 
 // Create number of players
 // Action dispatcher that will send their session ID to the playersArray through reducer to FB to Redux
