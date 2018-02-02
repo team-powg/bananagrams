@@ -74,11 +74,18 @@ export class MainMenu extends Component {
     evt.preventDefault()
     await this.generateGameId()
     const currentGame = this.state.currentGameId
-    const pot = this.state.pot
+    const beginningPot = this.state.pot;
+    const randomizedPot = [];
+    while (beginningPot.length) {
+      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = beginningPot.indexOf(randomLetter);
+      randomizedPot.push(randomLetter);
+      beginningPot.splice(pos, 1)
+    }
     const players = this.totalPlayers(this.state.numPlayers)
     const userId = this.props.user
     console.log('user', userId)
-    const newPlayerGame = makeGame(currentGame, pot, players, userId)
+    const newPlayerGame = makeGame(currentGame, randomizedPot, players, userId)
     store.dispatch(newPlayerGame)
     this.props.history.push(`/waitingroom/${currentGame}`)
   }
