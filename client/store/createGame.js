@@ -5,12 +5,14 @@ const CREATE_GAME = 'CREATE_GAME'
 const SWAP_TILE = 'SWAP_TILE'
 const GENERATE_POT = 'GENERATE_POT'
 const PEEL_FROM_GLOBAL_POT = 'PEEL_FROM_GLOBAL_POT'
+const LISTEN_TO_GAME = 'LISTEN_TO_GAME'
 
 /* ACTION CREATORS */
 const createGame = game => ({ type: CREATE_GAME, game })
 const swapTile = pot => ({ type: SWAP_TILE, pot })
 const generatePot = pot => ({ type: GENERATE_POT, pot })
 const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
+const listenToGame = game => ({ type: LISTEN_TO_GAME, game})
 
 
 /* THUNK CREATORS */
@@ -25,7 +27,9 @@ async dispatch => {
   })
   await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
   .set(userId) //Set Player 1 ID here
-  dispatch(createGame({ currentGame, pot, players }))
+  await firebase.database().ref(`games/${currentGame}`).once('value', snapshot => {
+    dispatch(createGame(snapshot.val()))
+  })
 }
 
 
@@ -75,7 +79,20 @@ async dispatch => {
         }
       }
     })
+    await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
+
+      dispatch(createGame(snapshot.val()))
+    })
   }
+
+
+  export const listenToGameThunk = gameId =>
+     async dispatch => {
+      await firebase.database().ref(`games/${gameId}/players`).on('value', (snapshot) => {
+        dispatch(listenToGame(snapshot.val()))
+        console.log("SNAPSHOT: ", snapshot)
+      })
+    }
 
 
 /* REDUCER */
@@ -89,6 +106,8 @@ export default function (game = {}, action) {
       return {...game, pot: action.pot}
     case PEEL_FROM_GLOBAL_POT:
       return {...game, pot: action.pot}
+    case LISTEN_TO_GAME:
+      return {...game}
     default:
       return game
   }

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import store, { listenToGameThunk } from '../store';
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -10,11 +11,27 @@ class WaitingRoom extends Component {
     this.startGameHandler = this.startGameHandler.bind(this)
   }
 
+  componentDidMount() {
+    var gameId = this.props.createGame.currentGame
+    this.props.listenToGameThunk(gameId)
+  }
+
 startGameHandler() {
-  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
+// playerLength() {
+//   var size = 0;
+//   var playersObj = this.props.createGame.players
+//   for (var key in playersObj) {
+//     if (playersObj.hasOwnProperty(key)) size++;
+// }
+//  if
+// }
+
   render() {
+    // console.log("GAME ID: ", this.props.createGame.currentGame)
+    console.log("PROPS: ", this.props)
     // const { players, currentGame } = this.props.createGame
     return (
       <div style={{
@@ -41,8 +58,9 @@ startGameHandler() {
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user}) => ({createGame, user})
+const mapDispatch = { listenToGameThunk }
 
-export default connect(mapState, null)(WaitingRoom)
+export default connect(mapState, mapDispatch)(WaitingRoom)
 
 
 // createGame.players.filter(player => player.id === user)
