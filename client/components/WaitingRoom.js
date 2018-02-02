@@ -11,7 +11,7 @@ class WaitingRoom extends Component {
   }
 
 startGameHandler() {
-  // this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {
