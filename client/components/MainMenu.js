@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame, updatePot, findGame } from '../store';
+import store, { makeGame, updatePot, findGame, getSessionIdThunk } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -9,7 +9,7 @@ export class MainMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numpPlayers: 1,
+      numPlayers: 1,
       currentGameId: '',
       pot: gameLetter,
       bool: true,
@@ -22,6 +22,10 @@ export class MainMenu extends Component {
     this.generateGameId = this.generateGameId.bind(this)
     this.joinGameSubmit = this.joinGameSubmit.bind(this)
     this.joinGameChange = this.joinGameChange.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.getSessionIdThunk()
   }
 
   assignNumPlayers(evt) {
@@ -57,30 +61,30 @@ export class MainMenu extends Component {
   }
 
   joinGameSubmit() {
-    if (this.state.joinGame) {
-      this.props.findGame(this.state.joinGame)
+    const userId = this.props.user;
+    if (this.state.joinGame && userId) {
+      this.props.findGame(this.state.joinGame, userId)
       this.props.history.push(`/waitingroom/${this.state.joinGame}`)
     } else {
       this.setState({errors: 'Please enter a game id'})
     }
   }
 
- async handleSubmit(evt) {
+  async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
     const currentGame = this.state.currentGameId
     const pot = this.state.pot
     const players = this.totalPlayers(this.state.numPlayers)
-    // for(var i in players) {
-
-    // }
-    const newPlayerGame = makeGame(currentGame, pot, players)
+    const userId = this.props.user
+    console.log('user', userId)
+    const newPlayerGame = makeGame(currentGame, pot, players, userId)
     store.dispatch(newPlayerGame)
-    this.props.history.push(`/waitingroom/${this.state.currentGameId}`)
+    this.props.history.push(`/waitingroom/${currentGame}`)
   }
 
   render() {
-    console.log("PROPS FIND GAME: ", this.props.findGame)
+    console.log('session', this.props.user)
     let x = challenge('probably');
     return (
       <div className="main" style={{
@@ -141,6 +145,8 @@ export class MainMenu extends Component {
 /********* CONTAINER *********/
 
 
-const mapDispatchToProps = { makeGame, updatePot, findGame }
+const mapState = ({user}) => ({user})
 
-export default connect(null, mapDispatchToProps)(MainMenu)
+const mapDispatchToProps = { makeGame, updatePot, findGame, getSessionIdThunk }
+
+export default connect(mapState, mapDispatchToProps)(MainMenu)

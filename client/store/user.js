@@ -6,7 +6,7 @@ import history from '../history'
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
-// const GET_CURRENT_SESSION = 'GET_CURRENT_SESSION'
+const GET_SESSION_ID = 'GET_SESSION_ID'
 
 /**
  * INITIAL STATE
@@ -16,17 +16,20 @@ const defaultUser = {}
 /**
  * ACTION CREATORS
  */
-// const getCurrentSession = user => ({type: GET_CURRENT_SESSION, user})
-// const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
 
+const getUser = user => ({type: GET_USER, user})
+const removeUser = () => ({type: REMOVE_USER})
+const getSessionId = (sessionId) => ({type: GET_SESSION_ID, sessionId})
 /**
  * THUNK CREATORS
  */
 
-// export const setCookieSession = () => {
-//   dispatch
-// }
+ export const getSessionIdThunk = () =>
+  dispatch =>
+    axios.get('/sessions')
+    .then(res =>
+      dispatch(getSessionId(res.data)))
+    .catch(err => console.log(err))
 
 export const me = () =>
   dispatch =>
@@ -62,10 +65,10 @@ export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
       return action.user
-    // case GET_CURRENT_SESSION:
-    //   return action.user
     case REMOVE_USER:
       return defaultUser
+    case GET_SESSION_ID:
+      return action.sessionId
     default:
       return state
   }
