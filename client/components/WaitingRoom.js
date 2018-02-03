@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { assignPlayerTilesToFirebasePotThunk, updatePot } from '../store'
+import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -12,10 +12,20 @@ class WaitingRoom extends Component {
     this.disperseTiles = this.disperseTiles.bind(this);
   }
 
+  async componentWillReceiveProps (nextProps) {
+    if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
+      const userId = nextProps.user.sessionId
+      const playersObj = await nextProps.createGame.players
+      const findNextUnassignedPlayerKey = Object.entries(playersObj).find(([key, value]) => {
+        if (value.id && value.id === userId) { return key }
+      })
+      let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
+      this.props.giveUserPlayerNumberThunk(playerNumber)
+    }
+  }
+
   disperseTiles(evt) {
     var beginningPot = this.props.createGame.pot;
-    var playerPot = [];
-    var numberOfPlayers = Object.keys(this.props.createGame.players).length
     var playerObj = this.props.createGame.players;
     var count;
     var gameId = this.props.createGame.currentGame;
@@ -30,12 +40,11 @@ class WaitingRoom extends Component {
     this.props.updatePot(gameId, beginningPot);
   }
 
-startGameHandler(evt) {
+async startGameHandler(evt) {
   evt.preventDefault()
-  const playerId = this.props.user;
   const gameId = this.props.createGame.currentGame;
-  this.disperseTiles();
-  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
+  await this.disperseTiles();
+  this.props.history.push(`/game/${gameId}`)
 }
 
   render() {
@@ -63,7 +72,8 @@ startGameHandler(evt) {
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user}) => ({createGame, user})
-const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot}
+const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk}
+
 export default connect(mapState, mapDispatch)(WaitingRoom)
 
 // Create number of players
