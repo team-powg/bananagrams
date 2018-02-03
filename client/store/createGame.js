@@ -1,4 +1,5 @@
 import firebase from '../firebase'
+import User, {giveUserPlayerNumber } from './user'
 
 /* ACTION TYPES */
 const CREATE_GAME = 'CREATE_GAME'
@@ -14,8 +15,9 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
 
 
 /* THUNK CREATORS */
-export const makeGame = (currentGame, pot, players, userId) =>
 
+// Thunk creator for making a game
+export const makeGame = (currentGame, pot, players, userId) =>
 async dispatch => {
   await firebase.database().ref('games').child(currentGame)
   .set({
@@ -47,7 +49,6 @@ async dispatch => {
     dispatch(peelGlobalPot( pot ))
   }
 
-
   export const dumpTile = (gameId, pot) =>
   dispatch => {
     firebase.database().ref('games').child(gameId)
@@ -57,23 +58,27 @@ async dispatch => {
     dispatch(swapTile( pot ))
   }
 
+  // Action thunk for a player joining a game
   export const findGame = (gameId, userId) =>
-  async dispatch => {
-     await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
-      dispatch(createGame(snapshot.val()))
-    })
-     await firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
-      var allPlayers = snapshot.val()
-      var counter = false
-      for (var i in allPlayers) {
-        if (!allPlayers[i].id && counter === false) {
-          counter = true
-          await firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id')
-          .set(userId)
-        }
-      }
+    dispatch => {
+      firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
+      // Finds next available player spot to assign player's session id
+      let allPlayers = await snapshot.val()
+
+      const findNextUnassignedPlayerKey = Object.entries(allPlayers).find(([key, value]) => {
+        if (!value.id) { return key }
+      })
+
+      await firebase.database().ref(`games/${gameId}/players/${findNextUnassignedPlayerKey[0]}`).child('id')
+      .set(userId.sessionId)
+
+      await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
+         dispatch(createGame(updateSnapshot.val()))
+      })
     })
   }
+
+  // let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
 
 
 /* REDUCER */

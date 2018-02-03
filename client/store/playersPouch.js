@@ -41,8 +41,31 @@ export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerNumb
     firebase.database().ref(`games/${gameId}/players/${player}`).child('playerPot')
     .set(indivPot)
     dispatch(getAllPlayerTiles(indivPot))
-
 }
+
+export const updateTilePositionOnFirebase = (updatedPot, player, gameId) =>
+  dispatch => {
+    console.log('hi')
+    firebase.database().ref(`games/${gameId}/players`).once('value', snapshot => {
+      let allPlayers = snapshot.val()
+      let playerNumber = Object.keys(allPlayers).filter(indivPlayer => {
+        console.log(indivPlayer)
+        if (indivPlayer.id) {
+          return indivPlayer.id.sessionId === player
+        }
+      })
+
+      console.log('player', playerNumber)
+      // for (let i in allPlayers){
+      //   if (allPlayers[i].id === playerId && isPlayer === false) {
+      //     isPlayer = true
+      //     firebase.database().ref(`/game/${gameId}/players/${allPlayers[i]}`).child('playerPot').once('value', snapshot => {
+      //       console.log(snapshot.val())
+      //     })
+      //   }
+      //}
+    })
+  }
 
 // Reducer
 function playersPouch(state = [], action) {

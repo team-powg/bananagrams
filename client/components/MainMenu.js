@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame, updatePot, findGame, getSessionIdThunk } from '../store';
+import store, { makeGame, updatePot, findGame, getSessionIdThunk, giveUserPlayerNumberThunk } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -55,6 +55,7 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
+  // Player joins a game
   joinGameChange(evt) {
     const gameId = evt.target.value
     this.setState({joinGame: gameId})
@@ -70,11 +71,13 @@ export class MainMenu extends Component {
     }
   }
 
+  // Player creates a game
   async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
     const currentGame = this.state.currentGameId
     const beginningPot = this.state.pot;
+
     const randomizedPot = [];
     while (beginningPot.length) {
       var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
@@ -83,9 +86,17 @@ export class MainMenu extends Component {
       beginningPot.splice(pos, 1)
     }
     const players = this.totalPlayers(this.state.numPlayers)
+
+    // Gives the player who created game player one spot
     const userId = this.props.user
+    const number = 1;
+    this.props.giveUserPlayerNumberThunk(number)
+
+    // Creates new game in firebase
     const newPlayerGame = makeGame(currentGame, randomizedPot, players, userId)
     store.dispatch(newPlayerGame)
+
+    // Goes to waiting room
     this.props.history.push(`/waitingroom/${currentGame}`)
   }
 
@@ -149,6 +160,6 @@ export class MainMenu extends Component {
 
 const mapState = ({user}) => ({user})
 
-const mapDispatchToProps = { makeGame, updatePot, findGame, getSessionIdThunk }
+const mapDispatchToProps = { makeGame, updatePot, findGame, getSessionIdThunk, giveUserPlayerNumberThunk}
 
 export default connect(mapState, mapDispatchToProps)(MainMenu)
