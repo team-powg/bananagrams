@@ -1,34 +1,11 @@
 var board = [
-  ['', '', 'T', '', 'T'], // 0, 2
-  ['', '', 'O', '', 'O'], // 1, 2
-  ['', 'B', 'Y', '', 'M'], // 2, 2
-  ['', 'A', 'S', '', ''], // 3, 2
-  ['', 'D', '', '', '']
-  ];
-
-// var board = [
-//   ['a', 'T','', 'i', 'P'],
-//   ['', 'O','B', '', 'O'],
-//   ['', '','O', '', 'P'],
-//   ['', 'S','Y', '', ''],
-//   ['', 'S','', '', '']
-//   ]
-
-// var board = [
-//   ['K', 'E', 'V', 'I', 'N'],
-//   ['K', 'E', 'V', '', 'N'],
-//   ['K', 'E', 'V', '', 'N'],
-//   ['K', 'E', 'V', '', 'N'],
-//   ['K', 'E', 'V', '', '']
-// ]
-
-// var board = [
-//   ['K', 'E', 'V', 'I', 'N'],
-//   ['K', 'E', 'V', 'p', 'N'],
-//   ['K', 'E', 'V', '', 'N'],
-//   ['K', 'E', 'V', '', 'N'],
-//   ['K', 'E', 'V', 'I', 'N']
-// ]
+  ['', '', 'H', '', '', ''],
+  ['', 'H', 'E', 'L', 'P', ''],
+  ['', '', '', '', 'I', ''],
+  ['', '', 'E', '', 'L', ''],
+  ['', '', 'G', 'E', 'L', ''],
+  ['', '', 'O', '', '', '']
+  ]
 
 function getAllWords(arr) {
     let horizWordArr = [];
@@ -52,10 +29,7 @@ function getAllWords(arr) {
       if (currentRow[k]){
         let nextRow = arr[i+1];
         let prevRow = arr[i-1];
-        // console.log('prevRowk', prevRow[k])
-        // console.log('HERE', 'I: ', i, 'K:', k, currentRow[k])
-        if (nextRow && (((!prevRow && nextRow[k]) || (prevRow && (!prevRow[k] && nextRow[k]))))) { //IS VERT WORD CONTINUING
-                // NEED TO ASK IF VERT WORD HAS ENDED (IE IS THERE AN EMPTY STRING BELOW LETTER?)
+        if (nextRow && (((!prevRow && nextRow[k]) || (prevRow && (!prevRow[k] && nextRow[k]))))) {
           vertWordArr.push(getVertWord(arr.slice(i),k))
         }
       }
@@ -84,7 +58,5 @@ function getHorizWord (arr, i) {
   }
   return newWord;
 }
+
 getAllWords(board)
-
-
-
