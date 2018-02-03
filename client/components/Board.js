@@ -16,7 +16,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile } from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk} from '../store';
 
 
 export class Board extends Component {
@@ -31,13 +31,15 @@ export class Board extends Component {
     this.peel = this.peel.bind(this)
   }
 
-  static propTypes = {
-    setTilePosition: PropTypes.func.isRequired
-  };
-
   componentDidMount() {
-    this.setState({gameId: this.props.match.params.currentGame})
+    if (this.props.createGame) {
+      const playerNumber = this.props.user.playerNumber
+      const gameId = this.props.createGame.currentGame
+      this.props.getPlayerTilesThunk(gameId, playerNumber)
+      this.setState({gameId})
+    }
   }
+
 
   movePiece = (x, y) => {
     this.props.setTilePosition(x, y)
@@ -164,9 +166,9 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile }
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk}
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch })
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user })
 
 Board = DragDropContext(HTML5Backend)(Board);
 Board = connect(mapStateToProps, mapDispatchToProps)(Board)
