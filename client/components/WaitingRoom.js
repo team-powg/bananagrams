@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk } from '../store'
+import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk  } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -13,6 +13,14 @@ class WaitingRoom extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
+    //connects to firebase to listen for gameStarted status
+    if (nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
+      this.props.listenToGameThunk(nextProps.createGame.currentGame)
+      if (nextProps.checkGameStartStatus === true) {
+        this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
+      }
+    }
+    // connects to firebase and assigns players a player number
     if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       const userId = nextProps.user.sessionId
       const playersObj = await nextProps.createGame.players
@@ -22,6 +30,10 @@ class WaitingRoom extends Component {
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
+  }
+
+  componentWillUnmount() {
+    this.props.stopListenToGameThunk(this.props.createGame.currentGame)
   }
 
   disperseTiles(evt) {
@@ -43,7 +55,10 @@ class WaitingRoom extends Component {
 async startGameHandler(evt) {
   evt.preventDefault()
   const gameId = this.props.createGame.currentGame;
+  //Tiles are dispersed among players
   await this.disperseTiles();
+  // Game started status on Firebase is updated to true for all players
+  await this.props.changeGameStatusThunk(gameId, true)
   this.props.history.push(`/game/${gameId}`)
 }
 
@@ -71,8 +86,8 @@ async startGameHandler(evt) {
 
 /********** CONTAINER *********/
 
-const mapState = ({createGame, user}) => ({createGame, user})
-const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk}
+const mapState = ({createGame, user, checkGameStartStatus}) => ({createGame, user, checkGameStartStatus})
+const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk}
 
 export default connect(mapState, mapDispatch)(WaitingRoom)
 

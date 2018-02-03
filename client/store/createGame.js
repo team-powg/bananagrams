@@ -1,5 +1,4 @@
 import firebase from '../firebase'
-import User, {giveUserPlayerNumber } from './user'
 
 /* ACTION TYPES */
 const CREATE_GAME = 'CREATE_GAME'
@@ -18,20 +17,20 @@ const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
 
 // Thunk creator for making a game
 export const makeGame = (currentGame, pot, players, userId) =>
-async dispatch => {
-  await firebase.database().ref('games').child(currentGame)
-  .set({
-    currentGame,
-    pot,
-    players
-  })
-  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
-  .set(userId.sessionId) //Set Player 1 ID here
-  dispatch(createGame({ currentGame, pot, players }))
-}
+  async dispatch => {
+    await firebase.database().ref('games').child(currentGame)
+    .set({
+      currentGame,
+      pot,
+      players,
+      gameStarted: false
+    })
+    await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
+    .set(userId.sessionId) //Set Player 1 ID here
+    dispatch(createGame({ currentGame, pot, players }))
+  }
 
-
-  export const updatePot = (gameId, pot) =>
+export const updatePot = (gameId, pot) =>
   dispatch => {
     firebase.database().ref(`games/${gameId}`)
     .update({
@@ -40,7 +39,7 @@ async dispatch => {
     dispatch(generatePot( pot ))
   }
 
-  export const peelTile = (gameId, pot) =>
+export const peelTile = (gameId, pot) =>
   dispatch => {
     firebase.database().ref('games').child(gameId)
     .update({
@@ -49,7 +48,7 @@ async dispatch => {
     dispatch(peelGlobalPot( pot ))
   }
 
-  export const dumpTile = (gameId, pot) =>
+export const dumpTile = (gameId, pot) =>
   dispatch => {
     firebase.database().ref('games').child(gameId)
     .update({
@@ -59,27 +58,24 @@ async dispatch => {
   }
 
   // Action thunk for a player joining a game
-  export const findGame = (gameId, userId) =>
-    dispatch => {
-      firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
-      // Finds next available player spot to assign player's session id
-      let allPlayers = await snapshot.val()
+export const findGame = (gameId, userId) =>
+  dispatch => {
+    firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
+    // Finds next available player spot to assign player's session id
+    let allPlayers = await snapshot.val()
 
-      const findNextUnassignedPlayerKey = Object.entries(allPlayers).find(([key, value]) => {
-        if (!value.id) { return key }
-      })
+    const findNextUnassignedPlayerKey = Object.entries(allPlayers).find(([key, value]) => {
+      if (!value.id) { return key }
+    })
 
-      await firebase.database().ref(`games/${gameId}/players/${findNextUnassignedPlayerKey[0]}`).child('id')
-      .set(userId.sessionId)
+    await firebase.database().ref(`games/${gameId}/players/${findNextUnassignedPlayerKey[0]}`).child('id')
+    .set(userId.sessionId)
 
-      await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
-         dispatch(createGame(updateSnapshot.val()))
+    await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
+        dispatch(createGame(updateSnapshot.val()))
       })
     })
   }
-
-  // let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
-
 
 /* REDUCER */
 export default function (game = {}, action) {
