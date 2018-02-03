@@ -13,7 +13,7 @@ class WaitingRoom extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    if (nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
+    if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       const userId = nextProps.user.sessionId
       const playersObj = await nextProps.createGame.players
       const findNextUnassignedPlayerKey = Object.entries(playersObj).find(([key, value]) => {
