@@ -16,9 +16,6 @@ class WaitingRoom extends Component {
     //connects to firebase to listen for gameStarted status
     if (nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       this.props.listenToGameThunk(nextProps.createGame.currentGame)
-      if (nextProps.checkGameStartStatus === true) {
-        this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
-      }
     }
     // connects to firebase and assigns players a player number
     if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
@@ -29,6 +26,11 @@ class WaitingRoom extends Component {
       })
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
       this.props.giveUserPlayerNumberThunk(playerNumber)
+    }
+    if (nextProps.checkGameStartStatus === true) {
+      console.log('hi')
+      console.log('nextProps', nextProps.createGame.currentGame)
+      this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
     }
   }
 
