@@ -26,6 +26,7 @@ export class Board extends Component {
       gameId: '',
       disabled: false
     }
+
     this.dumpTiles = this.dumpTiles.bind(this)
     this.peel = this.peel.bind(this)
   }
