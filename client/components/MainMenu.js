@@ -75,7 +75,7 @@ export class MainMenu extends Component {
   async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
-    const currentGame = this.state.currentGameId
+    const currentGameId = this.state.currentGameId
     const beginningPot = this.state.pot;
 
     const randomizedPot = [];
@@ -86,18 +86,17 @@ export class MainMenu extends Component {
       beginningPot.splice(pos, 1)
     }
     const players = this.totalPlayers(this.state.numPlayers)
+    const userId = this.props.user
 
     // Gives the player who created game player one spot
-    const userId = this.props.user
-    const number = 1;
-    this.props.giveUserPlayerNumberThunk(number)
+    this.props.giveUserPlayerNumberThunk(1)
 
     // Creates new game in firebase
-    const newPlayerGame = makeGame(currentGame, randomizedPot, players, userId)
+    const newPlayerGame = await makeGame(currentGameId, randomizedPot, players, userId)
     store.dispatch(newPlayerGame)
 
     // Goes to waiting room
-    this.props.history.push(`/waitingroom/${currentGame}`)
+    this.props.history.push(`/waitingroom/${currentGameId}`)
   }
 
   render() {

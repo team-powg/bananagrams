@@ -26,7 +26,7 @@ async dispatch => {
     players
   })
   await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
-  .set(userId) //Set Player 1 ID here
+  .set(userId.sessionId) //Set Player 1 ID here
   dispatch(createGame({ currentGame, pot, players }))
 }
 

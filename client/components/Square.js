@@ -29,7 +29,7 @@ export class Square extends Component {
   clickHandler() {
     // If no existing placed tile and a tile is selected by player
     if (!this.state.tile && this.props.selectedTile) {
-      const user = this.props.user;
+      const user = this.props.user.playerNumber;
       const currentTile = this.props.selectedTile;
       const gameId = this.props.createGame.currentGame;
       const playersPouch = this.props.playersPouch
