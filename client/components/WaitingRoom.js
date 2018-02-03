@@ -35,6 +35,7 @@ startGameHandler(evt) {
   const playerId = this.props.user;
   const gameId = this.props.createGame.currentGame;
   this.disperseTiles();
+  this.props.history.push(`/game/${this.props.createGame.currentGame}`)
 }
 
   render() {

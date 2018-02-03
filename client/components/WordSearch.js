@@ -6,9 +6,32 @@ var board = [
   ['', 'D', '', '', '']
   ];
 
-// BANANA ISOLATES EACH INDIVIDUAL WORD BY IDENTIFYING CONTIGUOUS TILES AND ADDS THEM TO A JOINT ARRAY
-function banana(arr) {
-  let horizWordArr = [];
+// var board = [
+//   ['a', 'T','', 'i', 'P'],
+//   ['', 'O','B', '', 'O'],
+//   ['', '','O', '', 'P'],
+//   ['', 'S','Y', '', ''],
+//   ['', 'S','', '', '']
+//   ]
+
+// var board = [
+//   ['K', 'E', 'V', 'I', 'N'],
+//   ['K', 'E', 'V', '', 'N'],
+//   ['K', 'E', 'V', '', 'N'],
+//   ['K', 'E', 'V', '', 'N'],
+//   ['K', 'E', 'V', '', '']
+// ]
+
+// var board = [
+//   ['K', 'E', 'V', 'I', 'N'],
+//   ['K', 'E', 'V', 'p', 'N'],
+//   ['K', 'E', 'V', '', 'N'],
+//   ['K', 'E', 'V', '', 'N'],
+//   ['K', 'E', 'V', 'I', 'N']
+// ]
+
+function getAllWords(arr) {
+    let horizWordArr = [];
   for (let row of arr) {
     let i = 0;
     while (i < row.length) {
@@ -29,8 +52,11 @@ function banana(arr) {
       if (currentRow[k]){
         let nextRow = arr[i+1];
         let prevRow = arr[i-1];
-        if (!prevRow && nextRow[k] || !prevRow[k] && nextRow[k]) {
-          vertWordArr.push(getVertWord(arr.slice(i), k))
+        // console.log('prevRowk', prevRow[k])
+        // console.log('HERE', 'I: ', i, 'K:', k, currentRow[k])
+        if (nextRow && (((!prevRow && nextRow[k]) || (prevRow && (!prevRow[k] && nextRow[k]))))) { //IS VERT WORD CONTINUING
+                // NEED TO ASK IF VERT WORD HAS ENDED (IE IS THERE AN EMPTY STRING BELOW LETTER?)
+          vertWordArr.push(getVertWord(arr.slice(i),k))
         }
       }
     }
@@ -42,6 +68,7 @@ function banana(arr) {
 function getVertWord(arrs, i) {
   let tempWord = '';
   for (let row of arrs) {
+    if (!row[i]) break;
     if (row[i]) {
       tempWord += row[i];
     }
@@ -57,5 +84,7 @@ function getHorizWord (arr, i) {
   }
   return newWord;
 }
+getAllWords(board)
 
-banana(board)
+
+
