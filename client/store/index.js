@@ -7,8 +7,9 @@ import squareToSquareMove from './squareToSquareMove'
 import selectedTile from './selectedTile'
 import createGame from './createGame';
 import playersPouch from './playersPouch';
+import checkGameStartStatus from './checkGameStartStatus';
 
-const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch})
+const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch, checkGameStartStatus})
 
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
@@ -21,4 +22,5 @@ export * from './user'
 export * from './createGame'
 export * from './playersPouch'
 export * from './selectedTile'
+export * from './checkGameStartStatus'
 
