@@ -36,7 +36,7 @@ class BoardSquare extends Component {
   }
 
   render() {
-    const { position: {x, y}, connectDropTarget, isOver, item } = this.props;
+    const {connectDropTarget, isOver } = this.props;
     const dropStyle = {
       position: 'relative',
       width: '100%',
@@ -45,9 +45,7 @@ class BoardSquare extends Component {
 
     return connectDropTarget(
       <div style={dropStyle}>
-        <Square>
-          {this.props.children}
-        </Square>
+        <Square position={this.props.position} />
         {isOver &&
           <div style={{
             position: 'absolute',

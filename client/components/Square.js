@@ -16,9 +16,9 @@ export class Square extends Component {
   }
 
   assignCoords(tile) {
-    console.log('square,children', this.props.children)
-    tile.x = this.props.children[1][0];
-    tile.y = this.props.children[1][1];
+    const {x, y} = this.props.position
+    tile.x = x;
+    tile.y = y;
     return tile;
   }
 
@@ -52,6 +52,7 @@ export class Square extends Component {
       this.props.removeSelectedTile();
 
     } else if (this.state.tile) {
+      // Selects tile on board and removes coords and replaces fb player pot
       let tile = this.state.tile;
       const user = this.props.user.playerNumber;
       const gameId = this.props.createGame.currentGame;
@@ -65,7 +66,7 @@ export class Square extends Component {
       //Removes tile coords in local
       let updatedPouch = playersPouch.map(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
       //Removes tile coords in firebase
-      this.props.removeTilePositionOnFirebase(updatedPouch, user, gameId)
+      this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
 
 
       this.setState({ tile: null });

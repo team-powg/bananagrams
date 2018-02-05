@@ -59,12 +59,7 @@ export class Board extends Component {
         height: '50px',
         border: '1px dotted rgba(0, 0, 0, .2)'
       }}>
-      <BoardSquare
-      movePiece={this.movePiece}
-      position={{ x, y }}>
-      {this.renderPiece(x, y)}
-      {this['coords']=[x, y]}
-      </BoardSquare>
+      <BoardSquare position={{ x, y }} />
       </div>
     );
   }
