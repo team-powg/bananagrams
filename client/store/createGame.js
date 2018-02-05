@@ -27,7 +27,7 @@ async dispatch => {
     gameStarted: false
   })
   await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
-  .set(userId) //Set Player 1 ID here
+  .set(userId.sessionId) //Set Player 1 ID here
   dispatch(createGame({currentGame, pot, players}))
 }
 // const updatePlayerPot = (playerPot, player) => ({type: UPDATE_PLAYER_POT, playerPot, player})
@@ -100,6 +100,7 @@ export const globalPotListenerThunk = (gameId) =>
      })
   })
 }
+
 
 // export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
 //   dispatch => {
