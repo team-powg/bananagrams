@@ -56,11 +56,6 @@ export const getPlayerTilesThunk = (gameId, playerNumber) =>
     })
   }
 
-export const updateTilePositionOnFirebase = (updatedPot, player, gameId) =>
-  (dispatch) => {
-    const playerNumber = `Player ${player}`
-    firebase.database().ref(`games/${gameId}/players/${playerNumber}/playerPot`).set(updatedPot)
-  }
 
   export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
   dispatch => {

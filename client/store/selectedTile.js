@@ -18,7 +18,7 @@ export const removeSelectedTile = () => {
 }
 
 // Reducer
-function selectedTileReducer (state = {}, action) {
+function selectedTileReducer (state = null, action) {
   switch (action.type) {
     case SELECT_TILE:
       return action.tile

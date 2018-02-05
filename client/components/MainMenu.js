@@ -11,7 +11,6 @@ export class MainMenu extends Component {
     this.state = {
       numPlayers: 1,
       currentGameId: '',
-      pot: gameLetter,
       bool: true,
       joinGame: '',
       errors: ''
@@ -76,7 +75,7 @@ export class MainMenu extends Component {
     evt.preventDefault()
     await this.generateGameId()
     const currentGameId = this.state.currentGameId
-    const beginningPot = this.state.pot;
+    const beginningPot = gameLetter.slice();
 
     const randomizedPot = [];
     while (beginningPot.length) {
