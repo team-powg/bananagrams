@@ -130,7 +130,7 @@ export class MainMenu extends Component {
           <span>Join A Game</span>
           <form onSubmit={this.joinGameSubmit}>
             <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
-            <button type="submit">Join Game</button>
+            <button type="submit" className='btn'>Join Game</button>
             {
               this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
             }
@@ -138,16 +138,16 @@ export class MainMenu extends Component {
         </div>
         <div style={{fontSize: '2em', textAlign: 'center'}}>
           <br />
-          <span>Learn The Rules</span>
+          <span>Learn The Rules  </span>
           <Link to='/rules'>
-            <button>Rules</button>
+            <button className='btn'>Rules</button>
           </Link>
         </div>
         <br />
         <div style={{fontSize: '2em', textAlign: 'center'}}>
-          <span>Check Out Your Stats</span>
+          <span>Check Out Your Stats  </span>
           <Link to=''>
-            <button>Stats</button>
+            <button className='btn'>Stats</button>
           </Link>
         </div>
       </div>

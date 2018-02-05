@@ -68,6 +68,7 @@ async startGameHandler(evt) {
       <div style={{
         textAlign: 'center'
       }}>
+      
         <span><h1 style={{fontSize: '2em'}}>Waiting Room</h1></span>
         {
           this.state.players > 1 ?

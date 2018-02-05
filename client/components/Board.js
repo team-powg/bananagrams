@@ -16,7 +16,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk} from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk} from '../store';
 
 
 export class Board extends Component {
@@ -31,12 +31,16 @@ export class Board extends Component {
     this.peel = this.peel.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // this.props.globalPotListenerThunk(this.state.gameId)
     if (this.props.createGame) {
       const playerNumber = this.props.user.playerNumber
       const gameId = this.props.createGame.currentGame
       this.props.getPlayerTilesThunk(gameId, playerNumber)
       this.setState({gameId})
+      // console.log("GAME ID: ", gameId)
+      const globalPot = this.props.globalPotListenerThunk(gameId)
+      await globalPot
     }
   }
 
@@ -105,7 +109,14 @@ export class Board extends Component {
       currentPot.splice(pos, 1);
       count++;
     }
-    let swapTile = dumpTile(this.state.gameId, currentPot)
+    console.log('Player Number: ', this.props.user.playerNumber)
+    let gameId = this.state.gameId
+    let playerNumber = this.props.user.playerNumber
+    console.log("PLAYERS: ", this.props.playersPouch)
+    let playerPouch = this.props.playersPouch
+    let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
+    let swapTile = dumpTile(gameId, currentPot, playerNumber)
+    store.dispatch(updatedPlayerPouch)
     store.dispatch(swapTile)
   }
 
@@ -114,6 +125,7 @@ export class Board extends Component {
     for (let i = 0; i < 100; i++) {
       squares.push(this.renderSquare(i));
     }
+    console.log("SELECTED TILE", this.props.selectedTile)
     return (
       <div style={{
         display: 'flex',
@@ -150,10 +162,10 @@ export class Board extends Component {
               margin: '0px 0px 0px 5px'
             }}>
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
-              <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
+              <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile.id !== undefined}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
               <Link to={`/game/${this.state.gameId}/winner`}>
-                <button className="btn" id="submit-tiles" refs="btn" disabled={this.props.playersPouch.length > 0}>Submit Game</button>
+                <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
               </Link>
             </div>
           </div>
@@ -166,9 +178,9 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk}
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk}
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user })
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
 
 Board = DragDropContext(HTML5Backend)(Board);
 Board = connect(mapStateToProps, mapDispatchToProps)(Board)
