@@ -74,7 +74,7 @@ async startGameHandler(evt) {
           Waiting on amount of players...
         </div>
         <div>
-          Game Id is
+          Game id is:  {this.props.createGame.currentGame}
         </div>
         <div>
           <form onSubmit={this.startGameHandler}>
