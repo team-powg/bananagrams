@@ -16,7 +16,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk} from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk} from '../store';
 
 
 export class Board extends Component {
@@ -110,9 +110,13 @@ export class Board extends Component {
       count++;
     }
     console.log('Player Number: ', this.props.user.playerNumber)
+    let gameId = this.state.gameId
+    let playerNumber = this.props.user.playerNumber
     console.log("PLAYERS: ", this.props.playersPouch)
-
-    let swapTile = dumpTile(this.state.gameId, currentPot)
+    let playerPouch = this.props.playersPouch
+    let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
+    let swapTile = dumpTile(gameId, currentPot, playerNumber)
+    store.dispatch(updatedPlayerPouch)
     store.dispatch(swapTile)
   }
 
@@ -175,7 +179,7 @@ export class Board extends Component {
 
 const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk}
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user })
+const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
 
 Board = DragDropContext(HTML5Backend)(Board);
 Board = connect(mapStateToProps, mapDispatchToProps)(Board)

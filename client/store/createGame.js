@@ -5,14 +5,14 @@ const CREATE_GAME = 'CREATE_GAME'
 const SWAP_TILE = 'SWAP_TILE'
 const GENERATE_POT = 'GENERATE_POT'
 const PEEL_FROM_GLOBAL_POT = 'PEEL_FROM_GLOBAL_POT'
-// const UPDATE_GLOBAL_POT = 'UPDATE_GLOBAL_POT'
+// const UPDATE_PLAYER_POT = 'UPDATE_PLAYER_POT'
 
 /* ACTION CREATORS */
 const createGame = game => ({ type: CREATE_GAME, game })
 const swapTile = pot => ({ type: SWAP_TILE, pot })
 const generatePot = pot => ({ type: GENERATE_POT, pot })
 const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
-// const updateGlobalPot = (pot) => ({type: UPDATE_GLOBAL_POT, pot})
+// const updatePlayerPot = (playerPot, player) => ({type: UPDATE_PLAYER_POT, playerPot, player})
 
 
 /* THUNK CREATORS */
@@ -88,6 +88,15 @@ export const globalPotListenerThunk = (gameId) =>
     })
   }
 
+// export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
+//   dispatch => {
+//     let player = 'Player ' + playerNumber
+//     firebase.database().ref(`games/${gameId}/players/${player}/playerPot`).update({
+//       playerPot
+//     })
+//     dispatch(updatePlayerPot(playerPot, player))
+//   }
+
 /* REDUCER */
 export default function (game = {}, action) {
   switch (action.type) {
@@ -99,6 +108,8 @@ export default function (game = {}, action) {
       return {...game, pot: action.pot}
     case PEEL_FROM_GLOBAL_POT:
       return {...game, pot: action.pot}
+    // case UPDATE_PLAYER_POT:
+    //   return {...game, players: action.player action.playerPot }
     default:
       return game
   }
