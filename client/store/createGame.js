@@ -65,14 +65,11 @@ export const findGame = (gameId, userId) =>
     firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
     // Finds next available player spot to assign player's session id
     let allPlayers = await snapshot.val()
-
     const findNextUnassignedPlayerKey = Object.entries(allPlayers).find(([key, value]) => {
       if (!value.id) { return key }
     })
-
     await firebase.database().ref(`games/${gameId}/players/${findNextUnassignedPlayerKey[0]}`).child('id')
     .set(userId.sessionId)
-
     await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
         dispatch(createGame(updateSnapshot.val()))
       })
