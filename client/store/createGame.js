@@ -5,12 +5,14 @@ const CREATE_GAME = 'CREATE_GAME'
 const SWAP_TILE = 'SWAP_TILE'
 const GENERATE_POT = 'GENERATE_POT'
 const PEEL_FROM_GLOBAL_POT = 'PEEL_FROM_GLOBAL_POT'
+// const UPDATE_GLOBAL_POT = 'UPDATE_GLOBAL_POT'
 
 /* ACTION CREATORS */
 const createGame = game => ({ type: CREATE_GAME, game })
 const swapTile = pot => ({ type: SWAP_TILE, pot })
 const generatePot = pot => ({ type: GENERATE_POT, pot })
 const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
+// const updateGlobalPot = (pot) => ({type: UPDATE_GLOBAL_POT, pot})
 
 
 /* THUNK CREATORS */
@@ -74,6 +76,15 @@ export const findGame = (gameId, userId) =>
     await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
         dispatch(createGame(updateSnapshot.val()))
       })
+    })
+  }
+
+export const globalPotListenerThunk = (gameId) =>
+  dispatch => {
+    // console.log("REDUX GAME ID: ", gameId)
+    firebase.database().ref(`games/${gameId}/pot`).on('value', snapshot => {
+      // console.log("SNAPSHOT: ", snapshot.val())
+      dispatch(swapTile(snapshot.val()))
     })
   }
 
