@@ -6,6 +6,7 @@ class WaitingRoom extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      players: 1,
       bool: false
     }
     this.startGameHandler = this.startGameHandler.bind(this)
@@ -28,8 +29,6 @@ class WaitingRoom extends Component {
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
     if (nextProps.checkGameStartStatus === true) {
-      console.log('hi')
-      console.log('nextProps', nextProps.createGame.currentGame)
       this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
     }
   }
@@ -69,13 +68,23 @@ async startGameHandler(evt) {
       <div style={{
         textAlign: 'center'
       }}>
-        <span>Waiting Room</span>
-        <div>
-          Waiting on amount of players...
-        </div>
-        <div>
-          Game Id is
-        </div>
+        <span><h1 style={{fontSize: '2em'}}>Waiting Room</h1></span>
+        {
+          this.state.players > 1 ?
+          <div>
+            There is currently 1 player in the room..
+          </div>
+          :
+          <div>
+            There are currently {this.state.players} players in the room..
+          </div>
+        }
+        {
+          this.props.createGame &&
+          <div style={{fontSize: '1.5em'}}>
+           Game Id is {this.props.createGame.currentGame}
+          </div>
+        }
         <div>
           <form onSubmit={this.startGameHandler}>
             <button type="submit" disabled={this.state.bool} className="start-btn">START GAME</button>
