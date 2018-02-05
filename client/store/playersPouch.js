@@ -57,23 +57,9 @@ export const getPlayerTilesThunk = (gameId, playerNumber) =>
   }
 
 export const updateTilePositionOnFirebase = (updatedPot, player, gameId) =>
-  dispatch => {
-    console.log('hi')
-    // firebase.database().ref(`games/${gameId}/players/`).once('value', snapshot => {
-    //   .set(pot: updatedPot)
-    //     }
-    //   })
-
-    //   console.log('player', playerNumber)
-      // for (let i in allPlayers){
-      //   if (allPlayers[i].id === playerId && isPlayer === false) {
-      //     isPlayer = true
-      //     firebase.database().ref(`/game/${gameId}/players/${allPlayers[i]}`).child('playerPot').once('value', snapshot => {
-      //       console.log(snapshot.val())
-      //     })
-      //   }
-      //}
-    // })
+  (dispatch) => {
+    const playerNumber = `Player ${player}`
+    firebase.database().ref(`games/${gameId}/players/${playerNumber}/playerPot`).set(updatedPot)
   }
 
   export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>

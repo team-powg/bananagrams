@@ -17,7 +17,6 @@ export class PlayerTilePouch extends Component {
 
  render() {
    //all tiles from player pot
-  //  console.log('playersPOUCH', this.props.playersPouch)
    return (
      <div style={{
        backgroundColor: '#966F33',

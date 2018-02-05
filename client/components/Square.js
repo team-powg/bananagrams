@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { removeSelectedTile } from "../store/selectedTile";
 import { removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase } from "../store/playersPouch";
+import { selectTile } from '../store/selectedTile'
 
 export class Square extends Component {
   constructor(props) {
@@ -32,17 +33,18 @@ export class Square extends Component {
       const user = this.props.user.playerNumber;
       const currentTile = this.props.selectedTile;
       const gameId = this.props.createGame.currentGame;
-      const playersPouch = this.props.playersPouch
+      console.log(this.props.createGame)
+      //console.log('uhoh', gameId.players[`Player ${user}`].playerPot)
 
       //Gives tile square x and y coords and updates local state
       const updatedTile = this.assignCoords(currentTile);
       this.setState({ tile: updatedTile });
 
       //Adds updated tile to player's pouch
-      let updatedPouch = playersPouch.filter(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
+      //let updatedPouch = playersPouch.filter(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
 
       //sends updated pouch to firebase
-      this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
+      //this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
 
       // Removes tile from player's pouch && as a selected tile
       this.props.removeTileFromPouch(this.props.selectedTile.id);
@@ -53,7 +55,7 @@ export class Square extends Component {
       //Removes tile coords
       const updatedTile = this.removeCoords(tile)
       // Brings tile back to player's pouch and resets local state
-      this.props.addTileToPouch(updatedTile);
+      this.props.selectTile(updatedTile);
       this.setState({ tile: null });
     } else {
       // if square has no tile and player has not selected a tile
@@ -81,8 +83,8 @@ export class Square extends Component {
   }
 }
 
-const mapState = ({ selectedTile, createGame, user, playersPouch }) => ({ selectedTile, user, createGame, playersPouch });
+const mapState = ({ selectedTile, createGame, user }) => ({ selectedTile, user, createGame });
 
-const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase };
+const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile };
 
 export default connect(mapState, mapDispatch)(Square);
