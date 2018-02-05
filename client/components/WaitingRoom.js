@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+
 import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk  } from '../store'
 
 class WaitingRoom extends Component {
@@ -12,6 +13,7 @@ class WaitingRoom extends Component {
     this.startGameHandler = this.startGameHandler.bind(this)
     this.disperseTiles = this.disperseTiles.bind(this);
   }
+
 
   async componentWillReceiveProps (nextProps) {
     //connects to firebase to listen for gameStarted status
@@ -63,7 +65,19 @@ async startGameHandler(evt) {
   this.props.history.push(`/game/${gameId}`)
 }
 
+// playerLength() {
+//   var size = 0;
+//   var playersObj = this.props.createGame.players
+//   for (var key in playersObj) {
+//     if (playersObj.hasOwnProperty(key)) size++;
+// }
+//  if
+// }
+
   render() {
+    // console.log("GAME ID: ", this.props.createGame.currentGame)
+    console.log("PROPS: ", this.props)
+    // const { players, currentGame } = this.props.createGame
     return (
       <div style={{
         textAlign: 'center'
@@ -100,6 +114,7 @@ async startGameHandler(evt) {
 
 const mapState = ({createGame, user, checkGameStartStatus}) => ({createGame, user, checkGameStartStatus})
 const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk}
+
 
 export default connect(mapState, mapDispatch)(WaitingRoom)
 

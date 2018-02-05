@@ -7,11 +7,31 @@ const GENERATE_POT = 'GENERATE_POT'
 const PEEL_FROM_GLOBAL_POT = 'PEEL_FROM_GLOBAL_POT'
 // const UPDATE_PLAYER_POT = 'UPDATE_PLAYER_POT'
 
+
 /* ACTION CREATORS */
 const createGame = game => ({ type: CREATE_GAME, game })
 const swapTile = pot => ({ type: SWAP_TILE, pot })
 const generatePot = pot => ({ type: GENERATE_POT, pot })
 const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
+
+
+
+/* THUNK CREATORS */
+export const makeGame = (currentGame, pot, players, userId) =>
+
+async dispatch => {
+  await firebase.database().ref('games').child(currentGame)
+  .set({
+    currentGame,
+    pot,
+    players
+  })
+  await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
+  .set(userId) //Set Player 1 ID here
+  await firebase.database().ref(`games/${currentGame}`).once('value', snapshot => {
+    dispatch(createGame(snapshot.val()))
+  })
+}
 // const updatePlayerPot = (playerPot, player) => ({type: UPDATE_PLAYER_POT, playerPot, player})
 
 
@@ -86,6 +106,10 @@ export const globalPotListenerThunk = (gameId) =>
       // console.log("SNAPSHOT: ", snapshot.val())
       dispatch(swapTile(snapshot.val()))
     })
+    await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
+
+      dispatch(createGame(snapshot.val()))
+    })
   }
 
 // export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
@@ -96,6 +120,15 @@ export const globalPotListenerThunk = (gameId) =>
 //     })
 //     dispatch(updatePlayerPot(playerPot, player))
 //   }
+
+  export const listenToGameThunk = gameId =>
+     async dispatch => {
+      await firebase.database().ref(`games/${gameId}/players`).on('value', (snapshot) => {
+        dispatch(listenToGame(snapshot.val()))
+        console.log("SNAPSHOT: ", snapshot)
+      })
+    }
+
 
 /* REDUCER */
 export default function (game = {}, action) {
