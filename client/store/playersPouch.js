@@ -40,13 +40,16 @@ export const addCoordsToTile = coords => {
 }
 
 //THUNK//
-export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerNumber ) =>
-  dispatch => {
-    let player = `Player ${playerNumber}`;
-    firebase.database().ref(`games/${gameId}/players/${player}`).child('playerPot')
-    .set(indivPot)
-    //dispatch(getAllPlayerTiles(indivPot))
-}
+// export const assignPlayerTilesToFirebasePotThunk = (indivPot, gameId, playerNumber ) =>
+//   async dispatch => {
+//     let player = `Player ${playerNumber}`;
+//     await firebase.database().ref(`games/${gameId}/players/${player}`).child('playerPot')
+//     .set(indivPot)
+//     await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
+//       dispatch(createGame(snapshot.val()))
+//     })
+//     // dispatch(getAllPlayerTiles(indivPot))
+// }
 
 export const getPlayerTilesThunk = (gameId, playerNumber) =>
   dispatch => {
@@ -60,17 +63,19 @@ export const updateTilePositionOnFirebase = (updatedPot, player, gameId) =>
   (dispatch) => {
     const playerNumber = `Player ${player}`
     firebase.database().ref(`games/${gameId}/players/${playerNumber}/playerPot`).set(updatedPot)
+    firebase.database().ref()
+    dispatch(getAllPlayerTiles(updatedPot))
   }
 
-  export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
-  dispatch => {
-    console.log("GAME ID, Player Number, Player Pot", gameId, playerNumber, playerPot)
-    let player = 'Player ' + playerNumber
-    firebase.database().ref(`games/${gameId}/players/${player}`).update({
-      playerPot
-    })
-    dispatch(updatePlayerPot(playerPot))
-  }
+  // export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
+  // dispatch => {
+  //   // console.log("GAME ID, Player Number, Player Pot", gameId, playerNumber, playerPot)
+  //   let player = 'Player ' + playerNumber
+  //   firebase.database().ref(`games/${gameId}/players/${player}`).update({
+  //     playerPot
+  //   })
+  //   dispatch(updatePlayerPot(playerPot))
+  // }
 
 // Reducer
 function playersPouch(state = [], action) {

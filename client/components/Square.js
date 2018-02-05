@@ -33,6 +33,7 @@ export class Square extends Component {
       const user = this.props.user.playerNumber;
       const currentTile = this.props.selectedTile;
       const gameId = this.props.createGame.currentGame;
+      const playersPouch = this.props.playersPouch
       console.log(this.props.createGame)
       //console.log('uhoh', gameId.players[`Player ${user}`].playerPot)
 
@@ -41,10 +42,10 @@ export class Square extends Component {
       this.setState({ tile: updatedTile });
 
       //Adds updated tile to player's pouch
-      //let updatedPouch = playersPouch.filter(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
+      let updatedPouch = playersPouch.filter(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
 
       //sends updated pouch to firebase
-      //this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
+      this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
 
       // Removes tile from player's pouch && as a selected tile
       this.props.removeTileFromPouch(this.props.selectedTile.id);
@@ -83,7 +84,7 @@ export class Square extends Component {
   }
 }
 
-const mapState = ({ selectedTile, createGame, user }) => ({ selectedTile, user, createGame });
+const mapState = ({ selectedTile, createGame, user, playersPouch }) => ({ selectedTile, user, createGame, playersPouch });
 
 const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile };
 

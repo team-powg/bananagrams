@@ -97,25 +97,23 @@ export class Board extends Component {
   async dumpTiles(evt){
     evt.preventDefault()
     var selectedTile = this.props.selectedTile;
-    var currentPot = this.props.createGame.pot;
-    currentPot.push(selectedTile);
+    var currentGlobalPot = this.props.createGame.pot;
+    currentGlobalPot.push(selectedTile);
     this.props.removeTileFromPouch(selectedTile.id)
     this.props.removeSelectedTile()
     var count = 0
     while (count < 3) {
-      var randomLetter = await currentPot[Math.floor(Math.random() * currentPot.length)];
-      var pos = await currentPot.indexOf(randomLetter);
+      var randomLetter = await currentGlobalPot[Math.floor(Math.random() * currentGlobalPot.length)];
+      var pos = await currentGlobalPot.indexOf(randomLetter);
       this.props.addTileToPouch(randomLetter)
-      currentPot.splice(pos, 1);
+      currentGlobalPot.splice(pos, 1);
       count++;
     }
-    console.log('Player Number: ', this.props.user.playerNumber)
     let gameId = this.state.gameId
     let playerNumber = this.props.user.playerNumber
-    console.log("PLAYERS: ", this.props.playersPouch)
     let playerPouch = this.props.playersPouch
     let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
-    let swapTile = dumpTile(gameId, currentPot, playerNumber)
+    let swapTile = dumpTile(gameId, currentGlobalPot, playerNumber)
     store.dispatch(updatedPlayerPouch)
     store.dispatch(swapTile)
   }
@@ -125,7 +123,6 @@ export class Board extends Component {
     for (let i = 0; i < 100; i++) {
       squares.push(this.renderSquare(i));
     }
-    console.log("SELECTED TILE", this.props.selectedTile)
     return (
       <div style={{
         display: 'flex',
@@ -162,7 +159,7 @@ export class Board extends Component {
               margin: '0px 0px 0px 5px'
             }}>
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
-              <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile.id !== undefined}>Dump Tile</button>
+              <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
               <Link to={`/game/${this.state.gameId}/winner`}>
                 <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
