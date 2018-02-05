@@ -7,11 +7,15 @@ import history from '../history'
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
 const GET_SESSION_ID = 'GET_SESSION_ID'
+const GIVE_USER_PLAYER_NUMBER = 'GIVE_USER_PLAYER_NUMBER'
 
 /**
  * INITIAL STATE
  */
-const defaultUser = {}
+const defaultUser = {
+  sessionId: null,
+  playerNumber: null
+}
 
 /**
  * ACTION CREATORS
@@ -20,9 +24,12 @@ const defaultUser = {}
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 const getSessionId = (sessionId) => ({type: GET_SESSION_ID, sessionId})
+export const giveUserPlayerNumber = (playerNumber) => ({type: GIVE_USER_PLAYER_NUMBER, playerNumber})
 /**
  * THUNK CREATORS
  */
+
+ export const giveUserPlayerNumberThunk = playerNumber => dispatch => dispatch(giveUserPlayerNumber(playerNumber))
 
  export const getSessionIdThunk = () =>
   dispatch =>
@@ -67,8 +74,10 @@ export default function (state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
+    case GIVE_USER_PLAYER_NUMBER:
+      return {...state, playerNumber: action.playerNumber}
     case GET_SESSION_ID:
-      return action.sessionId
+      return {...state, sessionId: action.sessionId }
     default:
       return state
   }

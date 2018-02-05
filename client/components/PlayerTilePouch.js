@@ -17,8 +17,6 @@ export class PlayerTilePouch extends Component {
 
  render() {
    //all tiles from player pot
-   const tileSelection = this.props.playersPouch
-  //  console.log('playersPOUCH', this.props.playersPouch)
    return (
      <div style={{
        backgroundColor: '#966F33',
@@ -31,7 +29,7 @@ export class PlayerTilePouch extends Component {
         display: 'flex',
         flexWrap: 'wrap'
       }}>
-      { tileSelection && tileSelection.map(tile => {
+      { this.props.playersPouch && this.props.playersPouch.map(tile => {
           return (
             <div key={tile.id} >
               <img style={{ height: '40px', margin: '2px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import store, { makeGame, updatePot, findGame, getSessionIdThunk } from '../store';
+import store, { makeGame, updatePot, findGame, getSessionIdThunk, giveUserPlayerNumberThunk } from '../store';
 import gameLetter from '../HelperStuff';
 import { challenge } from './WordChallenge';
 
@@ -55,6 +55,7 @@ export class MainMenu extends Component {
     this.setState({ currentGameId: gameIdStr })
   }
 
+  // Player joins a game
   joinGameChange(evt) {
     const gameId = evt.target.value
     this.setState({joinGame: gameId})
@@ -70,22 +71,35 @@ export class MainMenu extends Component {
     }
   }
 
+  // Player creates a game
   async handleSubmit(evt) {
     evt.preventDefault()
     await this.generateGameId()
-    const currentGame = this.state.currentGameId
-    const pot = this.state.pot
+    const currentGameId = this.state.currentGameId
+    const beginningPot = this.state.pot;
+
+    const randomizedPot = [];
+    while (beginningPot.length) {
+      var randomLetter = beginningPot[Math.floor(Math.random() * beginningPot.length)];
+      var pos = beginningPot.indexOf(randomLetter);
+      randomizedPot.push(randomLetter);
+      beginningPot.splice(pos, 1)
+    }
     const players = this.totalPlayers(this.state.numPlayers)
     const userId = this.props.user
-    console.log('user', userId)
-    const newPlayerGame = makeGame(currentGame, pot, players, userId)
+
+    // Gives the player who created game player one spot
+    this.props.giveUserPlayerNumberThunk(1)
+
+    // Creates new game in firebase
+    const newPlayerGame = await makeGame(currentGameId, randomizedPot, players, userId)
     store.dispatch(newPlayerGame)
-    this.props.history.push(`/waitingroom/${currentGame}`)
+
+    // Goes to waiting room
+    this.props.history.push(`/waitingroom/${currentGameId}`)
   }
 
   render() {
-    console.log('session', this.props.user)
-    let x = challenge('probably');
     return (
       <div className="main" style={{
         display: 'flex',
@@ -116,7 +130,7 @@ export class MainMenu extends Component {
           <span>Join A Game</span>
           <form onSubmit={this.joinGameSubmit}>
             <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
-            <button type="submit">Join Game</button>
+            <button type="submit" className='btn'>Join Game</button>
             {
               this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
             }
@@ -124,16 +138,16 @@ export class MainMenu extends Component {
         </div>
         <div style={{fontSize: '2em', textAlign: 'center'}}>
           <br />
-          <span>Learn The Rules</span>
+          <span>Learn The Rules  </span>
           <Link to='/rules'>
-            <button>Rules</button>
+            <button className='btn'>Rules</button>
           </Link>
         </div>
         <br />
         <div style={{fontSize: '2em', textAlign: 'center'}}>
-          <span>Check Out Your Stats</span>
+          <span>Check Out Your Stats  </span>
           <Link to=''>
-            <button>Stats</button>
+            <button className='btn'>Stats</button>
           </Link>
         </div>
       </div>
@@ -141,12 +155,10 @@ export class MainMenu extends Component {
     }
   }
 
-
 /********* CONTAINER *********/
-
 
 const mapState = ({user}) => ({user})
 
-const mapDispatchToProps = { makeGame, updatePot, findGame, getSessionIdThunk }
+const mapDispatchToProps = { makeGame, updatePot, findGame, getSessionIdThunk, giveUserPlayerNumberThunk}
 
 export default connect(mapState, mapDispatchToProps)(MainMenu)

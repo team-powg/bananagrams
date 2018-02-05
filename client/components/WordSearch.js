@@ -1,61 +1,80 @@
-var board = [
-  ['', '', 'T', '', 'T'], // 0, 2
-  ['', '', 'O', '', 'O'], // 1, 2
-  ['', 'B', 'Y', '', 'M'], // 2, 2
-  ['', 'A', 'S', '', ''], // 3, 2
-  ['', 'D', '', '', '']
-  ];
+// var board = [        //        SHOULD RETURN WORDS ARRAY
+//   ['A', 'C','T', 'I', 'O', 'N'],
+//   ['R', '','O', '', '', 'E'],
+//   ['T', '','M', '', '', 'A'],
+//   ['S', '','B', '', 'I', 'T'],
+//   ['Y', '','S', '', 'N', ''],
+//   ['', '', '', '', 'N', '']
+//   ]
 
-// BANANA ISOLATES EACH INDIVIDUAL WORD BY IDENTIFYING CONTIGUOUS TILES AND ADDS THEM TO A JOINT ARRAY
-function banana(arr) {
+var board = [            // SHOULD RETURN FALSE
+  ['A', 'C','T', 'I', 'O', 'N'],
+  ['R', '','O', '', '', 'E'],
+  ['T', '','M', '', '', 'A'],
+  ['S', '','B', '', 'I', 'T'],
+  ['Y', '','S', '', '', ''],
+  ['', '', '', 'O', 'N', '']
+  ]
+
+function getAllWords(arr) {
   let horizWordArr = [];
-  for (let row of arr) {
-    let i = 0;
-    while (i < row.length) {
-      if (row[i]) {
-        if (row[i+1]) {
-          horizWordArr.push(getHorizWord(row, i));
-          i++;
-        } else i++;
-        break;
-      } else i++;
+  let y = 0;
+  while (y < arr.length) {
+    let prevRow = arr[y-1]
+    let currentRow = arr[y];
+    let nextRow = arr[y+1];
+    let x = 0;
+    while (x < currentRow.length) {
+      if (currentRow[x]) {
+        if (currentRow[x+1] && !currentRow[x-1] ) {
+          let connectedWord = getHorizWord(currentRow, x, prevRow, nextRow)
+          horizWordArr.push(connectedWord);
+        }
+      }
+      x++;
     }
+    y++;
   }
   let vertWordArr = [];
-  var i = 0
-  while(i < arr.length) {
-    let currentRow = arr[i];
-    for (var k = 0; k < currentRow.length; k++) {
-      if (currentRow[k]){
-        let nextRow = arr[i+1];
-        let prevRow = arr[i-1];
-        if (!prevRow && nextRow[k] || !prevRow[k] && nextRow[k]) {
-          vertWordArr.push(getVertWord(arr.slice(i), k))
+  y = 0
+  while(y < arr.length) {
+    currentRow = arr[y];
+    for (x = 0; x < currentRow.length; x++) {
+      if (currentRow[x]){
+        nextRow = arr[y+1];
+        prevRow = arr[y-1];
+        if (nextRow && (((!prevRow && nextRow[x]) || (prevRow && (!prevRow[x] && nextRow[x]))))) {
+          connectedWord = getVertWord(arr.slice(y), x);
+          vertWordArr.push(connectedWord)
         }
       }
     }
-    i++
+    y++
   }
   return vertWordArr.concat(horizWordArr)
 }
 
-function getVertWord(arrs, i) {
+function getVertWord(arrs, y) {
   let tempWord = '';
   for (let row of arrs) {
-    if (row[i]) {
-      tempWord += row[i];
+    if (!row[y]) break;
+    if (row[y]) {
+      tempWord += row[y];
     }
   }
   return tempWord;
 }
 
-function getHorizWord (arr, i) {
+function getHorizWord (curr, y, prev, next) {
   let newWord = '';
-  while (arr[i]) {
-    newWord+=arr[i];
-    i++;
+  while (curr[y]) {
+    newWord+=curr[y];
+    y++;
   }
   return newWord;
 }
 
-banana(board)
+var wordsArr = getAllWords(board)
+
+console.log(wordsArr)
+

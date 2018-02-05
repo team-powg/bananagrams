@@ -5,14 +5,15 @@ const CREATE_GAME = 'CREATE_GAME'
 const SWAP_TILE = 'SWAP_TILE'
 const GENERATE_POT = 'GENERATE_POT'
 const PEEL_FROM_GLOBAL_POT = 'PEEL_FROM_GLOBAL_POT'
-const LISTEN_TO_GAME = 'LISTEN_TO_GAME'
+// const UPDATE_PLAYER_POT = 'UPDATE_PLAYER_POT'
+
 
 /* ACTION CREATORS */
 const createGame = game => ({ type: CREATE_GAME, game })
 const swapTile = pot => ({ type: SWAP_TILE, pot })
 const generatePot = pot => ({ type: GENERATE_POT, pot })
 const peelGlobalPot = pot => ({ type: PEEL_FROM_GLOBAL_POT, pot})
-const listenToGame = game => ({ type: LISTEN_TO_GAME, game})
+
 
 
 /* THUNK CREATORS */
@@ -31,30 +32,45 @@ async dispatch => {
     dispatch(createGame(snapshot.val()))
   })
 }
+// const updatePlayerPot = (playerPot, player) => ({type: UPDATE_PLAYER_POT, playerPot, player})
 
 
-  export const updatePot = (gameId, pot) =>
+/* THUNK CREATORS */
+
+// Thunk creator for making a game
+export const makeGame = (currentGame, pot, players, userId) =>
+  async dispatch => {
+    await firebase.database().ref('games').child(currentGame)
+    .set({
+      currentGame,
+      pot,
+      players,
+      gameStarted: false
+    })
+    await firebase.database().ref(`games/${currentGame}/players/Player 1`).child('id')
+    .set(userId.sessionId) //Set Player 1 ID here
+    dispatch(createGame({ currentGame, pot, players }))
+  }
+
+export const updatePot = (gameId, pot) =>
   dispatch => {
     firebase.database().ref(`games/${gameId}`)
     .update({
       pot
     })
-    console.log("POT: ", pot)
     dispatch(generatePot( pot ))
   }
 
-  export const peelTile = (gameId, pot) =>
+export const peelTile = (gameId, pot) =>
   dispatch => {
     firebase.database().ref('games').child(gameId)
     .update({
       pot
     })
-    console.log("POT: ", pot)
     dispatch(peelGlobalPot( pot ))
   }
 
-
-  export const dumpTile = (gameId, pot) =>
+export const dumpTile = (gameId, pot) =>
   dispatch => {
     firebase.database().ref('games').child(gameId)
     .update({
@@ -63,21 +79,32 @@ async dispatch => {
     dispatch(swapTile( pot ))
   }
 
-  export const findGame = (gameId, userId) =>
-  async dispatch => {
-     await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
-      dispatch(createGame(snapshot.val()))
+  // Action thunk for a player joining a game
+export const findGame = (gameId, userId) =>
+  dispatch => {
+    firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
+    // Finds next available player spot to assign player's session id
+    let allPlayers = await snapshot.val()
+
+    const findNextUnassignedPlayerKey = Object.entries(allPlayers).find(([key, value]) => {
+      if (!value.id) { return key }
     })
-     await firebase.database().ref(`games/${gameId}/players`).once('value', async snapshot => {
-      var allPlayers = snapshot.val()
-      var counter = false
-      for (var i in allPlayers) {
-        if (!allPlayers[i].id && counter === false) {
-          counter = true
-          await firebase.database().ref(`games/${gameId}/players/${allPlayers[i]}`).child('id')
-          .set(userId)
-        }
-      }
+
+    await firebase.database().ref(`games/${gameId}/players/${findNextUnassignedPlayerKey[0]}`).child('id')
+    .set(userId.sessionId)
+
+    await firebase.database().ref(`games/${gameId}`).once('value', updateSnapshot => {
+        dispatch(createGame(updateSnapshot.val()))
+      })
+    })
+  }
+
+export const globalPotListenerThunk = (gameId) =>
+  dispatch => {
+    // console.log("REDUX GAME ID: ", gameId)
+    firebase.database().ref(`games/${gameId}/pot`).on('value', snapshot => {
+      // console.log("SNAPSHOT: ", snapshot.val())
+      dispatch(swapTile(snapshot.val()))
     })
     await firebase.database().ref(`games/${gameId}`).once('value', snapshot => {
 
@@ -85,6 +112,14 @@ async dispatch => {
     })
   }
 
+// export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
+//   dispatch => {
+//     let player = 'Player ' + playerNumber
+//     firebase.database().ref(`games/${gameId}/players/${player}/playerPot`).update({
+//       playerPot
+//     })
+//     dispatch(updatePlayerPot(playerPot, player))
+//   }
 
   export const listenToGameThunk = gameId =>
      async dispatch => {
@@ -106,8 +141,8 @@ export default function (game = {}, action) {
       return {...game, pot: action.pot}
     case PEEL_FROM_GLOBAL_POT:
       return {...game, pot: action.pot}
-    case LISTEN_TO_GAME:
-      return {...game}
+    // case UPDATE_PLAYER_POT:
+    //   return {...game, players: action.player action.playerPot }
     default:
       return game
   }

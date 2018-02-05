@@ -7,7 +7,7 @@ export default class Rules extends Component {
         return (
             <div className="giant-image">
                 <img
-                    src="bananagrams-glamour.png"
+                    src="/banangrams-glamour.png"
                     height="250"
                     width="250"
                     className="circle-logo"
@@ -25,7 +25,7 @@ export default class Rules extends Component {
                 <p>If the words are acceptable, than that player is the WINNER.</p>
                 <p>If any word is unacceptable, that player becomes the “ROTTEN BANANA” and is out of that hand. He or she returns all their letters face down to the bunch and the game resumes for the remaining players.</p>
                 <Link to="/">
-                    <h2>Home</h2>
+                    <button className='btn'>Home</button>
                 </Link>
             </div>
         )
