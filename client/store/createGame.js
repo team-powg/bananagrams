@@ -41,13 +41,22 @@ export const updatePot = (gameId, pot) =>
     dispatch(generatePot( pot ))
   }
 
-export const peelTile = (gameId, pot) =>
-  dispatch => {
-    firebase.database().ref('games').child(gameId)
+export const peelTile = (gameId, pot, players, letters) =>
+  async dispatch => {
+    await firebase.database().ref('games').child(gameId)
     .update({
       pot
     })
-    dispatch(peelGlobalPot( pot ))
+    for (var i = 0; i < players.length; i++) {
+      console.log("PLAYER 1: ", players[i])
+      await firebase.database().ref(`games/${gameId}/players/${players[i]}/playerPot`).once('value', snapshot =>{
+        let newPlayerPot = snapshot.val()
+        newPlayerPot.push(letters[i])
+        firebase.database().ref(`games/${gameId}/players/${players[i]}/playerPot`).set(newPlayerPot)
+      })
+    }
+
+    await dispatch(peelGlobalPot( pot ))
   }
 
 export const dumpTile = (gameId, pot) =>
