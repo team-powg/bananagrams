@@ -15,7 +15,7 @@ class GlobalPotDisplay extends Component {
             textAlign: 'center'
           }}>
           {
-            `Total Tiles Remaining: ${this.props.createGame.pot.length}`
+            this.props.createGame && this.props.createGame.pot &&`Total Tiles Remaining: ${this.props.createGame.pot.length}`
           }
           </div>
         }
