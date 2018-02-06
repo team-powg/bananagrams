@@ -15,7 +15,6 @@ import GlobalPotDisplay from "./GlobalPotDisplay";
 import OtherPlayersBoardView from "./OtherPlayersBoardView";
 import SelectedTileDisplay from "./SelectedTileDisplay";
 import GameHeader from "./GameHeader";
-import GameFooter from "./GameFooter";
 import store, {
   updatePot,
   addTileToPouch,
