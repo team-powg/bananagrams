@@ -1,5 +1,6 @@
 // Connected to the redux store, owns Squares and Tiles
 // Knows all the tiles, their values, and their coordinates
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -20,9 +21,9 @@ import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPou
 export class Board extends Component {
   constructor() {
     super()
-
-    this.dumpTiles = this.dumpTiles.bind(this)
-    this.peel = this.peel.bind(this)
+    this.dumpTiles = this.dumpTiles.bind(this);
+    this.peel = this.peel.bind(this);
+    this.handleSubmitGame = this.handleSubmitGame.bind(this);
   }
 
   async componentDidMount() {
@@ -37,10 +38,9 @@ export class Board extends Component {
     }
   }
 
-
   movePiece = (x, y) => {
-    this.props.setTilePosition(x, y)
-  }
+    this.props.setTilePosition(x, y);
+  };
 
   renderSquare(i, j) {
     const x = i;
@@ -58,7 +58,14 @@ export class Board extends Component {
   }
 
   movePiece = (x, y) => {
-    this.props.setTilePosition(x, y)
+    this.props.setTilePosition(x, y);
+  };
+
+  handleSubmitGame(evt) {
+    evt.preventDefault();
+    const gameId = this.props.createGame.currentGame;
+    const playerNumber = this.props.user.playerNumber;
+    this.props.submitWordsForChallengeThunk(gameId, playerNumber);
   }
 
   renderPiece(x, y) {
@@ -148,6 +155,17 @@ export class Board extends Component {
             display: 'flex',
             flexWrap: 'wrap'
           }}>
+          <div
+            style={{
+              backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
+              width: "620px",
+              height: "500px",
+              margin: "0 auto",
+              border: "1px solid black",
+              display: "flex",
+              flexWrap: "wrap"
+            }}
+          >
             {squares}
           </div>
           <div style={{width: '25vw', height: '100%'}}>
@@ -163,6 +181,18 @@ export class Board extends Component {
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
               <Link to={`/game/${this.props.createGame.currentGame}/winner`}>
                 <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
+                <button
+                  className="btn"
+                  id="submit-tiles"
+                  refs="btn"
+                  disabled={
+                    this.props.createGame.pot.length > 0 &&
+                    this.props.playersPouch.length > 0
+                  }
+                  onClick={evt => this.handleSubmitGame(evt)}
+                >
+                  Submit Game
+                </button>
               </Link>
             </div>
           </div>
@@ -174,12 +204,38 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, playerPotListenerThunk }
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
+const mapDispatchToProps = {
+  updatePot,
+  setTilePosition,
+  getAllPlayerTiles,
+  submitWordsForChallengeThunk,
+  addTileToPouch,
+  peelTile,
+  removeTileFromPouch,
+  removeSelectedTile,
+  getPlayerTilesThunk,
+  globalPotListenerThunk
+};
+
+
+const mapStateToProps = ({
+  squareToSquareMove,
+  createGame,
+  selectedTile,
+  playersPouch,
+  user
+}) => ({
+  squareToSquareMove,
+  createGame,
+  selectedTile,
+  dumpTile,
+  playersPouch,
+  user,
+  updatePlayerPotThunk
+});
 
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, mapDispatchToProps)(Board)
+Board = connect(mapStateToProps, mapDispatchToProps)(Board);
 
-export default Board
-
+export default Board;

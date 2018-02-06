@@ -53,7 +53,7 @@ class WaitingRoom extends Component {
     var gameId = this.props.createGame.currentGame;
 
     for (var player in playerObj) {
-      let playerPot = beginningPot.splice(0, 21);
+      let playerPot = beginningPot.splice(0, 3);
       if (!count) {
         count = 1
       } else count++;
