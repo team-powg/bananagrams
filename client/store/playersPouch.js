@@ -58,12 +58,19 @@ export const getPlayerTilesThunk = (gameId, playerNumber) =>
 
   export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
   dispatch => {
-    console.log("GAME ID, Player Number, Player Pot", gameId, playerNumber, playerPot)
     let player = 'Player ' + playerNumber
     firebase.database().ref(`games/${gameId}/players/${player}`).update({
       playerPot
     })
     dispatch(updatePlayerPot(playerPot))
+  }
+
+  export const playerPotListenerThunk = (gameId, playerNumber) =>
+  dispatch => {
+    let player = 'Player ' + playerNumber
+    firebase.database().ref(`games/${gameId}/players/${player}/playerPot`).on('value', snapshot => {
+      dispatch(updatePlayerPot(snapshot.val()))
+    })
   }
 
 // Reducer

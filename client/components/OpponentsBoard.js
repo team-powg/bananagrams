@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
-class OtherPlayersBoardView extends Component {
-  render(){
+export const OpponentsBoard = (props) => {
+
     return (
       <div style={{
           height: '25%',
@@ -15,16 +15,14 @@ class OtherPlayersBoardView extends Component {
       </div>
     )
   }
-}
 
 
-export default OtherPlayersBoardView
+
+  const mapState = ({user}) => ({user})
+
+  const mapDispatch = { makeGame, updatePot, findGame, getSessionIdThunk, giveUserPlayerNumberThunk}
+
+  export default connect(mapState, mapDispatch)(OpponentsBoard)
 
 
-// this.props.numberOfPlayers.map(player => {
-//   return (
-//     <div style={///>
-//     <board playerNumber={playerNumber} style={height: '15%'}/>
-//     <div>
-//   )
-// })
+

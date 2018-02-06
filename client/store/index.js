@@ -12,6 +12,7 @@ import challengeGame from './challengeGame'
 
 const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch, checkGameStartStatus, challengeGame})
 
+
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
   createLogger({collapsed: true})
