@@ -1,7 +1,7 @@
 // Component that holds and displays all of the unused tiles assigned to player
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import {selectTile} from '../store/selectedTile';
+import store, {selectTile, getSessionIdThunk} from '../store';
 
 
 export class PlayerTilePouch extends Component {
@@ -10,13 +10,26 @@ export class PlayerTilePouch extends Component {
     this.clickHandler = this.clickHandler.bind(this)
   }
 
+
+
   clickHandler(evt) {
     const tileObj = evt;
     this.props.selectTile(tileObj);
   }
 
  render() {
-   //all tiles from player pot
+
+    const player = `Player ${this.props.user.playerNumber}`
+
+
+   console.log("USER: ", this.props.user)
+  //  if (this.props.createGame && player) {
+  //     let stuff = this.props.createGame.players[player].playerPot.filter(tile => (!tile.x))
+  //     console.log("STUFF: ",)
+  //   }
+
+
+
    return (
      <div style={{
        backgroundColor: '#966F33',
@@ -29,7 +42,7 @@ export class PlayerTilePouch extends Component {
         display: 'flex',
         flexWrap: 'wrap'
       }}>
-      { this.props.playersPouch && this.props.playersPouch.map(tile => {
+      { this.props.createGame && player && this.props.user && this.props.user.sessionId && this.props.createGame.players[player].playerPot && this.props.createGame.players[player].playerPot.filter(tile => (!tile.x)).map(tile => {
           return (
             <div key={tile.id} >
               <img style={{ height: '40px', margin: '2px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
@@ -45,7 +58,7 @@ export class PlayerTilePouch extends Component {
 
 /***** CONTAINER ****/
 
-const mapState = ({playersPouch}) => ({playersPouch})
-const mapDispatch = ({selectTile})
+const mapState = ({playersPouch, createGame, user}) => ({playersPouch, createGame, user})
+const mapDispatch = ({selectTile, getSessionIdThunk})
 
 export default connect(mapState, mapDispatch)(PlayerTilePouch)

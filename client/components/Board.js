@@ -16,7 +16,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk, playerPotListenerThunk } from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk, playerPotListenerThunk, listenToGame } from '../store';
 
 
 export class Board extends Component {
@@ -32,10 +32,10 @@ export class Board extends Component {
   }
 
   async componentDidMount() {
-    // this.props.globalPotListenerThunk(this.state.gameId)
     if (this.props.createGame) {
+      let gameId = this.props.match.params.currentGame
+      let listenToCurrentGame = this.props.listenToGame(gameId)
       const playerNumber = this.props.user.playerNumber
-      const gameId = this.props.createGame.currentGame
       this.props.getPlayerTilesThunk(gameId, playerNumber)
       this.setState({ gameId })
       // console.log("GAME ID: ", gameId)
@@ -43,7 +43,9 @@ export class Board extends Component {
       const playerPouch = this.props.playerPotListenerThunk(gameId, playerNumber)
       await globalPot
       await playerPouch
+      await listenToCurrentGame
     }
+
   }
 
 
@@ -169,7 +171,9 @@ export class Board extends Component {
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile ? false : true}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
               <Link to={`/game/${this.state.gameId}/winner`}>
-                <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
+                <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame && this.props.createGame.pot
+                  && this.props.createGame.pot.length > 0 && this.props.playersPouch
+                  && this.props.playersPouch.length > 0)}>Submit Game</button>
               </Link>
             </div>
           </div>
@@ -182,7 +186,7 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, playerPotListenerThunk }
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, playerPotListenerThunk, listenToGame }
 
 const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
 

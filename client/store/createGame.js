@@ -117,6 +117,13 @@ export const globalPotListenerThunk = (gameId) =>
 //     dispatch(updatePlayerPot(playerPot, player))
 //   }
 
+export const listenToGame = (gameId) =>
+dispatch => {
+  firebase.database().ref(`games/${gameId}`).on('value', snapshot => {
+    dispatch(createGame(snapshot.val()))
+  })
+}
+
 /* REDUCER */
 export default function (game = {}, action) {
   switch (action.type) {
