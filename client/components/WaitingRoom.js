@@ -31,9 +31,11 @@ class WaitingRoom extends Component {
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
-
     const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length + 1
+    // console.log('obj', Object.values(nextProps.createGame.players))
+    // console.log('objfilter', Object.values(nextProps.createGame.players).filter(player => player.id))
     this.setState({numPlayersJoined})
+
     // When host starts game, all other players will be pushed to game view
     if (nextProps.checkGameStartStatus === true) {
       this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
@@ -139,10 +141,3 @@ const mapState = ({createGame, user, checkGameStartStatus}) => ({createGame, use
 const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers}
 
 export default connect(mapState, mapDispatch)(WaitingRoom)
-
-// Create number of players
-// Action dispatcher that will send their session ID to the playersArray through reducer to FB to Redux
-// When others playersfill out game code then same action dispatcher adds their session id to the player array
-// when playerArray = number of players chosen, then the START button highlights
-// The server gets the gameId, does the randomizing for tiles and then its dividing, Once thats complete
-// Then we can render the game component
