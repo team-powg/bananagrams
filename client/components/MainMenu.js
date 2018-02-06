@@ -100,7 +100,7 @@ export class MainMenu extends Component {
 
   render() {
     return (
-      <div className="main" style={{
+      <div className="main" id='background' style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
