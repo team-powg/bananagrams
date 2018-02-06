@@ -34,7 +34,7 @@ export class PlayerTilePouch extends Component {
      <div style={{
        backgroundColor: '#966F33',
        border: '1px solid black',
-       width: '300px',
+       width: '100%',
        height: '60vh',
        margin: '0px 0px 5px 5px'
      }}>
@@ -45,7 +45,7 @@ export class PlayerTilePouch extends Component {
       { this.props.createGame && player && this.props.user && this.props.user.sessionId && this.props.createGame.players[player].playerPot && this.props.createGame.players[player].playerPot.filter(tile => (!tile.x)).map(tile => {
           return (
             <div key={tile.id} >
-              <img style={{ height: '40px', margin: '2px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
+              <img style={{ height: '1.8rem', margin: '2px'}} src={tile.img} onClick={() => this.clickHandler(tile)} />
             </div>
             )
           })
@@ -62,3 +62,4 @@ const mapState = ({playersPouch, createGame, user}) => ({playersPouch, createGam
 const mapDispatch = ({selectTile, getSessionIdThunk})
 
 export default connect(mapState, mapDispatch)(PlayerTilePouch)
+

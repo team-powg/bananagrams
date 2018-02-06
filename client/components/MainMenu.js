@@ -99,8 +99,9 @@ export class MainMenu extends Component {
   }
 
   render() {
+    // challenge(['invincible', 'beautifully', 'bearded', 'Chuck', 'Norjris'])
     return (
-      <div className="main" style={{
+      <div className="main" id='background' style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -125,16 +126,20 @@ export class MainMenu extends Component {
           </div>
         </form>
         </div>
+
+
         <div style={{fontSize: '2em', textAlign: 'center'}}>
           <span>Join A Game</span>
           <form onSubmit={this.joinGameSubmit}>
-            <input type="text" name="game" placeholder="Enter game id" onChange={this.joinGameChange} />
+            <input className="form-style-5" type="text" name="game" placeholder="Enter game id here..." onChange={this.joinGameChange} />
             <button type="submit" className='btn'>Join Game</button>
             {
               this.state.errors ? <div style={{fontSize: '15px', color: 'red'}}><span>{this.state.errors}</span></div> : <div></div>
             }
           </form>
         </div>
+
+
         <div style={{fontSize: '2em', textAlign: 'center'}}>
           <br />
           <span>Learn The Rules  </span>
@@ -143,12 +148,6 @@ export class MainMenu extends Component {
           </Link>
         </div>
         <br />
-        <div style={{fontSize: '2em', textAlign: 'center'}}>
-          <span>Check Out Your Stats  </span>
-          <Link to=''>
-            <button className='btn'>Stats</button>
-          </Link>
-        </div>
       </div>
       )
     }

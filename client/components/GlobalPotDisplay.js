@@ -9,7 +9,8 @@ class GlobalPotDisplay extends Component {
           this.props && this.props.createGame && <div style={{
             border: '1px solid black',
             backgroundColor: '#6D92A0',
-            width: 'auto',
+            width: '100%',
+            height: '10%',
             margin: '0px 5px 5px 0px',
             textAlign: 'center'
           }}>

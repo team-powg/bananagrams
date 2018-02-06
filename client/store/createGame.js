@@ -107,7 +107,6 @@ export const globalPotListenerThunk = (gameId) =>
   })
 }
 
-
 // export const updatePlayerPotThunk = (gameId, playerNumber, playerPot) =>
 //   dispatch => {
 //     let player = 'Player ' + playerNumber
