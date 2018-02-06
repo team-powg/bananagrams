@@ -1,33 +1,16 @@
-// var board = [        //        SHOULD RETURN WORDS ARRAY
-//   ['A', 'C','T', 'I', 'O', 'N'],
-//   ['R', '','O', '', '', 'E'],
-//   ['T', '','M', '', '', 'A'],
-//   ['S', '','B', '', 'I', 'T'],
-//   ['Y', '','S', '', 'N', ''],
-//   ['', '', '', '', 'N', '']
-//   ]
 
-var board = [            // SHOULD RETURN FALSE
-  ['A', 'C','T', 'I', 'O', 'N'],
-  ['R', '','O', '', '', 'E'],
-  ['T', '','M', '', '', 'A'],
-  ['S', '','B', '', 'I', 'T'],
-  ['Y', '','S', '', '', ''],
-  ['', '', '', 'O', 'N', '']
-  ]
-
-function getAllWords(arr) {
+export function getAllWords(arr) {
   let horizWordArr = [];
   let y = 0;
   while (y < arr.length) {
     let prevRow = arr[y-1]
-    let currentRow = arr[y];
+    let currRow = arr[y];
     let nextRow = arr[y+1];
     let x = 0;
-    while (x < currentRow.length) {
-      if (currentRow[x]) {
-        if (currentRow[x+1] && !currentRow[x-1] ) {
-          let connectedWord = getHorizWord(currentRow, x, prevRow, nextRow)
+    while (x < currRow.length) {
+      if (currRow[x]) {
+        if (currRow[x+1] && !currRow[x-1] ) {
+          let connectedWord = getHorizWord(currRow, x, prevRow, nextRow)
           horizWordArr.push(connectedWord);
         }
       }
@@ -38,23 +21,27 @@ function getAllWords(arr) {
   let vertWordArr = [];
   y = 0
   while(y < arr.length) {
-    currentRow = arr[y];
-    for (x = 0; x < currentRow.length; x++) {
-      if (currentRow[x]){
-        nextRow = arr[y+1];
-        prevRow = arr[y-1];
+    let currRow = arr[y];
+    for (let x = 0; x < currRow.length; x++) {
+      if (currRow[x]){
+        let nextRow = arr[y+1];
+        let prevRow = arr[y-1];
         if (nextRow && (((!prevRow && nextRow[x]) || (prevRow && (!prevRow[x] && nextRow[x]))))) {
-          connectedWord = getVertWord(arr.slice(y), x);
+          let connectedWord = getVertWord(arr.slice(y), x);
           vertWordArr.push(connectedWord)
         }
       }
     }
     y++
   }
+  console.log('HHHHHHH')
+
+  console.log(vertWordArr.concat(horizWordArr))
   return vertWordArr.concat(horizWordArr)
 }
 
-function getVertWord(arrs, y) {
+export function getVertWord(arrs, y) {
+  console.log('VERTS')
   let tempWord = '';
   for (let row of arrs) {
     if (!row[y]) break;
@@ -65,7 +52,8 @@ function getVertWord(arrs, y) {
   return tempWord;
 }
 
-function getHorizWord (curr, y, prev, next) {
+export function getHorizWord (curr, y, prev, next) {
+  console.log('HORIZS')
   let newWord = '';
   while (curr[y]) {
     newWord+=curr[y];
@@ -73,8 +61,4 @@ function getHorizWord (curr, y, prev, next) {
   }
   return newWord;
 }
-
-var wordsArr = getAllWords(board)
-
-console.log(wordsArr)
 
