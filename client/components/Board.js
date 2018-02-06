@@ -171,7 +171,7 @@ export class Board extends Component {
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile ? false : true}>Dump Tile</button>
 
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
-              <Link to={`/game/${this.state.gameId}/winner`}>
+              <Link to={`/game/${this.props.createGame.currentGame}/winner`}>
                 <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame && this.props.createGame.pot
                   && this.props.createGame.pot.length > 0 && this.props.playersPouch
                   && this.props.playersPouch.length > 0)}>Submit Game</button>
