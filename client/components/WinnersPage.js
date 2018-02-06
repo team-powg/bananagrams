@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import store, { makeGame } from '../store';
-import GameFooter from './GameFooter'
 
 
 export default class WinnersPage extends Component {
@@ -16,11 +15,7 @@ export default class WinnersPage extends Component {
   render(){
     return(
       <div>
-        
-
         <button className="btn" id="challenge-winner">Challenge Winner</button>
-
-        <GameFooter />
       </div>
     )
   }

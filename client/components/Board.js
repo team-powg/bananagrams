@@ -3,42 +3,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types';
 import Tile from './Tile';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import BoardSquare from './BoardSquare';
 import { setTilePosition } from '../store/squareToSquareMove';
 import { getAllPlayerTiles } from '../store/playersPouch';
 import PlayerTilePouch from './PlayerTilePouch';
 import GlobalPotDisplay from './GlobalPotDisplay';
 import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
+import Square from './Square';
 import GameHeader from './GameHeader';
-import GameFooter from './GameFooter';
 import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk} from '../store';
 
 
 export class Board extends Component {
   constructor() {
     super()
-    this.state = {
-      gameId: '',
-      disabled: false
-    }
 
     this.dumpTiles = this.dumpTiles.bind(this)
     this.peel = this.peel.bind(this)
   }
 
   async componentDidMount() {
-    // this.props.globalPotListenerThunk(this.state.gameId)
     if (this.props.createGame) {
       const playerNumber = this.props.user.playerNumber
       const gameId = this.props.createGame.currentGame
       this.props.getPlayerTilesThunk(gameId, playerNumber)
-      this.setState({gameId})
-      // console.log("GAME ID: ", gameId)
+
       const globalPot = this.props.globalPotListenerThunk(gameId)
       await globalPot
     }
@@ -49,17 +41,17 @@ export class Board extends Component {
     this.props.setTilePosition(x, y)
   }
 
-  renderSquare(i) {
-    const x = i % 10;
-    const y = Math.floor(i / 10);
+  renderSquare(i, j) {
+    const x = i;
+    const y = j;
     return (
-      <div key={i}
+      <div key={i + "-" + j}
       style={{
-        width: '50px',
-        height: '50px',
+        width: '6.66%',
+        height: '6.66%',
         border: '1px dotted rgba(0, 0, 0, .2)'
       }}>
-      <BoardSquare position={{ x, y }} />
+        <Square position={{ x, y }} />
       </div>
     );
   }
@@ -117,29 +109,31 @@ export class Board extends Component {
 
   render() {
     const squares = [];
-    for (let i = 0; i < 100; i++) {
-      squares.push(this.renderSquare(i));
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
+        squares.push(this.renderSquare(i, j))
+      }
     }
     return (
       <div style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: '100vh'
       }}>
-        <GameHeader gameId={this.state.gameId} />
+        <GameHeader gameId={this.props.createGame.currentGame} />
         <div style={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'stretch',
-          justifyContent: 'space-between'
+          height: '95vh'
         }}>
-          <div>
+          <div style={{width: '25vw', height: '100%'}}>
             <GlobalPotDisplay />
-            <OtherPlayersBoardView />
+            <OtherPlayersBoardView gameId={this.props.createGame.currentGame} />
           </div>
           <div style={{
             backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
-            width: '620px',
-            height: '500px',
+            width: '50vw',
+            height: '100%',
             margin: '0 auto',
             border: '1px solid black',
             display: 'flex',
@@ -147,9 +141,9 @@ export class Board extends Component {
           }}>
             {squares}
           </div>
-          <div>
-          <PlayerTilePouch />
-          <SelectedTileDisplay />
+          <div style={{width: '25vw', height: '100%'}}>
+            <PlayerTilePouch />
+            <SelectedTileDisplay />
             <div style={{
               display: 'flex',
               flexDirection: 'row',
@@ -158,13 +152,12 @@ export class Board extends Component {
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile ? false : true}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
-              <Link to={`/game/${this.state.gameId}/winner`}>
+              <Link to={`/game/${this.props.createGame.currentGame}/winner`}>
                 <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
               </Link>
             </div>
           </div>
         </div>
-        <GameFooter />
       </div>
     );
   }

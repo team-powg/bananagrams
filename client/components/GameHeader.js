@@ -4,7 +4,7 @@ const GameHeader = (props) => {
 const {gameId} = props
   return (
     <div style={{
-      height: '25px',
+      height: '5vh',
       width: '100vw',
       backgroundColor: '#022735',
       color: '#68979B',

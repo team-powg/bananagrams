@@ -1,24 +1,43 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import OpponentsBoard from './OpponentsBoard';
 
 class OtherPlayersBoardView extends Component {
-  render(){
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const numberOfPlayers = ['1', '2', '3']
     return (
       <div style={{
-          height: '25%',
-          width: 'auto',
+          height: '90%',
+          width: '100%',
           backgroundColor: '#6D92A0',
           border: '1px solid black',
           margin: '0px 5px 5px 0px'
         }}>
-        This box will render other player's boards during gameplay
+        {
+          numberOfPlayers.map((player, i) => {
+            return (
+              <React.Fragment key={i}>
+                <OpponentsBoard player={player} gameId={this.props.gameId} />
+              </React.Fragment>
+            )
+          })
+        }
       </div>
     )
   }
 }
 
+/************ CONTAINER ***********/
 
-export default OtherPlayersBoardView
+const mapState = null
+
+const mapDispatch = null
+
+export default connect(null, null)(OtherPlayersBoardView)
 
 
 // this.props.numberOfPlayers.map(player => {
