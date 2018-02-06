@@ -9,6 +9,7 @@ import createGame from './createGame';
 import playersPouch from './playersPouch';
 import checkGameStartStatus from './checkGameStartStatus';
 
+
 const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch, checkGameStartStatus})
 
 const middleware = composeWithDevTools(applyMiddleware(

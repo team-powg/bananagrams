@@ -19,3 +19,12 @@ class OtherPlayersBoardView extends Component {
 
 
 export default OtherPlayersBoardView
+
+
+// this.props.numberOfPlayers.map(player => {
+//   return (
+//     <div style={///>
+//     <board playerNumber={playerNumber} style={height: '15%'}/>
+//     <div>
+//   )
+// })
