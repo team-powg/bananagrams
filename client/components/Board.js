@@ -229,7 +229,6 @@ export class Board extends Component {
             </div>
           </div>
         </div>
-        <GameFooter />
       </div>
     );
   }
