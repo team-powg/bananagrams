@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-
-import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk  } from '../store'
+import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers  } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
@@ -14,7 +13,6 @@ class WaitingRoom extends Component {
     this.startGameHandler = this.startGameHandler.bind(this)
     this.disperseTiles = this.disperseTiles.bind(this);
   }
-
 
   async componentWillReceiveProps (nextProps) {
 
@@ -73,7 +71,7 @@ class WaitingRoom extends Component {
   }
 
   render() {
-    console.log(this.state)
+
     return (
       <div style={{
         textAlign: 'center',
@@ -138,8 +136,7 @@ class WaitingRoom extends Component {
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user, checkGameStartStatus}) => ({createGame, user, checkGameStartStatus})
-const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk}
-
+const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers}
 
 export default connect(mapState, mapDispatch)(WaitingRoom)
 

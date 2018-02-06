@@ -82,10 +82,13 @@ export class Board extends Component {
     var pos = await beginningPot.indexOf(randomLetter);
     beginningPot.splice(pos, 1)
     this.props.addTileToPouch(randomLetter)
-    let getPeeledPot = peelTile(this.state.gameId, beginningPot)
+    let gameId = this.state.gameId
+    let playerNumber = this.props.user.playerNumber
+    let playerPouch = this.props.playersPouch
+    let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
+    let getPeeledPot = peelTile(gameId, beginningPot)
     store.dispatch(getPeeledPot)
-    //leave room to assign peeled tiles to opponents
-    //Disable peel button ONLY when the players pouch is empty AND when global pot is less than number of players
+    store.dispatch(updatedPlayerPouch)
   }
 
   async dumpTiles(evt){
