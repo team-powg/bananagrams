@@ -1,5 +1,6 @@
 // Connected to the redux store, owns Squares and Tiles
 // Knows all the tiles, their values, and their coordinates
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -15,30 +16,29 @@ import GlobalPotDisplay from './GlobalPotDisplay';
 import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
+import Square from './Square';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk, playerPotListenerThunk } from '../store';
-
+import store, { updatePot, submitWordsForChallengeThunk, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk, playerPotListenerThunk } from '../store';
 
 export class Board extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
-      gameId: '',
+      gameId: "",
       disabled: false
-    }
+    };
 
-    this.dumpTiles = this.dumpTiles.bind(this)
-    this.peel = this.peel.bind(this)
+    this.dumpTiles = this.dumpTiles.bind(this);
+    this.peel = this.peel.bind(this);
+    this.handleSubmitGame = this.handleSubmitGame.bind(this);
   }
 
   async componentDidMount() {
-    // this.props.globalPotListenerThunk(this.state.gameId)
     if (this.props.createGame) {
       const playerNumber = this.props.user.playerNumber
       const gameId = this.props.createGame.currentGame
       this.props.getPlayerTilesThunk(gameId, playerNumber)
       this.setState({ gameId })
-      // console.log("GAME ID: ", gameId)
       const globalPot = this.props.globalPotListenerThunk(gameId)
       const playerPouch = this.props.playerPotListenerThunk(gameId, playerNumber)
       await globalPot
@@ -46,28 +46,35 @@ export class Board extends Component {
     }
   }
 
-
   movePiece = (x, y) => {
-    this.props.setTilePosition(x, y)
-  }
+    this.props.setTilePosition(x, y);
+  };
 
-  renderSquare(i) {
-    const x = i % 10;
-    const y = Math.floor(i / 10);
+  renderSquare(i, j) {
+    const x = i;
+    const y = j;
     return (
-      <div key={i}
-        style={{
-          width: '50px',
-          height: '50px',
-          border: '1px dotted rgba(0, 0, 0, .2)'
-        }}>
-        <BoardSquare position={{ x, y }} />
+
+      <div key={i + "" + j}
+      style={{
+        width: '10%',
+        height: '10%',
+        border: '1px dotted rgba(0, 0, 0, .2)'
+      }}>
+        <Square position={{ x, y }} />
       </div>
     );
   }
 
   movePiece = (x, y) => {
-    this.props.setTilePosition(x, y)
+    this.props.setTilePosition(x, y);
+  };
+
+  handleSubmitGame(evt) {
+    evt.preventDefault();
+    const gameId = this.props.createGame.currentGame;
+    const playerNumber = this.props.user.playerNumber;
+    this.props.submitWordsForChallengeThunk(gameId, playerNumber);
   }
 
   renderPiece(x, y) {
@@ -127,34 +134,42 @@ export class Board extends Component {
 
   render() {
     const squares = [];
-    for (let i = 0; i < 100; i++) {
-      squares.push(this.renderSquare(i));
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        squares.push(this.renderSquare(i, j));
+      }
     }
     return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
         <GameHeader gameId={this.state.gameId} />
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'stretch',
-          justifyContent: 'space-between'
-        }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "stretch",
+            justifyContent: "space-between"
+          }}
+        >
           <div>
             <GlobalPotDisplay />
             <OtherPlayersBoardView />
           </div>
-          <div style={{
-            backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
-            width: '620px',
-            height: '500px',
-            margin: '0 auto',
-            border: '1px solid black',
-            display: 'flex',
-            flexWrap: 'wrap'
-          }}>
+          <div
+            style={{
+              backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
+              width: "620px",
+              height: "500px",
+              margin: "0 auto",
+              border: "1px solid black",
+              display: "flex",
+              flexWrap: "wrap"
+            }}
+          >
             {squares}
           </div>
           <div>
@@ -169,7 +184,18 @@ export class Board extends Component {
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile ? false : true}>Dump Tile</button>
               <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
               <Link to={`/game/${this.state.gameId}/winner`}>
-                <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
+                <button
+                  className="btn"
+                  id="submit-tiles"
+                  refs="btn"
+                  disabled={
+                    this.props.createGame.pot.length > 0 &&
+                    this.props.playersPouch.length > 0
+                  }
+                  onClick={evt => this.handleSubmitGame(evt)}
+                >
+                  Submit Game
+                </button>
               </Link>
             </div>
           </div>
@@ -182,12 +208,38 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, playerPotListenerThunk }
 
-const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
+const mapDispatchToProps = {
+  updatePot,
+  setTilePosition,
+  getAllPlayerTiles,
+  submitWordsForChallengeThunk,
+  addTileToPouch,
+  peelTile,
+  removeTileFromPouch,
+  removeSelectedTile,
+  getPlayerTilesThunk,
+  globalPotListenerThunk
+};
+
+
+const mapStateToProps = ({
+  squareToSquareMove,
+  createGame,
+  selectedTile,
+  playersPouch,
+  user
+}) => ({
+  squareToSquareMove,
+  createGame,
+  selectedTile,
+  dumpTile,
+  playersPouch,
+  user,
+  updatePlayerPotThunk
+});
 
 Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, mapDispatchToProps)(Board)
+Board = connect(mapStateToProps, mapDispatchToProps)(Board);
 
-export default Board
-
+export default Board;

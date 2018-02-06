@@ -5,11 +5,10 @@ const GET_ALL_PLAYER_TILES = "GET_ALL_PLAYER_TILES";
 const REMOVE_TILE_FROM_POUCH = "REMOVE_TILE_FROM_POUCH";
 const ADD_TILE_TO_POUCH = "ADD_TILE_TO_POUCH";
 const ADD_COORDS_TO_TILE = "ADD_COORDS_TO_TILE";
-const UPDATE_PLAYER_POT = 'UPDATE_PLAYER_POT'
+const UPDATE_PLAYER_POT = 'UPDATE_PLAYER_POT';
 
 // Action
 const updatePlayerPot = (playerPot) => ({type: UPDATE_PLAYER_POT, playerPot})
-
 
 export const getAllPlayerTiles = tiles => {
   return {
@@ -81,6 +80,7 @@ function playersPouch(state = [], action) {
       return action.tiles;
     case REMOVE_TILE_FROM_POUCH:
       return state.filter(tile => tile.id !== action.id);
+
     case ADD_TILE_TO_POUCH:
       if (action.tile !== {}) {
         return [action.tile, ...state]
@@ -89,8 +89,6 @@ function playersPouch(state = [], action) {
       }
       case UPDATE_PLAYER_POT:
         return action.playerPot
-    // case: ADD_COORDS_TO_TILE:
-    //   return coords
     default:
       return state;
   }

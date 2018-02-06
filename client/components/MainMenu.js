@@ -99,6 +99,7 @@ export class MainMenu extends Component {
   }
 
   render() {
+    // challenge(['invincible', 'beautifully', 'bearded', 'Chuck', 'Norjris'])
     return (
       <div className="main" id='background' style={{
         display: 'flex',
