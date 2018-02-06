@@ -16,7 +16,7 @@ import OtherPlayersBoardView from './OtherPlayersBoardView';
 import SelectedTileDisplay from './SelectedTileDisplay';
 import GameHeader from './GameHeader';
 import GameFooter from './GameFooter';
-import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk} from '../store';
+import store, { updatePot, addTileToPouch, peelTile, dumpTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, updatePlayerPotThunk, playerPotListenerThunk } from '../store';
 
 
 export class Board extends Component {
@@ -37,10 +37,12 @@ export class Board extends Component {
       const playerNumber = this.props.user.playerNumber
       const gameId = this.props.createGame.currentGame
       this.props.getPlayerTilesThunk(gameId, playerNumber)
-      this.setState({gameId})
+      this.setState({ gameId })
       // console.log("GAME ID: ", gameId)
       const globalPot = this.props.globalPotListenerThunk(gameId)
+      const playerPouch = this.props.playerPotListenerThunk(gameId, playerNumber)
       await globalPot
+      await playerPouch
     }
   }
 
@@ -54,12 +56,12 @@ export class Board extends Component {
     const y = Math.floor(i / 10);
     return (
       <div key={i}
-      style={{
-        width: '50px',
-        height: '50px',
-        border: '1px dotted rgba(0, 0, 0, .2)'
-      }}>
-      <BoardSquare position={{ x, y }} />
+        style={{
+          width: '50px',
+          height: '50px',
+          border: '1px dotted rgba(0, 0, 0, .2)'
+        }}>
+        <BoardSquare position={{ x, y }} />
       </div>
     );
   }
@@ -77,40 +79,48 @@ export class Board extends Component {
 
   async peel(evt) {
     evt.preventDefault()
-    var beginningPot = this.props.createGame.pot;
-    var randomLetter = await beginningPot[Math.floor(Math.random() * beginningPot.length)];
-    var pos = await beginningPot.indexOf(randomLetter);
-    beginningPot.splice(pos, 1)
-    this.props.addTileToPouch(randomLetter)
-    let gameId = this.state.gameId
-    let playerNumber = this.props.user.playerNumber
-    let playerPouch = this.props.playersPouch
-    let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
-    let getPeeledPot = peelTile(gameId, beginningPot)
+    var globalPot = this.props.createGame.pot;
+    let playersArr = Object.keys(this.props.createGame.players)
+    let letterArray = []
+    for (var i = 0; i < playersArr.length; i++) {
+      var randomLetter = await globalPot[0];
+      letterArray.push(randomLetter)
+      // console.log("RANDOM LETTER ARRAY: ", letterArray)
+      var pos = await globalPot.indexOf(randomLetter);
+      globalPot.splice(pos, 1)
+    }
+
+    let gameId = this.props.createGame.currentGame
+    // let playerNumber = this.props.user.playerNumber
+    // let playerPouch = this.props.playersPouch
+    // let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
+    let getPeeledPot = peelTile(gameId, globalPot, playersArr, letterArray)
     store.dispatch(getPeeledPot)
-    store.dispatch(updatedPlayerPouch)
+    // store.dispatch(updatedPlayerPouch)
   }
 
-  async dumpTiles(evt){
+
+
+  async dumpTiles(evt) {
     evt.preventDefault()
     var selectedTile = this.props.selectedTile;
-    var currentPot = this.props.createGame.pot;
-    currentPot.push(selectedTile);
+    var globalPot = this.props.createGame.pot;
+    globalPot.push(selectedTile);
     this.props.removeTileFromPouch(selectedTile.id)
     this.props.removeSelectedTile()
     var count = 0
     while (count < 3) {
-      var randomLetter = await currentPot[Math.floor(Math.random() * currentPot.length)];
-      var pos = await currentPot.indexOf(randomLetter);
+      var randomLetter = await globalPot[Math.floor(Math.random() * globalPot.length)];
+      var pos = await globalPot.indexOf(randomLetter);
       this.props.addTileToPouch(randomLetter)
-      currentPot.splice(pos, 1);
+      globalPot.splice(pos, 1);
       count++;
     }
     let gameId = this.state.gameId
     let playerNumber = this.props.user.playerNumber
     let playerPouch = this.props.playersPouch
     let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
-    let swapTile = dumpTile(gameId, currentPot, playerNumber)
+    let swapTile = dumpTile(gameId, globalPot, playerNumber)
     store.dispatch(updatedPlayerPouch)
     store.dispatch(swapTile)
   }
@@ -148,8 +158,8 @@ export class Board extends Component {
             {squares}
           </div>
           <div>
-          <PlayerTilePouch />
-          <SelectedTileDisplay />
+            <PlayerTilePouch />
+            <SelectedTileDisplay />
             <div style={{
               display: 'flex',
               flexDirection: 'row',
@@ -157,7 +167,7 @@ export class Board extends Component {
             }}>
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
               <button className="btn" id="dump-tiles" refs="btn" onClick={(evt) => this.dumpTiles(evt)} disabled={this.props.selectedTile ? false : true}>Dump Tile</button>
-              <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)} disabled={this.props.playersPouch.length > 0}>PEEL</button>
+              <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.peel(evt)}>PEEL</button>
               <Link to={`/game/${this.state.gameId}/winner`}>
                 <button className="btn" id="submit-tiles" refs="btn" disabled={(this.props.createGame.pot.length > 0 && this.props.playersPouch.length > 0)}>Submit Game</button>
               </Link>
@@ -172,7 +182,7 @@ export class Board extends Component {
 
 /******** CONTAINER **********/
 
-const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk}
+const mapDispatchToProps = { updatePot, setTilePosition, getAllPlayerTiles, addTileToPouch, peelTile, removeTileFromPouch, removeSelectedTile, getPlayerTilesThunk, globalPotListenerThunk, playerPotListenerThunk }
 
 const mapStateToProps = ({ squareToSquareMove, createGame, selectedTile, playersPouch, user }) => ({ squareToSquareMove, createGame, selectedTile, dumpTile, playersPouch, user, updatePlayerPotThunk })
 
