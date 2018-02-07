@@ -4,7 +4,7 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'PT Sans Narrow', sans-serif;
   height: 100%;
   background-color: #27586B;
 }
@@ -263,16 +263,21 @@ background:#EFC31A!important;
 #bananas > img {
   width: 20%;
   height: 220px;
-  padding: 30px;
 }
 
 #victory-image {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#challenge-winner {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
 }
-
 
 /**/
 .text-blockUI-container {
@@ -334,4 +339,3 @@ background:#EFC31A!important;
       top: .5em;
   }
 }
-
