@@ -267,9 +267,15 @@ background:#EFC31A!important;
 
 #victory-image {
   position: absolute;
-  top: 0;
+  top: 120px;
   left: 50%;
   transform: translate(-50%, 0);
 }
 
+#challenge-winner {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
 
+}
