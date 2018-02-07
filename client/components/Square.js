@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { removeSelectedTile } from "../store/selectedTile";
-import { removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, listenToTiles } from "../store";
+import { removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase } from "../store";
 import { selectTile } from '../store/selectedTile'
 
 export class Square extends Component {
@@ -94,13 +94,20 @@ export class Square extends Component {
   }
 }
 
-const mapState = ({ selectedTile, createGame, user, setTileReducer }, ownProps) => {
-  return {
-    tile: setTileReducer[`${ownProps.position.x}-${ownProps.position.y}`],
-    selectedTile, user, createGame, setTileReducer
+const mapState = ({ selectedTile, createGame, user, watchPlayer1Tiles, watchPlayer2Tiles, watchPlayer3Tiles, watchPlayer4Tiles}, ownProps) => {
+    let tile
+    if (ownProps.playerToListenTo === 1) {
+      tile = watchPlayer1Tiles[`${ownProps.position.x}-${ownProps.position.y}`] }
+    if (ownProps.playerToListenTo === 2) {
+      tile = watchPlayer2Tiles[`${ownProps.position.x}-${ownProps.position.y}`] }
+    if (ownProps.playerToListenTo === 3) {
+      tile = watchPlayer3Tiles[`${ownProps.position.x}-${ownProps.position.y}`] }
+    if (ownProps.playerToListenTo === 4) {
+      tile = watchPlayer4Tiles[`${ownProps.position.x}-${ownProps.position.y}`]
+    }
+    return { selectedTile, createGame, user, tile }
   }
-}
 
-const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile, listenToTiles };
+const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile };
 
 export default connect(mapState, mapDispatch)(Square);
