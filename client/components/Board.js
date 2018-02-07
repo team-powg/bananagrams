@@ -224,7 +224,7 @@ export class Board extends Component {
                   id="submit-tiles"
                   refs="btn"
                   onClick={evt => this.handleSubmitGame(evt)}
-                  disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x) && this.props.createGame.pot.length > 3}
+                  disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x) && this.props.createGame.pot.length < 3}
                 >
                   Submit Game
                 </button>
