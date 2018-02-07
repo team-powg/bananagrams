@@ -3,16 +3,16 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { removeSelectedTile } from "../store/selectedTile";
-import { removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase } from "../store";
+import { removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, listenToTiles } from "../store";
 import { selectTile } from '../store/selectedTile'
 
 export class Square extends Component {
   constructor(props) {
     super();
-    this.state = { tile: null };
     this.clickHandler = this.clickHandler.bind(this);
     this.assignCoords = this.assignCoords.bind(this);
     this.removeCoords = this.removeCoords.bind(this);
+    // this.hasTile = this.hasTile.bind(this)
   }
 
   assignCoords(tile) {
@@ -28,9 +28,13 @@ export class Square extends Component {
     return tile;
   }
 
+  // hasTile() {
+  //   return this.props.tiles[`${this.props.position.x}-${this.props.position.y}`]
+  // }
+
   clickHandler() {
     // If no existing placed tile and a tile is selected by player
-    if (!this.state.tile && this.props.selectedTile) {
+    if (!this.props.tile && this.props.selectedTile) {
       const user = this.props.user.playerNumber;
       const currentTile = this.props.selectedTile;
       const gameId = this.props.createGame.currentGame;
@@ -39,7 +43,6 @@ export class Square extends Component {
 
       //Gives tile square x and y coords and updates local state
       const updatedTile = this.assignCoords(currentTile);
-      this.setState({ tile: updatedTile });
 
       //Adds updated tile to player's pouch
       let updatedPouch = playersPouch.map(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
@@ -51,9 +54,9 @@ export class Square extends Component {
       this.props.removeTileFromPouch(this.props.selectedTile.id);
       this.props.removeSelectedTile();
 
-    } else if (this.state.tile) {
+    } else if (this.props.tile) {
       // Selects tile on board and removes coords and replaces fb player pot
-      let tile = this.state.tile;
+      let tile = this.props.tile;
       const user = this.props.user.playerNumber;
       const gameId = this.props.createGame.currentGame;
       const player = `Player ${user}`
@@ -67,9 +70,6 @@ export class Square extends Component {
       let updatedPouch = playersPouch.map(tile => (updatedTile.id === tile.id) ? updatedTile : tile)
       //Removes tile coords in firebase
       this.props.updateTilePositionOnFirebase(updatedPouch, user, gameId)
-
-
-      this.setState({ tile: null });
     } else {
       // if square has no tile and player has not selected a tile
       console.log("weird things are happening");
@@ -85,19 +85,22 @@ export class Square extends Component {
           height: "100%"
         }}
       >
-        <div>
-          {this.state.tile && (
-            <img style={{ width: "100%" }} src={this.state.tile.img} />
-          )}
-        </div>
-        {this.props.children}
+        { this.props.tile ?
+            <img style={{ width: "100%" }} src={this.props.tile.img} />
+          : null
+        }
       </div>
     );
   }
 }
 
-const mapState = ({ selectedTile, createGame, user }) => ({ selectedTile, user, createGame });
+const mapState = ({ selectedTile, createGame, user, setTileReducer }, ownProps) => {
+  return {
+    tile: setTileReducer[`${ownProps.position.x}-${ownProps.position.y}`],
+    selectedTile, user, createGame, setTileReducer
+  }
+}
 
-const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile };
+const mapDispatch = { removeSelectedTile, removeTileFromPouch, addTileToPouch, updateTilePositionOnFirebase, selectTile, listenToTiles };
 
 export default connect(mapState, mapDispatch)(Square);

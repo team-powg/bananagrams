@@ -21,14 +21,10 @@ export class PlayerTilePouch extends Component {
 
     const player = `Player ${this.props.user.playerNumber}`
 
-
-   console.log("USER: ", this.props.user)
   //  if (this.props.createGame && player) {
   //     let stuff = this.props.createGame.players[player].playerPot.filter(tile => (!tile.x))
   //     console.log("STUFF: ",)
   //   }
-
-
 
    return (
      <div style={{
