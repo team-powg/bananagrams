@@ -112,18 +112,12 @@ export class Board extends Component {
     for (var i = 0; i < playersArr.length; i++) {
       var randomLetter = await globalPot[0];
       letterArray.push(randomLetter);
-      // console.log("RANDOM LETTER ARRAY: ", letterArray)
       var pos = await globalPot.indexOf(randomLetter);
       globalPot.splice(pos, 1);
     }
-
     let gameId = this.props.createGame.currentGame;
-    // let playerNumber = this.props.user.playerNumber
-    // let playerPouch = this.props.playersPouch
-    // let updatedPlayerPouch = updatePlayerPotThunk(gameId, playerNumber, playerPouch)
     let getPeeledPot = peelTile(gameId, globalPot, playersArr, letterArray);
     store.dispatch(getPeeledPot);
-    // store.dispatch(updatedPlayerPouch)
   }
 
   async dumpTiles(evt) {
@@ -151,8 +145,6 @@ export class Board extends Component {
 
   render() {
     const player = 'Player ' + this.props.user.playerNumber
-    console.log("PLAYER: ", player)
-    console.log("PLAYER POT: ", this.props.createGame.players[player].playerPot)
     const squares = [];
     for (let i = 0; i < 15; i++) {
       for (let j = 0; j < 15; j++) {
@@ -231,14 +223,8 @@ export class Board extends Component {
                   className="btn"
                   id="submit-tiles"
                   refs="btn"
-                  disabled={
-                    this.props.createGame &&
-                    this.props.createGame.pot &&
-                    this.props.createGame.pot.length > 0 &&
-                    this.props.playersPouch &&
-                    this.props.playersPouch.length > 0
-                  }
                   onClick={evt => this.handleSubmitGame(evt)}
+                  disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x) && this.props.createGame.pot.length > 3}
                 >
                   Submit Game
                 </button>

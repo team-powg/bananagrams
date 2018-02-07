@@ -100,9 +100,7 @@ export const updateTilePositionOnFirebase = (updatedPot, player, gameId) =>
 
 export const globalPotListenerThunk = (gameId) =>
   async dispatch => {
-    // console.log("REDUX GAME ID: ", gameId)
     await firebase.database().ref(`games/${gameId}/pot`).on('value', snapshot => {
-      // console.log("SNAPSHOT: ", snapshot.val())
       dispatch(swapTile(snapshot.val()))
       firebase.database().ref(`games/${gameId}`).once('value', updatedGame => {
       dispatch(createGame(updatedGame.val()))

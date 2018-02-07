@@ -43,10 +43,8 @@ export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
           let y = tile.y;
           grid[x].splice(y, 1, letter);
           var arrayOfFoundWords = getAllWords(grid);
-
-            console.log('CHALLENGED', challenge(rr))
-
           dispatch(returnWordsArray(arrayOfFoundWords));
+
         });
     })
 }
