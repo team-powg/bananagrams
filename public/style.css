@@ -274,3 +274,64 @@ background:#EFC31A!important;
 }
 
 
+/**/
+.text-blockUI-container {
+  margin: 0 auto;
+  line-height: 1.5;
+  padding-left: 35px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.text-blockUI {
+  position: relative;
+  -webkit-animation: fadeInOut 4s infinite;
+  animation: fadeInOut 4s infinite;
+}
+
+.text-blockUI-2 {
+  opacity: 0;
+  position: absolute;
+  left: 35px;
+  -webkit-animation: fadeInOut 4s 2s infinite;
+  animation: fadeInOut 4s 2s infinite;
+}
+
+@-webkit-keyframes fadeInOut {
+  0% {
+      opacity: 0;
+      top: -.5em;
+  }
+  25% {
+      opacity: 1;
+      top: 0;
+  }
+  75% {
+      opacity: 0;
+      top: .5em;
+  }
+  100% {
+      opacity: 0;
+      top: .5em;
+  }
+}
+@keyframes fadeInOut {
+  0% {
+      opacity: 0;
+      top: -.5em;
+  }
+  25% {
+      opacity: 1;
+      top: 0;
+  }
+  75% {
+      opacity: 0;
+      top: .5em;
+  }
+  100% {
+      opacity: 0;
+      top: .5em;
+  }
+}
+

@@ -15,9 +15,9 @@
 			}
             var nowPosX = [];
             nowPosX[0] = ((fx.end[0] - fx.start[0]) * fx.pos) + fx.start[0] + fx.unit[0];
-            nowPosX[1] = ((fx.end[1] - fx.start[1]) * fx.pos) + fx.start[1] + fx.unit[1];           
+            nowPosX[1] = ((fx.end[1] - fx.start[1]) * fx.pos) + fx.start[1] + fx.unit[1];
             fx.elem.style.backgroundPosition = nowPosX[0]+' '+nowPosX[1];
-            
+
            function toArray(strg){
                strg = strg.replace(/left|top/g,'0px');
                strg = strg.replace(/right|bottom/g,'100%');
@@ -28,3 +28,4 @@
         }
 	});
 })(jQuery);
+
