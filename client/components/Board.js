@@ -16,6 +16,7 @@ import SelectedTileDisplay from "./SelectedTileDisplay";
 import Square from "./Square";
 import GameHeader from "./GameHeader";
 import WinnersPage from "./WinnersPage";
+import { challenge } from './WordChallenge';
 import store, {
   updatePot,
   addTileToPouch,
@@ -66,6 +67,7 @@ export class Board extends Component {
     const gameId = this.props.createGame.currentGame;
     const playerNumber = this.props.user.playerNumber;
     console.log("***************");
+    challenge('invincible')
     this.renderWinPage();
   }
 
@@ -128,25 +130,24 @@ export class Board extends Component {
 
   async dumpTiles(evt) {
     evt.preventDefault();
-    var selectedTile = this.props.selectedTile;
-    var globalPot = this.props.createGame.pot;
+    let player = 'Player ' + this.props.user.playerNumber
+    let selectedTile = this.props.selectedTile;
+    let playerPot = this.props.createGame.players[player].playerPot
+    let index = playerPot.indexOf(selectedTile)
+    playerPot.splice(index, 1)
+    let globalPot = this.props.createGame.pot;
     globalPot.push(selectedTile);
-    this.props.removeTileFromPouch(selectedTile.id);
     this.props.removeSelectedTile();
-    var count = 0;
+    let count = 0;
     while (count < 3) {
-      var randomLetter = await globalPot[
-        Math.floor(Math.random() * globalPot.length)
-      ];
-      var pos = await globalPot.indexOf(randomLetter);
-      this.props.addTileToPouch(randomLetter);
+      let randomLetter = await globalPot[0]
+      let pos = await globalPot.indexOf(randomLetter);
+      playerPot.push(randomLetter)
       globalPot.splice(pos, 1);
       count++;
     }
     let gameId = this.props.createGame.currentGame;
-    let playerNumber = this.props.user.playerNumber;
-    let playerPouch = this.props.playersPouch;
-    let swapTile = dumpTile(gameId, globalPot, playerNumber, playerPouch);
+    let swapTile = dumpTile(gameId, globalPot, player, playerPot);
     store.dispatch(swapTile);
   }
 
@@ -224,8 +225,7 @@ export class Board extends Component {
               >
                 PEEL
               </button>
-              <Link to={`/game/${this.props.createGame.currentGame}/winner`}>
-                <button
+                <button href={`/game/${this.props.createGame.currentGame}/winner`}
                   className="btn"
                   id="submit-tiles"
                   refs="btn"
@@ -240,7 +240,6 @@ export class Board extends Component {
                 >
                   Submit Game
                 </button>
-              </Link>
             </div>
           </div>
         </div>

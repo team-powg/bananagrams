@@ -13,10 +13,11 @@ class GlobalPotDisplay extends Component {
             margin: '0px 5px 5px 0px',
             textAlign: 'center',
             fontSize: '1.5em',
-            color: 'rgb(239, 195, 26)'
+            color: 'rgb(239, 195, 26)',
+            borderRadius: '50px'
           }}>
           {
-            this.props.createGame && this.props.createGame.pot ? `Total Tiles Remaining: ${this.props.createGame.pot.length}`
+            this.props.createGame && this.props.createGame.pot ? `Game Pot: ${this.props.createGame.pot.length}`
             : <span>There are no tiles left in the pot! </span>
           }
           </div>

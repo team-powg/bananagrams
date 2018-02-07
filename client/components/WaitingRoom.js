@@ -32,6 +32,7 @@ class WaitingRoom extends Component {
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
     const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length + 1
+    // console.log("NUMBER OF PLAYERS: ", numPlayersJoined)
     // console.log('obj', Object.values(nextProps.createGame.players))
     // console.log('objfilter', Object.values(nextProps.createGame.players).filter(player => player.id))
     this.setState({numPlayersJoined})
@@ -53,7 +54,7 @@ class WaitingRoom extends Component {
     var gameId = this.props.createGame.currentGame;
 
     for (var player in playerObj) {
-      let playerPot = beginningPot.splice(0, 2);
+      let playerPot = beginningPot.splice(0, 21);
       if (!count) {
         count = 1
       } else count++;
@@ -77,18 +78,19 @@ class WaitingRoom extends Component {
     return (
       <div style={{
         textAlign: 'center',
-        color: '#DDDD03'
+        color: '#DDDD03',
+        backgroundColor: 'rgba(0, 0, 0, .7)', padding: '5% 10%', margin: '5%'
       }}>
         <div>
-          <span><h1 style={{fontSize: '2em'}}>Welcome to the Waiting Room!</h1></span>
+          <span><h1 style={{fontSize: '3em'}}>Welcome to the Waiting Room!</h1></span>
           {
             this.props.createGame &&
-            <div style={{fontSize: '1.5em'}}>
-            <span>This game's ID number is <strong>{this.props.createGame.currentGame}</strong>. Let your friends know!</span>
+            <div style={{fontSize: '2em'}}>
+            <span>This game's ID number is <strong>{this.props.match.params.currentGame}</strong>. Let your friends know!</span>
             </div>
           }
         </div>
-        <div style={{color: 'black', margin: '2% 5%'}}>
+        <div style={{fontSize: '1.5em', color: 'white', margin: '2% 5%'}}>
           {
             this.props.createGame && <span> We are expecting {this.state.numPlayersExpecting} players </span>
           }
@@ -109,7 +111,7 @@ class WaitingRoom extends Component {
         </div>
         {
           this.props.user.playerNumber === 1 ?
-        <div style={{margin: '2% 5%', color: 'black'}}>
+        <div style={{margin: '2% 5%', color: 'yellow'}}>
           <div><span> You are the host! When all players have joined, you may start the game! </span></div>
           <div style={{marginTop: '2%'}}>
           <form onSubmit={this.startGameHandler}>
@@ -122,7 +124,7 @@ class WaitingRoom extends Component {
       }
       <div style={{color: 'black', margin: '2% 5%'}}>
         <span style={{fontSize: '1.5em', color: '#DDDD03'}}>Basic Rules</span>
-        <ul style={{textAlign: 'left', fontSize: '1em'}}>
+        <ul style={{textAlign: 'left', fontSize: '1em', color: 'white'}}>
           <li>Start off by clicking tile you want and then clicking a spot on the board</li>
           <li>Have a tile you don't want? Select it first then hit the "Dump" button to take it out of your hand.  Remember, you will get three random tiles back! </li>
           <li>Once all of your tiles are on the board, you can hit the "Peel" button.  This gives you a new random tile, but also gives every other player an additional tile. </li>
