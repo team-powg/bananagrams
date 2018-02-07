@@ -30,7 +30,10 @@ import store, {
   updatePlayerPotThunk,
   playerPotListenerThunk,
   listenToGame,
-  listenToTiles
+  listenTo1TilesThunk,
+  listenTo2TilesThunk,
+  listenTo3TilesThunk,
+  listenTo4TilesThunk
 } from "../store";
 
 export class Board extends Component {
@@ -44,12 +47,18 @@ export class Board extends Component {
 
   async componentDidMount() {
     if (this.props.createGame) {
-      const playerNumber = this.props.user.playerNumber;
-      let gameId = this.props.match.params.currentGame;
-      let listenToCurrentGame = this.props.listenToGame(gameId);
-      const listenTile = this.props.listenToTiles(gameId, playerNumber)
-      await listenToCurrentGame;
-      await listenTile
+      const playerNumber = await this.props.user.playerNumber;
+      let gameId = await this.props.match.params.currentGame;
+      this.props.listenToGame(gameId)
+      if (playerNumber === 1) {
+        this.props.listenTo1TilesThunk(gameId)
+      } else if (playerNumber === 2) {
+        this.props.listenTo2TilesThunk(gameId)
+      } else if (playerNumber === 3) {
+        this.props.listenTo3TilesThunk(gameId)
+      } else if (playerNumber === 4) {
+        this.props.listenTo4TilesThunk(gameId)
+      }
     }
   }
 
@@ -69,6 +78,7 @@ export class Board extends Component {
   }
 
   renderSquare(i, j) {
+    const playerNumber = this.props.user.playerNumber;
     const x = i;
     const y = j;
     return (
@@ -79,7 +89,7 @@ export class Board extends Component {
           height: "6.66%",
         }}
       >
-        <Square position={{ x, y }} playersBoard={true} />
+        <Square position={{ x, y }} playersBoard={true} playerToListenTo={playerNumber} />
       </div>
     );
   }
@@ -169,8 +179,8 @@ export class Board extends Component {
           }}
         >
           <div style={{ width: "25vw", height: "100%" }}>
-            <GlobalPotDisplay />
             <OtherPlayersBoardView gameId={this.props.createGame.currentGame} />
+            <GlobalPotDisplay />
           </div>
           <div
             style={{
@@ -253,7 +263,10 @@ const mapDispatchToProps = {
   playerPotListenerThunk,
   listenToGame,
   submitWordsForChallengeThunk,
-  listenToTiles
+  listenTo1TilesThunk,
+  listenTo2TilesThunk,
+  listenTo3TilesThunk,
+  listenTo4TilesThunk
 };
 
 const mapStateToProps = ({

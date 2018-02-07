@@ -10,9 +10,12 @@ import playersPouch from './playersPouch';
 import checkGameStartStatus from './checkGameStartStatus';
 import otherPlayersBoards from './otherPlayersBoards'
 import challengeGame from './challengeGame'
-import setTileReducer from './setTileReducer'
+import watchPlayer1Tiles from './watchPlayerOneTiles'
+import watchPlayer2Tiles from './watchPlayerTwoTiles'
+import watchPlayer3Tiles from './watchPlayerThreeTiles'
+import watchPlayer4Tiles from './watchPlayerFourTiles'
 
-const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch, checkGameStartStatus, otherPlayersBoards, challengeGame, setTileReducer})
+const reducer = combineReducers({user, squareToSquareMove, createGame, selectedTile, playersPouch, checkGameStartStatus, otherPlayersBoards, challengeGame, watchPlayer1Tiles, watchPlayer2Tiles, watchPlayer3Tiles, watchPlayer4Tiles})
 
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
@@ -28,5 +31,9 @@ export * from './selectedTile'
 export * from './checkGameStartStatus'
 export * from './otherPlayersBoards'
 export * from './challengeGame'
-export * from './setTileReducer'
+export * from './watchPlayerOneTiles'
+export * from './watchPlayerTwoTiles'
+export * from './watchPlayerThreeTiles'
+export * from './watchPlayerFourTiles'
+
 

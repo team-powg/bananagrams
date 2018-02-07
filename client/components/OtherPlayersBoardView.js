@@ -8,7 +8,10 @@ class OtherPlayersBoardView extends Component {
   }
 
   render() {
-    const numberOfPlayers = Object.entries(this.props.createGame.players).filter(([key, value]) => value.id !== this.props.user.sessionId)
+    const numberOfPlayers = Object.entries(this.props.createGame.players).filter(([key, value]) => { if (value.id !== this.props.user.sessionId) {
+        return key
+      }
+    })
     return (
       <div style={{
           height: '90%',

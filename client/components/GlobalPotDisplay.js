@@ -17,7 +17,8 @@ class GlobalPotDisplay extends Component {
             borderRadius: '50px'
           }}>
           {
-            this.props.createGame && this.props.createGame.pot && `Game Pot: ${this.props.createGame.pot.length}`
+            this.props.createGame && this.props.createGame.pot ? `Game Pot: ${this.props.createGame.pot.length}`
+            : <span>There are no tiles left in the pot! </span>
           }
           </div>
         }
