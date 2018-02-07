@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import store, { makeGame } from "../store";
 import { bounce } from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
+import fireworks from "./"
 
 export default class WinnersPage extends Component {
   constructor(props) {
@@ -26,11 +27,14 @@ export default class WinnersPage extends Component {
   // CREATE ON CLICK HANDLER FOR CHALLENGE BUTTON
 
   render() {
+    // function playMusic(){
+    //   fireworks.play();
+    //   }
     const styles = {
       bounce: {
         animation: 'x 1s',
         animationName: Radium.keyframes(bounce, 'bounce'),
-        animationIterationCount: '5'
+        animationIterationCount: '10'
       }
     }
     return (
@@ -39,6 +43,7 @@ export default class WinnersPage extends Component {
         <button className="btn" id="challenge-winner">
           Challenge Winner
         </button>
+        {/* <audio id="music" loop src="fireworks" autoplay> </audio> */}
         <div id="bananas" style={styles.bounce}>
           <img src="/banangrams-glamour.png" />
           <img src="/banangrams-glamour.png" />

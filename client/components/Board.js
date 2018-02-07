@@ -63,7 +63,6 @@ export class Board extends Component {
     const playerNumber = this.props.user.playerNumber;
     console.log("***************");
     this.renderWinPage();
-    // this.props.submitWordsForChallengeThunk(gameId, playerNumber);
   }
 
   renderWinPage() {
