@@ -32,7 +32,6 @@ export default class WinnersPage extends Component {
     //   }
 
     challenge('invincible')
-    console.log('&&&&&&&&&&&')
     const styles = {
       bounce: {
         animation: "x 1s",

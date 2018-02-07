@@ -33,13 +33,8 @@ export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
           let letter = tile.letter;
           let x = tile.x;
           let y = tile.y;
-          console.log('letter    x   y  ', letter, x, y)
           grid[x].splice(y, 1, letter);
-          console.log('   GRID   ', grid)
           var rr = getAllWords(grid);
-
-            console.log('CHALLENGED', challenge(rr))
-
           return rr;
         });
     })

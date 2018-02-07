@@ -17,19 +17,14 @@ export function challenge(word) {
       var text = res.data;
       parser = new DOMParser();
       xmlDoc = parser.parseFromString(text,"text/xml");
-      console.log('RES DATA', xmlDoc)
-      console.log('  ')
-      console.log('WORD', word)
 
       if (res.data.includes("<suggestion>") || res.data.includes(">abbrev") || res.data.includes(">sugg") || res.data.includes(">Middle Engli")) {
-        console.log('false')
         bool = false;
       }
     });
     if (!bool) {
       return "Challenge successful.  This game is not over";
     } else {
-      console.log('fohewonfoinewonfo')
       return `All words are valid in Merriam-Webster's dictionary.`
     }
   }

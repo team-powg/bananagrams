@@ -32,9 +32,6 @@ class WaitingRoom extends Component {
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
     const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length + 1
-    // console.log("NUMBER OF PLAYERS: ", numPlayersJoined)
-    // console.log('obj', Object.values(nextProps.createGame.players))
-    // console.log('objfilter', Object.values(nextProps.createGame.players).filter(player => player.id))
     this.setState({numPlayersJoined})
 
     // When host starts game, all other players will be pushed to game view
