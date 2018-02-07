@@ -16,7 +16,7 @@ class SelectedTileDisplay extends Component {
       {
         this.props && this.props.selectedTile ?
         <div>
-          <img style={{height: '2rem', margin: '2px'}} src={this.props.selectedTile.img} />
+          <img style={{height: '3em', margin: '2px'}} src={this.props.selectedTile.img} />
         </div>
         :
         <div></div>

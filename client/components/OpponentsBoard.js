@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Square from './Square';
-import {startOtherPlayersMonitor} from '../store'
 
 
 export class OpponentsBoard extends Component {
@@ -9,21 +8,6 @@ export class OpponentsBoard extends Component {
     super(props)
     this.renderSquare = this.renderSquare.bind(this)
   }
-
-  // async componentWillReceiveProps(nextProps) {
-  //   console.log('createGameinProps', this.props.createGame.currentGame)
-  //   if (nextProps !== this.props) {
-  //     const gameId = await nextProps.gameId
-  //     const playerNumber = await +nextProps.player
-  //     this.props.startOtherPlayersMonitor(gameId, playerNumber)
-  //   }
-  // }
-
-  // async componentDidMount() {
-  //   const gameId = await this.props.createGame.currentGame
-  //   const playerNumber = await +this.props.player
-  //   this.props.startOtherPlayersMonitor(gameId, playerNumber)
-  // }
 
   renderSquare(i, j) {
     const x = i;
@@ -35,7 +19,7 @@ export class OpponentsBoard extends Component {
         height: '6.66%',
         border: '1px dotted rgba(0, 0, 0, .2)'
       }}>
-        <Square position={{ x, y }} />
+        <Square position={{ x, y }} playersBoard={false}/>
       </div>
     );
   }
@@ -46,9 +30,8 @@ export class OpponentsBoard extends Component {
         squares.push(this.renderSquare(i, j))
       }
     }
-
     return (
-      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '33%', width: '100%', border: '1px solid black'}}>
+      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '33%', width: '100%', border: '1px solid black', margin: '1% 0'}}>
         {squares}
      </div>
     )
@@ -60,7 +43,7 @@ export class OpponentsBoard extends Component {
 
 const mapState = ({otherPlayersBoards, createGame}) => ({otherPlayersBoards, createGame})
 
-const mapDispatch = {startOtherPlayersMonitor}
+const mapDispatch = null;
 
 
 export default connect(mapState, mapDispatch)(OpponentsBoard)
