@@ -32,6 +32,7 @@ class WaitingRoom extends Component {
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
     const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length + 1
+    // console.log("NUMBER OF PLAYERS: ", numPlayersJoined)
     // console.log('obj', Object.values(nextProps.createGame.players))
     // console.log('objfilter', Object.values(nextProps.createGame.players).filter(player => player.id))
     this.setState({numPlayersJoined})
@@ -81,15 +82,15 @@ class WaitingRoom extends Component {
         backgroundColor: 'rgba(0, 0, 0, .7)', padding: '5% 10%', margin: '5%'
       }}>
         <div>
-          <span><h1 style={{fontSize: '2em'}}>Welcome to the Waiting Room!</h1></span>
+          <span><h1 style={{fontSize: '3em'}}>Welcome to the Waiting Room!</h1></span>
           {
             this.props.createGame &&
-            <div style={{fontSize: '1.5em'}}>
-            <span>This game's ID number is <strong>{this.props.createGame.currentGame}</strong>. Let your friends know!</span>
+            <div style={{fontSize: '2em'}}>
+            <span>This game's ID number is <strong>{this.props.match.params.currentGame}</strong>. Let your friends know!</span>
             </div>
           }
         </div>
-        <div style={{color: 'white', margin: '2% 5%'}}>
+        <div style={{fontSize: '1.5em', color: 'white', margin: '2% 5%'}}>
           {
             this.props.createGame && <span> We are expecting {this.state.numPlayersExpecting} players </span>
           }
