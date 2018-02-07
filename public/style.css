@@ -283,7 +283,6 @@ background:#EFC31A!important;
 .text-blockUI-container {
   margin: 0 auto;
   line-height: 1.5;
-  padding-left: 35px;
   position: relative;
   width: 100%;
   text-align: center;
@@ -291,17 +290,16 @@ background:#EFC31A!important;
 
 .text-blockUI {
   position: relative;
-  -webkit-animation: fadeInOut 4s infinite;
-  animation: fadeInOut 4s infinite;
+  -webkit-animation: fadeInOut 10s infinite;
+  animation: fadeInOut 2s infinite;
 }
 
-.text-blockUI-2 {
+/* .text-blockUI-2 {
   opacity: 0;
-  position: absolute;
-  left: 35px;
+  position: relative;
   -webkit-animation: fadeInOut 4s 2s infinite;
   animation: fadeInOut 4s 2s infinite;
-}
+} */
 
 @-webkit-keyframes fadeInOut {
   0% {

@@ -34,8 +34,8 @@ export class PlayerTilePouch extends Component {
         }}>
           {this.props.createGame && player && this.props.user && this.props.user.sessionId && this.props.createGame.players[player].playerPot && this.props.createGame.players[player].playerPot.filter(tile => (!tile.x)).map(tile => {
             return (
-              <div key={tile.id} >
-                <img style={{ height: '1.8rem', margin: '2px' }} src={tile.img} onClick={() => this.clickHandler(tile)} />
+              <div key={tile.id} onClick={() => this.clickHandler(tile)}>
+                <img style={{ height: '1.8rem', margin: '2px' }} src={tile.img} />
               </div>
             )
           })

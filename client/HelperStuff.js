@@ -29,7 +29,6 @@ let gameLetter = [
   { id: 28, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
   { id: 29, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
   { id: 30, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
-
   { id: 31, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
   { id: 32, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
   { id: 33, letter: 'E', x: null, y: null, img: '/tiles/E.png' },
