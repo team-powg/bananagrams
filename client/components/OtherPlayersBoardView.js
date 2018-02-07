@@ -8,20 +8,19 @@ class OtherPlayersBoardView extends Component {
   }
 
   render() {
-    const numberOfPlayers = ['1', '2', '3']
+    const numberOfPlayers = Object.entries(this.props.createGame.players).filter(([key, value]) => value.id !== this.props.user.sessionId)
     return (
       <div style={{
           height: '90%',
-          width: '100%',
           backgroundColor: '#6D92A0',
           border: '1px solid black',
           margin: '0px 5px 5px 0px'
         }}>
         {
-          numberOfPlayers.map((player, i) => {
+          numberOfPlayers && numberOfPlayers.map((player, i) => {
             return (
               <React.Fragment key={i}>
-                <OpponentsBoard player={player} gameId={this.props.gameId} />
+                <OpponentsBoard player={numberOfPlayers[i]} gameId={this.props.gameId} />
               </React.Fragment>
             )
           })
@@ -33,17 +32,8 @@ class OtherPlayersBoardView extends Component {
 
 /************ CONTAINER ***********/
 
-const mapState = null
+const mapState = ({createGame, user}) => ({createGame, user})
 
 const mapDispatch = null
 
-export default connect(null, null)(OtherPlayersBoardView)
-
-
-// this.props.numberOfPlayers.map(player => {
-//   return (
-//     <div style={///>
-//     <board playerNumber={playerNumber} style={height: '15%'}/>
-//     <div>
-//   )
-// })
+export default connect(mapState, null)(OtherPlayersBoardView)

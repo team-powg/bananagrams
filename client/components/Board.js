@@ -5,8 +5,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Tile from "./Tile";
-import { DragDropContext } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
+// import { DragDropContext } from "react-dnd";
+// import HTML5Backend from "react-dnd-html5-backend";
 import { setTilePosition } from "../store/squareToSquareMove";
 import { getAllPlayerTiles } from "../store/playersPouch";
 import PlayerTilePouch from "./PlayerTilePouch";
@@ -43,19 +43,10 @@ export class Board extends Component {
 
   async componentDidMount() {
     if (this.props.createGame) {
-
       const playerNumber = this.props.user.playerNumber;
       let gameId = this.props.match.params.currentGame;
       let listenToCurrentGame = this.props.listenToGame(gameId);
-      // this.props.getPlayerTilesThunk(gameId, playerNumber);
-      // const globalPot = this.props.globalPotListenerThunk(gameId);
       const listenTile = this.props.listenToTiles(gameId, playerNumber)
-      // const playerPouch = this.props.playerPotListenerThunk(
-      //   gameId,
-      //   playerNumber
-      // );
-      // await globalPot;
-      // await playerPouch;
       await listenToCurrentGame;
       await listenTile
     }
@@ -75,10 +66,6 @@ export class Board extends Component {
     winnerDiv.style.display = 'block';
   }
 
-  movePiece = (x, y) => {
-    this.props.setTilePosition(x, y);
-  };
-
   renderSquare(i, j) {
     const x = i;
     const y = j;
@@ -88,24 +75,24 @@ export class Board extends Component {
         style={{
           width: "6.66%",
           height: "6.66%",
-          border: "1px dotted rgba(0, 0, 0, .2)"
         }}
       >
-        <Square position={{ x, y }} />
+        <Square position={{ x, y }} playersBoard={true} />
       </div>
     );
   }
 
-  movePiece = (x, y) => {
-    this.props.setTilePosition(x, y);
-  };
+  // movePiece = (x, y) => {
+  //   this.props.setTilePosition(x, y);
+  // };
 
-  renderPiece(x, y) {
-    const { tileX, tileY } = this.props.squareToSquareMove.position;
-    if (x === tileX && y === tileY) {
-      return <Tile />;
-    }
-  }
+  // renderPiece(x, y) {
+  //   const { tileX, tileY } = this.props.squareToSquareMove.position;
+  //   if (x === tileX && y === tileY) {
+  //     return <Tile />;
+  //   }
+  // }
+
 
   async peel(evt) {
     evt.preventDefault();
@@ -186,10 +173,11 @@ export class Board extends Component {
           </div>
           <div
             style={{
-              backgroundImage: `url(${`https://i.pinimg.com/originals/96/57/ba/9657ba4fb7abde9935786a66ccc894ba.jpg`})`,
+              backgroundImage: `url('/hardwoodbg.jpg')`,
               width: "50vw",
               height: "100%",
               margin: "0 auto",
+              flexDirection: 'column',
               border: "1px solid black",
               display: "flex",
               flexWrap: "wrap"
@@ -285,7 +273,7 @@ const mapStateToProps = ({
   updatePlayerPotThunk
 });
 
-Board = DragDropContext(HTML5Backend)(Board);
-Board = connect(mapStateToProps, mapDispatchToProps)(Board);
+// Board = DragDropContext(HTML5Backend)(Board);
+// Board = connect(mapStateToProps, mapDispatchToProps)(Board);
 
-export default Board;
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

@@ -34,7 +34,7 @@ export class Square extends Component {
 
   clickHandler() {
     // If no existing placed tile and a tile is selected by player
-    if (!this.props.tile && this.props.selectedTile) {
+    if (!this.props.tile && this.props.selectedTile && this.props.playersBoard) {
       const user = this.props.user.playerNumber;
       const currentTile = this.props.selectedTile;
       const gameId = this.props.createGame.currentGame;
@@ -54,7 +54,7 @@ export class Square extends Component {
       this.props.removeTileFromPouch(this.props.selectedTile.id);
       this.props.removeSelectedTile();
 
-    } else if (this.props.tile) {
+    } else if (this.props.tile && this.props.playersBoard) {
       // Selects tile on board and removes coords and replaces fb player pot
       let tile = this.props.tile;
       const user = this.props.user.playerNumber;
@@ -86,7 +86,7 @@ export class Square extends Component {
         }}
       >
         { this.props.tile ?
-            <img style={{ width: "100%" }} src={this.props.tile.img} />
+            <img style={{ width: "98%" }} src={this.props.tile.img} />
           : null
         }
       </div>

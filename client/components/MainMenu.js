@@ -106,11 +106,11 @@ export class MainMenu extends Component {
         flexDirection: 'column',
         alignItems: 'center',
       }}>
-        <div style={{ backgroundColor: 'rgba(0, 0, 0, .5)', margin: '5%', padding: '5%' }}>
-          <div style={{ fontSize: '2em' }}>
+        <div style={{ backgroundColor: 'rgba(0, 0, 0, .7)', padding: '0% 5% 6% 5%' }}>
+          <div style={{ fontSize: '2em', color: '#FCD71D'}}>
             <h1>Bananagrams</h1>
           </div>
-          <div style={{ fontSize: '2em' }}>
+          <div style={{ fontSize: '2em', textAlign: 'center', color: '#FCD71D' }}>
             <span>Start A New Game</span>
           </div>
           <div style={{ fontSize: '1em', textAlign: 'center' }}>
@@ -123,17 +123,17 @@ export class MainMenu extends Component {
             </form>
             <form onSubmit={this.handleSubmit} id="new-game">
               <div>
-                <button form="new-game" type="submit" className="start-btn">CREATE GAME</button>
+                <button form="new-game" type="submit" className="start-btn" disabled={this.state.bool}>CREATE GAME</button>
               </div>
             </form>
           </div>
 
 
-          <div style={{ fontSize: '2em', textAlign: 'center' }}>
+          <div style={{ fontSize: '2em', textAlign: 'center', color: '#FCD71D', marginTop: '5%'}}>
             <span>Join A Game</span>
             <form onSubmit={this.joinGameSubmit}>
               <input className="form-style-5" type="text" name="game" placeholder="Enter game id here..." onChange={this.joinGameChange} />
-              <button type="submit" className='btn'>Join Game</button>
+              <button type="submit" className='btn' style={{marginLeft: '5%'}}>Join Game</button>
               {
                 this.state.errors ? <div style={{ fontSize: '15px', color: 'red' }}><span>{this.state.errors}</span></div> : <div></div>
               }
@@ -141,7 +141,7 @@ export class MainMenu extends Component {
           </div>
 
 
-          <div style={{ fontSize: '2em', textAlign: 'center' }}>
+          <div style={{ fontSize: '2em', textAlign: 'center', color: '#EFC31A' }}>
             <br />
             <span>Learn The Rules  </span>
             <Link to='/rules'>
