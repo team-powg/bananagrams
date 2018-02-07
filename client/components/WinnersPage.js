@@ -18,15 +18,10 @@ export class WinnersPage extends Component {
 
   async handleChallenge (evt) {
     evt.preventDefault();
-    console.log("***************");
     const wordArray = await this.props.challengeGame
-    console.log('word array', wordArray)
   }
 
   render() {
-
-    challenge('invincible')
-    console.log('&&&&&&&&&&&')
     const styles = {
       bounce: {
         animation: "x 1s",
