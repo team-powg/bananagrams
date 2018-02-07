@@ -32,7 +32,9 @@ export class WinnersPage extends Component {
     return (
       <StyleRoot>
         <div id="winner-div">
+
           <button className="btn" id="challenge-winner" onClick={(evt) => this.handleChallenge(evt)}>
+
             Challenge Winner
           </button>
           {/* <audio id="music" loop src="fireworks" autoplay> </audio> */}
