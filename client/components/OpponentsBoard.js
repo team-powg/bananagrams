@@ -33,7 +33,6 @@ export class OpponentsBoard extends Component {
       style={{
         width: '6.66%',
         height: '6.66%',
-        border: '1px dotted rgba(0, 0, 0, .1)'
       }}>
         <Square position={{ x, y }} playersBoard={false} playerToListenTo={playerNumber} />
       </div>
@@ -47,7 +46,7 @@ export class OpponentsBoard extends Component {
       }
     }
     return (
-      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '35%', width: '100%', border: '1px solid black', margin: '1% 0'}}>
+      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '35%', width: '100%', border: '1px solid black', backgroundColor: '#966F33', margin: '0% 0% 1% 0%'}}>
         {squares}
      </div>
     )
