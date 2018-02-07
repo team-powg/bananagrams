@@ -57,16 +57,16 @@ export const peelTile = (gameId, pot, players, letters) =>
   }
 
 
-export const dumpTile = (gameId, pot, playerNumber, playerPot) =>
+export const dumpTile = (gameId, pot, player, playerPot) =>
   async dispatch => {
     // let player = 'Player ' + playerNumber
   await firebase.database().ref('games').child(gameId)
     .update({
       pot
     })
-    // await firebase.database().ref(`games/${gameId}/players/${player}`).update({
-    //   playerPot
-    // })
+    await firebase.database().ref(`games/${gameId}/players/${player}`).update({
+      playerPot
+    })
     dispatch(swapTile( pot ))
   }
 

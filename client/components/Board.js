@@ -118,25 +118,24 @@ export class Board extends Component {
 
   async dumpTiles(evt) {
     evt.preventDefault();
-    var selectedTile = this.props.selectedTile;
-    var globalPot = this.props.createGame.pot;
+    let player = 'Player ' + this.props.user.playerNumber
+    let selectedTile = this.props.selectedTile;
+    let playerPot = this.props.createGame.players[player].playerPot
+    let index = playerPot.indexOf(selectedTile)
+    playerPot.splice(index, 1)
+    let globalPot = this.props.createGame.pot;
     globalPot.push(selectedTile);
-    this.props.removeTileFromPouch(selectedTile.id);
     this.props.removeSelectedTile();
-    var count = 0;
+    let count = 0;
     while (count < 3) {
-      var randomLetter = await globalPot[
-        Math.floor(Math.random() * globalPot.length)
-      ];
-      var pos = await globalPot.indexOf(randomLetter);
-      this.props.addTileToPouch(randomLetter);
+      let randomLetter = await globalPot[0]
+      let pos = await globalPot.indexOf(randomLetter);
+      playerPot.push(randomLetter)
       globalPot.splice(pos, 1);
       count++;
     }
     let gameId = this.props.createGame.currentGame;
-    let playerNumber = this.props.user.playerNumber;
-    let playerPouch = this.props.playersPouch;
-    let swapTile = dumpTile(gameId, globalPot, playerNumber, playerPouch);
+    let swapTile = dumpTile(gameId, globalPot, player, playerPot);
     store.dispatch(swapTile);
   }
 
