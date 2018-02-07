@@ -152,6 +152,9 @@ export class Board extends Component {
   }
 
   render() {
+    const player = 'Player ' + this.props.user.playerNumber
+    console.log("PLAYER: ", player)
+    console.log("PLAYER POT: ", this.props.createGame.players[player].playerPot)
     const squares = [];
     for (let i = 0; i < 15; i++) {
       for (let j = 0; j < 15; j++) {
@@ -222,6 +225,7 @@ export class Board extends Component {
                 id="grab-tiles"
                 refs="btn"
                 onClick={evt => this.peel(evt)}
+                disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x)}
               >
                 PEEL
               </button>

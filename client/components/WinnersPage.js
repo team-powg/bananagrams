@@ -43,8 +43,8 @@ export default class WinnersPage extends Component {
     return (
       <StyleRoot>
         <div id="winner-div">
-          <div class="center">
-            <div class="select-button" />
+          <div className="center">
+            <div className="select-button" />
           </div>
           <button className="btn" id="challenge-winner">
             Challenge Winner
