@@ -62,18 +62,16 @@ export class Board extends Component {
     }
   }
 
-  handleSubmitGame(evt) {
+  async handleSubmitGame(evt) {
     evt.preventDefault();
     const gameId = this.props.createGame.currentGame;
     const playerNumber = this.props.user.playerNumber;
-    console.log("***************");
-    challenge('invincible')
+    const wordArray = await this.props.submitWordsForChallengeThunk(gameId, playerNumber);
     this.renderWinPage();
   }
 
   renderWinPage() {
     const winnerDiv = document.getElementById('winner-div');
-    // console.log('winnerdiv', winnerDiv)
     winnerDiv.style.display = 'block';
   }
 

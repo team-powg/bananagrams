@@ -3,6 +3,14 @@ import {getAllWords, getHorizWord, getVertWord} from '../components/WordSearch'
 import {challenge} from '../components/WordChallenge'
 
 const SUBMIT_WORDS_FOR_CHALLENGE = 'SUBMIT_WORDS_FOR_CHALLENGE';
+const RETURN_WORDS_ARRAY = 'RETURN_WORDS_ARRAY';
+
+export const returnWordsArray = wordArray => {
+  return {
+    type: RETURN_WORDS_ARRAY,
+    wordArray
+  }
+}
 
 export const submitWordsForChallenge = id => {
   return {
@@ -33,14 +41,12 @@ export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
           let letter = tile.letter;
           let x = tile.x;
           let y = tile.y;
-          console.log('letter    x   y  ', letter, x, y)
           grid[x].splice(y, 1, letter);
-          console.log('   GRID   ', grid)
-          var rr = getAllWords(grid);
+          var arrayOfFoundWords = getAllWords(grid);
 
             console.log('CHALLENGED', challenge(rr))
 
-          return rr;
+          dispatch(returnWordsArray(arrayOfFoundWords));
         });
     })
 }
@@ -48,9 +54,8 @@ export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
 // Reducer
 function challengeGame(state = [], action) {
   switch (action.type) {
-    case SUBMIT_WORDS_FOR_CHALLENGE:
-      return
-
+    case RETURN_WORDS_ARRAY:
+      return action.wordArray;
   default:
     return state;
   }

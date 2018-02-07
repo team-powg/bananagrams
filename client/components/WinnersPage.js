@@ -6,30 +6,24 @@ import { bounce } from "react-animations";
 import Radium, { StyleRoot } from "radium";
 import fireworks from "./";
 import { challenge } from './WordChallenge';
+import {submitWordsForChallengeThunk} from '../store'
 
-
-export default class WinnersPage extends Component {
+export class WinnersPage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleChallenge = this.handleChallenge.bind(this)
   }
 
-  // class Test extends React.Component {
-  //   render() {
-  //     <StyleRoot>
-  //       <div className="test" >
-  //       </div>
-  //     </StyleRoot>
-  //   }
-  // }
-  // this.props.submitWordsForChallengeThunk(gameId, playerNumber);
 
-  // CREATE ON CLICK HANDLER FOR CHALLENGE BUTTON
+  async handleChallenge (evt) {
+    evt.preventDefault();
+    console.log("***************");
+    const wordArray = await this.props.challengeGame
+    console.log('word array', wordArray)
+  }
 
   render() {
-    // function playMusic(){
-    //   fireworks.play();
-    //   }
 
     challenge('invincible')
     console.log('&&&&&&&&&&&')
@@ -43,10 +37,7 @@ export default class WinnersPage extends Component {
     return (
       <StyleRoot>
         <div id="winner-div">
-          <div class="center">
-            <div class="select-button" />
-          </div>
-          <button className="btn" id="challenge-winner">
+          <button className="btn" id="challenge-winner" onClick={(evt) => this.handleChallenge(evt)}>
             Challenge Winner
           </button>
           {/* <audio id="music" loop src="fireworks" autoplay> </audio> */}
@@ -81,3 +72,9 @@ export default class WinnersPage extends Component {
     );
   }
 }
+
+const mapState = ({ challengeGame }) => ({ challengeGame })
+
+const mapDispatchToProps = null
+
+export default connect(mapState, mapDispatchToProps)(WinnersPage)
