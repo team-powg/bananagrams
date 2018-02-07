@@ -28,7 +28,8 @@ import store, {
   submitWordsForChallengeThunk,
   updatePlayerPotThunk,
   playerPotListenerThunk,
-  listenToGame
+  listenToGame,
+  listenToTiles
 } from "../store";
 
 export class Board extends Component {
@@ -42,18 +43,21 @@ export class Board extends Component {
 
   async componentDidMount() {
     if (this.props.createGame) {
+
+      const playerNumber = this.props.user.playerNumber;
       let gameId = this.props.match.params.currentGame;
       let listenToCurrentGame = this.props.listenToGame(gameId);
-      const playerNumber = this.props.user.playerNumber;
-      this.props.getPlayerTilesThunk(gameId, playerNumber);
-      const globalPot = this.props.globalPotListenerThunk(gameId);
-      const playerPouch = this.props.playerPotListenerThunk(
-        gameId,
-        playerNumber
-      );
-      await globalPot;
-      await playerPouch;
+      // this.props.getPlayerTilesThunk(gameId, playerNumber);
+      // const globalPot = this.props.globalPotListenerThunk(gameId);
+      const listenTile = this.props.listenToTiles(gameId, playerNumber)
+      // const playerPouch = this.props.playerPotListenerThunk(
+      //   gameId,
+      //   playerNumber
+      // );
+      // await globalPot;
+      // await playerPouch;
       await listenToCurrentGame;
+      await listenTile
     }
   }
 
@@ -142,16 +146,10 @@ export class Board extends Component {
       globalPot.splice(pos, 1);
       count++;
     }
-    let gameId = this.state.gameId;
+    let gameId = this.props.createGame.currentGame;
     let playerNumber = this.props.user.playerNumber;
     let playerPouch = this.props.playersPouch;
-    let updatedPlayerPouch = updatePlayerPotThunk(
-      gameId,
-      playerNumber,
-      playerPouch
-    );
-    let swapTile = dumpTile(gameId, globalPot, playerNumber);
-    store.dispatch(updatedPlayerPouch);
+    let swapTile = dumpTile(gameId, globalPot, playerNumber, playerPouch);
     store.dispatch(swapTile);
   }
 
@@ -267,7 +265,8 @@ const mapDispatchToProps = {
   globalPotListenerThunk,
   playerPotListenerThunk,
   listenToGame,
-  submitWordsForChallengeThunk
+  submitWordsForChallengeThunk,
+  listenToTiles
 };
 
 const mapStateToProps = ({
