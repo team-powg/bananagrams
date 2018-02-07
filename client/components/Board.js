@@ -15,6 +15,7 @@ import OtherPlayersBoardView from "./OtherPlayersBoardView";
 import SelectedTileDisplay from "./SelectedTileDisplay";
 import Square from "./Square";
 import GameHeader from "./GameHeader";
+import WinnersPage from "./WinnersPage";
 import store, {
   updatePot,
   addTileToPouch,
@@ -36,6 +37,7 @@ export class Board extends Component {
     this.dumpTiles = this.dumpTiles.bind(this);
     this.peel = this.peel.bind(this);
     this.handleSubmitGame = this.handleSubmitGame.bind(this);
+    this.renderWinPage = this.renderWinPage.bind(this);
   }
 
   async componentDidMount() {
@@ -59,7 +61,15 @@ export class Board extends Component {
     evt.preventDefault();
     const gameId = this.props.createGame.currentGame;
     const playerNumber = this.props.user.playerNumber;
-    this.props.submitWordsForChallengeThunk(gameId, playerNumber);
+    console.log("***************");
+    this.renderWinPage();
+    // this.props.submitWordsForChallengeThunk(gameId, playerNumber);
+  }
+
+  renderWinPage() {
+    const winnerDiv = document.getElementById('winner-div');
+    // console.log('winnerdiv', winnerDiv)
+    winnerDiv.style.display = 'block';
   }
 
   movePiece = (x, y) => {
@@ -86,13 +96,6 @@ export class Board extends Component {
   movePiece = (x, y) => {
     this.props.setTilePosition(x, y);
   };
-
-  handleSubmitGame(evt) {
-    evt.preventDefault();
-    const gameId = this.props.createGame.currentGame;
-    const playerNumber = this.props.user.playerNumber;
-    this.props.submitWordsForChallengeThunk(gameId, playerNumber);
-  }
 
   renderPiece(x, y) {
     const { tileX, tileY } = this.props.squareToSquareMove.position;
@@ -168,6 +171,10 @@ export class Board extends Component {
           height: "100vh"
         }}
       >
+        <WinnersPage style={{
+          display: 'none'
+          }
+          }/>
         <GameHeader gameId={this.props.createGame.currentGame} />
         <div
           style={{
@@ -233,7 +240,8 @@ export class Board extends Component {
                     this.props.createGame.pot.length > 0 &&
                     this.props.playersPouch &&
                     this.props.playersPouch.length > 0
-                  } onClick={evt => this.handleSubmitGame(evt)}
+                  }
+                  onClick={evt => this.handleSubmitGame(evt)}
                 >
                   Submit Game
                 </button>

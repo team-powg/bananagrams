@@ -138,9 +138,9 @@ background:#EFC31A!important;
 #background {
   background: url(/banangrams-glamour.png) repeat 5% 5%;
   background-size: 300px;
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	z-index: 100;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 100;
 }
 
 .form-style-5{
@@ -231,4 +231,32 @@ background:#EFC31A!important;
 {
   background: #109177;
 }
+
+#winner-div {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+#bananas {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#bananas > img {
+  width: 20%;
+  height: 220px;
+  padding: 30px;
+}
+
+#victory-image {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 
