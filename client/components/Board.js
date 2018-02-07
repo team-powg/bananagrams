@@ -62,11 +62,11 @@ export class Board extends Component {
     }
   }
 
-  handleSubmitGame(evt) {
+  async handleSubmitGame(evt) {
     evt.preventDefault();
     const gameId = this.props.createGame.currentGame;
     const playerNumber = this.props.user.playerNumber;
-    challenge('invincible')
+    const wordArray = await this.props.submitWordsForChallengeThunk(gameId, playerNumber);
     this.renderWinPage();
   }
 
