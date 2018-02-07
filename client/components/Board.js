@@ -16,6 +16,7 @@ import SelectedTileDisplay from "./SelectedTileDisplay";
 import Square from "./Square";
 import GameHeader from "./GameHeader";
 import WinnersPage from "./WinnersPage";
+import { challenge } from './WordChallenge';
 import store, {
   updatePot,
   addTileToPouch,
@@ -57,6 +58,7 @@ export class Board extends Component {
     const gameId = this.props.createGame.currentGame;
     const playerNumber = this.props.user.playerNumber;
     console.log("***************");
+    challenge('invincible')
     this.renderWinPage();
   }
 
@@ -213,8 +215,7 @@ export class Board extends Component {
               >
                 PEEL
               </button>
-              <Link to={`/game/${this.props.createGame.currentGame}/winner`}>
-                <button
+                <button href={`/game/${this.props.createGame.currentGame}/winner`}
                   className="btn"
                   id="submit-tiles"
                   refs="btn"
@@ -229,7 +230,6 @@ export class Board extends Component {
                 >
                   Submit Game
                 </button>
-              </Link>
             </div>
           </div>
         </div>
