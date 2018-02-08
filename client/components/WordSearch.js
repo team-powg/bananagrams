@@ -1,4 +1,17 @@
 
+const dummyGrid = [
+  ['', '', '', '', '', '', '', '', '', ''],
+  ['', 'H', 'E', 'L', 'L', 'O', '', '', '', ''],
+  ['', 'E', '', '', '', 'P', '', '', '', ''],
+  ['N', 'A', 'P', 'E', '', 'E', '', '', '', ''],
+  ['O', 'R', '', '', '', 'N', '', '', '', ''],
+  ['', 'S', '', '', '', 'I', '', '', '', ''],
+  ['B', 'E', 'A', 'M', '', 'N', '', 'A', '', ''],
+  ['', '', '', 'E', 'N', 'G', 'U', 'L', 'F', ''],
+  ['', '', '', '', '', '', '', 'O', '', ''],
+  ['', '', '', '', '', '', '', 'E', '', '']
+];
+
 export function getAllWords(arr) {
   let horizWordArr = [];
   let y = 0;
@@ -34,14 +47,10 @@ export function getAllWords(arr) {
     }
     y++
   }
-  console.log('HHHHHHH')
-
-  console.log(vertWordArr.concat(horizWordArr))
   return vertWordArr.concat(horizWordArr)
 }
 
 export function getVertWord(arrs, y) {
-  console.log('VERTS')
   let tempWord = '';
   for (let row of arrs) {
     if (!row[y]) break;
@@ -53,7 +62,6 @@ export function getVertWord(arrs, y) {
 }
 
 export function getHorizWord (curr, y, prev, next) {
-  console.log('HORIZS')
   let newWord = '';
   while (curr[y]) {
     newWord+=curr[y];
@@ -61,4 +69,3 @@ export function getHorizWord (curr, y, prev, next) {
   }
   return newWord;
 }
-
