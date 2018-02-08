@@ -29,7 +29,7 @@ class WaitingRoom extends Component {
     if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       const userId = nextProps.user.sessionId
       const playersObj = await nextProps.createGame.players
-      const findNextUnassignedPlayerKey = Object.entries(playersObj).find(([key, value]) => {
+      const findNextUnassignedPlayerKey = await Object.entries(playersObj).find(([key, value]) => {
         if (value.id && value.id === userId) { return key }
       })
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
@@ -73,10 +73,10 @@ class WaitingRoom extends Component {
   async startGameHandler(evt) {
     evt.preventDefault()
     const gameId = this.props.createGame.currentGame;
-    //Tiles are dispersed among players
-    await this.disperseTiles();
     // Game started status on Firebase is updated to true for all players
     await this.props.changeGameStatusThunk(gameId, true)
+    //Tiles are dispersed among players
+    await this.disperseTiles();
     // Pushes all players screens to the game
     this.props.history.push(`/game/${gameId}`)
   }
