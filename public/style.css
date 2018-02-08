@@ -6,7 +6,6 @@
 body {
   font-family: 'PT Sans Narrow', sans-serif;
   height: 100%;
-  background-color: #27586B;
 }
 
 a {
@@ -127,6 +126,18 @@ background:#EFC31A!important;
 }
 
 .start-btn:disabled {
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #504949;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.start-btn:disabled:hover {
   -webkit-border-radius: 8;
   -moz-border-radius: 8;
   border-radius: 8px;

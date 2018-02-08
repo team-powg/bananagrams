@@ -46,7 +46,8 @@ export class OpponentsBoard extends Component {
       }
     }
     return (
-      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '35%', width: '100%', border: '1px solid black', backgroundColor: '#966F33', margin: '0% 0% 1% 0%'}}>
+      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '35%', width: '100%', border: '1px solid black', backgroundColor: '#966F33', margin: '0% 0% 1% 0%',  borderRadius: '10px'
+    }}>
         {squares}
      </div>
     )

@@ -38,7 +38,7 @@ class WaitingRoom extends Component {
     // keeps track of players joining waiting room
     if (nextProps.createGame) {
       const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length
-      console.log('playersinprops', numPlayersJoined)
+
       if (numPlayersJoined > 1) {
         this.setState({numPlayersJoined})
       }
@@ -83,54 +83,51 @@ class WaitingRoom extends Component {
 
   render() {
     return (
-      <div style={{
-        textAlign: 'center',
-        color: '#DDDD03',
-        backgroundColor: 'rgba(0, 0, 0, .7)', padding: '5% 10%', margin: '5%'
-      }}>
-        <div>
-          <span><h1 style={{fontSize: '3em'}}>Welcome to the Waiting Room!</h1></span>
-          {
-            this.props.createGame &&
-            <div style={{fontSize: '2em'}}>
-            <span>This game's ID number is <strong>{this.props.match.params.currentGame}</strong>. Let your friends know!</span>
-            </div>
-          }
-        </div>
-        <div style={{fontSize: '1.5em', color: 'white', margin: '2% 5%'}}>
-          {
-            this.props.createGame && <span> We are expecting {this.state.numPlayersExpecting} players </span>
-          }
-          {
-            this.props.user &&
-              <div><span>You have been assigned player number {this.props.user.playerNumber}</span></div>
-          }
-            <div>
-              Currently, there are {this.state.numPlayersJoined} players in the room..
-            </div>
-        </div>
-        {
-          this.props.user.playerNumber === 1 ?
-        <div style={{margin: '2% 5%', color: 'yellow'}}>
-          <div><span> You are the host! When all players have joined, you may start the game! </span></div>
-          <div style={{marginTop: '2%'}}>
-          <form onSubmit={this.startGameHandler}>
-            <button type="submit" disabled={!(this.state.numPlayersExpecting === this.state.numPlayersJoined)} className="start-btn">START GAME</button>
-          </form>
+      <div style={{width: '100%vw', height: '100vh', top: '0', left: '0', backgroundColor: '#27586B', overflow: 'hidden', position: 'fixed'}}>
+        <div style={{
+          textAlign: 'center',
+          color: '#DDDD03',
+          backgroundColor: 'rgba(0, 0, 0, .7)', margin: '2%', padding: '1%'
+        }}>
+          <div>
+            <span><h1 style={{fontSize: '2.5em', margin: '1%'}}>Welcome to the Waiting Room!</h1></span>
+            {
+              this.props.createGame &&
+              <div style={{fontSize: '2em'}}>
+              <span>This game's ID number is <strong>{this.props.match.params.currentGame}</strong>. Let your friends know!</span>
+              </div>
+            }
+          </div>
+          <div style={{fontSize: '1.5em', color: 'white', margin: '2% 5%'}}>
+            {
+              this.props.createGame && <span> We are expecting {this.state.numPlayersExpecting} players </span>
+            }
+            {
+              this.props.user &&
+                <div><span>You have been assigned player number {this.props.user.playerNumber}</span></div>
+            }
+              <div>
+                Currently, there are {this.state.numPlayersJoined} players in the room..
+              </div>
+          </div>
+          <div style={{margin: '2% 5%', color: 'yellow'}}>
+            <div><span> When all players have joined, anyone can hit the SPLIT button to start the game! </span></div>
+            <div style={{marginTop: '2%'}}>
+            <form onSubmit={this.startGameHandler}>
+              <button type="submit" disabled={!(this.state.numPlayersExpecting === this.state.numPlayersJoined)} className="start-btn">SPLIT!</button>
+            </form>
           </div>
         </div>
-        :
-        <div> <span> The game will start when all players have joined! </span> </div>
-      }
-      <div style={{color: 'black', margin: '2% 5%'}}>
-        <span style={{fontSize: '1.5em', color: '#DDDD03'}}>Basic Rules</span>
-        <ul style={{textAlign: 'left', fontSize: '1em', color: 'white'}}>
-          <li>Start off by clicking tile you want and then clicking a spot on the board</li>
-          <li>Have a tile you don't want? Select it first then hit the "Dump" button to take it out of your hand.  Remember, you will get three random tiles back! </li>
-          <li>Once all of your tiles are on the board, you can hit the "Peel" button.  This gives you a new random tile, but also gives every other player an additional tile. </li>
-          <li>If you've used up all of your tiles and there are no more tiles to peel from, then you can hit the submit button! Be wary, other opponents can challenge your words at the end of the game!  Make sure to double check before submitting!</li>
-          <li>Last but not least, do all of the previous steps faster than your opponents! Good luck!</li>
-        </ul>
+        <div style={{color: 'black', margin: '2% 15%'}}>
+          <span style={{fontSize: '1.5em', color: '#DDDD03'}}>Basic Rules</span>
+          <ul style={{textAlign: 'left', fontSize: '1em', color: 'white'}}>
+            <li>Start off by clicking tile you want and then clicking a spot on the board</li>
+            <li>Have a tile you don't want? Select it first then hit the "Dump" button to take it out of your hand.  Remember, you will get three random tiles back! </li>
+            <li>Once all of your tiles are on the board, you can hit the "Peel" button.  This gives you a new random tile, but also gives every other player an additional tile. </li>
+            <li>If you've used up all of your tiles and there are no more tiles to peel from, then you can hit the submit button! Be wary, other opponents can challenge your words at the end of the game!  Make sure to double check before submitting!</li>
+            <li>Last but not least, do all of the previous steps faster than your opponents! Good luck!</li>
+          </ul>
+        </div>
       </div>
     </div>
     )

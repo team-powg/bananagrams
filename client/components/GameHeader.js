@@ -9,6 +9,7 @@ const {gameId} = props
       color: 'yellow',
       textAlign: 'center',
       margin: '0px 0px 5px 0px',
+      borderRadius: '10px'
     }}>
       <div className="text-blockUI-container" >
         <span className="text-blockUI">

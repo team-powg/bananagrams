@@ -104,7 +104,7 @@ export class MainMenu extends Component {
       <div className="main" id='background' style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
       }}>
         <div style={{ backgroundColor: 'rgba(0, 0, 0, .7)', padding: '0% 5% 6% 5%' }}>
           <div style={{ fontSize: '3em', color: '#FCD71D', textAlign: 'center'}}>
