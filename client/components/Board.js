@@ -29,7 +29,6 @@ import store, {
   submitWordsForChallengeThunk,
   updatePlayerPotThunk,
   playerPotListenerThunk,
-  listenToGame,
   listenTo1TilesThunk,
   listenTo2TilesThunk,
   listenTo3TilesThunk,
@@ -49,7 +48,6 @@ export class Board extends Component {
     if (this.props.createGame) {
       const playerNumber = await this.props.user.playerNumber;
       let gameId = await this.props.match.params.currentGame;
-      this.props.listenToGame(gameId)
       if (playerNumber === 1) {
         this.props.listenTo1TilesThunk(gameId)
       } else if (playerNumber === 2) {
@@ -249,7 +247,6 @@ const mapDispatchToProps = {
   getPlayerTilesThunk,
   globalPotListenerThunk,
   playerPotListenerThunk,
-  listenToGame,
   submitWordsForChallengeThunk,
   listenTo1TilesThunk,
   listenTo2TilesThunk,

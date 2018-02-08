@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers  } from '../store'
+import { assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers, listenToGame } from '../store'
 
 class WaitingRoom extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numPlayersJoined: 0,
+      numPlayersJoined: 1,
       numPlayersExpecting: 1,
       bool: false
     }
@@ -14,14 +14,18 @@ class WaitingRoom extends Component {
     this.disperseTiles = this.disperseTiles.bind(this);
   }
 
-  async componentWillReceiveProps (nextProps) {
+  async componentDidMount() {
+    //connects to firebase and listens to any changes in game
+    await this.props.listenToGame(this.props.match.params.currentGame)
+  }
 
-    //connects to firebase to listen for gameStarted status
+  async componentWillReceiveProps (nextProps) {
+    //sets state to know how many players it should be expecting
     if (nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       this.props.listenToGameThunk(nextProps.createGame.currentGame)
       this.setState({numPlayersExpecting: Object.keys(nextProps.createGame.players).length})
     }
-    // connects to firebase and assigns players a player number
+    // assigns players a player number as they join the waiting room
     if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       const userId = nextProps.user.sessionId
       const playersObj = await nextProps.createGame.players
@@ -31,9 +35,14 @@ class WaitingRoom extends Component {
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
       this.props.giveUserPlayerNumberThunk(playerNumber)
     }
-    const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length + 1
-    this.setState({numPlayersJoined})
-
+    // keeps track of players joining waiting room
+    if (nextProps.createGame) {
+      const numPlayersJoined = Object.values(nextProps.createGame.players).filter(player => player.id).length
+      console.log('playersinprops', numPlayersJoined)
+      if (numPlayersJoined > 1) {
+        this.setState({numPlayersJoined})
+      }
+    }
     // When host starts game, all other players will be pushed to game view
     if (nextProps.checkGameStartStatus === true) {
       this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
@@ -41,6 +50,7 @@ class WaitingRoom extends Component {
   }
 
   componentWillUnmount() {
+    // stops listening for gameStarted bool in firebas
     this.props.stopListenToGameThunk(this.props.createGame.currentGame)
   }
 
@@ -50,8 +60,8 @@ class WaitingRoom extends Component {
     var count;
     var gameId = this.props.createGame.currentGame;
 
-    for (var player in playerObj) {
-      let playerPot = beginningPot.splice(0, 5);
+    for (let player in playerObj) {
+      let playerPot = beginningPot.splice(0, 21);
       if (!count) {
         count = 1
       } else count++;
@@ -67,11 +77,11 @@ class WaitingRoom extends Component {
     await this.disperseTiles();
     // Game started status on Firebase is updated to true for all players
     await this.props.changeGameStatusThunk(gameId, true)
+    // Pushes all players screens to the game
     this.props.history.push(`/game/${gameId}`)
   }
 
   render() {
-
     return (
       <div style={{
         textAlign: 'center',
@@ -95,16 +105,9 @@ class WaitingRoom extends Component {
             this.props.user &&
               <div><span>You have been assigned player number {this.props.user.playerNumber}</span></div>
           }
-          {
-            this.state.numPlayersJoined === 1 ?
-            <div>
-              Currently, there is 1 player in the room..
-            </div>
-            :
             <div>
               Currently, there are {this.state.numPlayersJoined} players in the room..
             </div>
-          }
         </div>
         {
           this.props.user.playerNumber === 1 ?
@@ -112,7 +115,7 @@ class WaitingRoom extends Component {
           <div><span> You are the host! When all players have joined, you may start the game! </span></div>
           <div style={{marginTop: '2%'}}>
           <form onSubmit={this.startGameHandler}>
-            <button type="submit" className="start-btn">START GAME</button>
+            <button type="submit" disabled={!(this.state.numPlayersExpecting === this.state.numPlayersJoined)} className="start-btn">START GAME</button>
           </form>
           </div>
         </div>
@@ -137,6 +140,6 @@ class WaitingRoom extends Component {
 /********** CONTAINER *********/
 
 const mapState = ({createGame, user, checkGameStartStatus}) => ({createGame, user, checkGameStartStatus})
-const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers}
+const mapDispatch = {assignPlayerTilesToFirebasePotThunk, updatePot, giveUserPlayerNumberThunk, changeGameStatusThunk, listenToGameThunk, stopListenToGameThunk, listenToNumberOfPlayers, listenToGame}
 
 export default connect(mapState, mapDispatch)(WaitingRoom)
