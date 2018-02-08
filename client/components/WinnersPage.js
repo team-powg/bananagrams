@@ -19,6 +19,7 @@ export class WinnersPage extends Component {
   async handleChallenge (evt) {
     evt.preventDefault();
     const wordArray = await this.props.challengeGame
+    console.log('HANDLE CHALLENGE', wordArray)
   }
 
   render() {

@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import {getAllWords, getHorizWord, getVertWord} from '../components/WordSearch'
-import {challenge} from '../components/WordChallenge'
 
 const SUBMIT_WORDS_FOR_CHALLENGE = 'SUBMIT_WORDS_FOR_CHALLENGE';
 const RETURN_WORDS_ARRAY = 'RETURN_WORDS_ARRAY';
@@ -18,6 +17,19 @@ export const submitWordsForChallenge = id => {
     id
   }
 }
+
+const dummyGrid = [
+  ['', '', '', '', '', '', '', '', '', ''],
+  ['', 'H', 'E', 'L', 'L', 'O', '', '', '', ''],
+  ['', 'E', '', '', '', 'P', '', '', '', ''],
+  ['N', 'A', 'P', 'E', '', 'E', '', '', '', ''],
+  ['O', 'R', '', '', '', 'N', '', '', '', ''],
+  ['', 'S', '', '', '', 'I', '', '', '', ''],
+  ['B', 'E', 'A', 'M', '', 'N', '', 'A', '', ''],
+  ['', '', '', 'E', 'N', 'G', 'U', 'L', 'F', ''],
+  ['', '', '', '', '', '', '', 'O', '', ''],
+  ['', '', '', '', '', '', '', 'E', '', '']
+];
 
 //THUNK//
 export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
@@ -44,7 +56,6 @@ export const submitWordsForChallengeThunk = (gameId, playerNumber) =>
           grid[x].splice(y, 1, letter);
           var arrayOfFoundWords = getAllWords(grid);
           dispatch(returnWordsArray(arrayOfFoundWords));
-
         });
     })
 }
