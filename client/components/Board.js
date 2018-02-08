@@ -154,7 +154,8 @@ export class Board extends Component {
         style={{
           display: "flex",
           flexDirection: "column",
-          height: "100vh"
+          height: "100vh",
+          backgroundColor: '#FCD71D'
         }}
       >
         <WinnersPage style={{
@@ -182,7 +183,8 @@ export class Board extends Component {
               flexDirection: 'column',
               border: "1px solid black",
               display: "flex",
-              flexWrap: "wrap"
+              flexWrap: "wrap",
+              borderRadius: '10px'
             }}
           >
             {squares}

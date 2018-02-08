@@ -17,7 +17,8 @@ class OtherPlayersBoardView extends Component {
           height: '90%',
           backgroundColor: '#6D92A0',
           border: '1px solid black',
-          margin: '0px 5px 5px 0px'
+          margin: '0px 5px 5px 0px',
+          borderRadius: '10px'
         }}>
         {
           numberOfPlayers && numberOfPlayers.map((player, i) => {

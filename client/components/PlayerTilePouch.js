@@ -26,7 +26,8 @@ export class PlayerTilePouch extends Component {
         border: '1px solid black',
         width: '100%',
         height: '65vh',
-        margin: '0px 0px 5px 5px'
+        margin: '0px 0px 5px 5px',
+        borderRadius: '10px'
       }}>
         <div style={{
           display: 'flex',

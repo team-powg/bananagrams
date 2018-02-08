@@ -10,7 +10,8 @@ class SelectedTileDisplay extends Component {
         width: '100%',
         height: '15%',
         margin: '0px 0px 5px 5px',
-        textAlign: 'center'
+        textAlign: 'center',
+        borderRadius: '10px'
       }}>
       <span>Your selected tile</span>
       {
