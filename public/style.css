@@ -68,7 +68,7 @@ form div {
   margin: 1px;
 }
 
-#grab-tiles:hover, #start-btn:hover, #peel-tiles:hover, #submit-tiles:hover, #dump-tiles:hover {
+#grab-tiles:hover, #start-btn:hover, #peel-tiles:hover, #dump-tiles:hover {
   background: green;
 }
 
