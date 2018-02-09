@@ -272,7 +272,14 @@ form div {
 
 #victory-image {
   position: absolute;
-  top: 120px;
+  top: 90px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#challengediv {
+  position: relative;
+  top: 200px;
   left: 50%;
   transform: translate(-50%, 0);
 }

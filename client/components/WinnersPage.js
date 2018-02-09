@@ -5,21 +5,26 @@ import store, { makeGame } from "../store";
 import { bounce } from "react-animations";
 import Radium, { StyleRoot } from "radium";
 import fireworks from "./";
-import { challenge } from './WordChallenge';
-import {submitWordsForChallengeThunk} from '../store'
+import { challenge } from "./WordChallenge";
+import { submitWordsForChallengeThunk, challengeGame } from "../store";
 
 export class WinnersPage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.handleChallenge = this.handleChallenge.bind(this)
+    this.handleChallenge = this.handleChallenge.bind(this);
   }
 
-
-  async handleChallenge (evt) {
+  async handleChallenge(evt) {
     evt.preventDefault();
-    const wordArray = await this.props.challengeGame
-    console.log('HANDLE CHALLENGE', wordArray)
+    const wordArray = await this.props.challengeGame;
+    // console.log(challenge("qqqqqqz"))
+    // console.log(challenge('force', ))
+    // wordArray.push('qqqqqqz')
+    console.log("HANDLE CHALLENGE", wordArray);
+    return wordArray.map(word => {
+      return challenge(word);
+    });
   }
 
   render() {
@@ -32,10 +37,13 @@ export class WinnersPage extends Component {
     };
     return (
       <StyleRoot>
-        <div id="winner-div">
-
-          <button className="btn" id="challenge-winner" onClick={(evt) => this.handleChallenge(evt)}>
-
+        <div   width='30px'
+  height='30px' id="winner-div">
+          <button
+            className="btn"
+            id="challenge-winner"
+            onClick={evt => this.handleChallenge(evt)}
+          >
             Challenge Winner
           </button>
           {/* <audio id="music" loop src="fireworks" autoplay> </audio> */}
@@ -65,14 +73,17 @@ export class WinnersPage extends Component {
             id="victory-image"
             src="http://static1.squarespace.com/static/55806048e4b014e817c47363/t/5596b2ffe4b06cf8b4011515/1487970458150/?format=1500w"
           />
+          {/* <div id="challengediv">
+            <h1>TESTTESTTESTTEST</h1>
+          </div> */}
         </div>
       </StyleRoot>
     );
   }
 }
 
-const mapState = ({ challengeGame }) => ({ challengeGame })
+const mapState = ({ challengeGame }) => ({ challengeGame });
 
-const mapDispatchToProps = null
+const mapDispatchToProps = null;
 
-export default connect(mapState, mapDispatchToProps)(WinnersPage)
+export default connect(mapState, mapDispatchToProps)(WinnersPage);

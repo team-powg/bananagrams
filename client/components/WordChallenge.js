@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 export function challenge(word) {
-  var bool = true;
     //Merriam api
     word = word.toLowerCase();
     const merriamUrl =
@@ -17,14 +16,21 @@ export function challenge(word) {
       var text = res.data;
       parser = new DOMParser();
       xmlDoc = parser.parseFromString(text,"text/xml");
-
-      if (res.data.includes("<suggestion>") || res.data.includes(">abbrev") || res.data.includes(">sugg") || res.data.includes(">Middle Engli")) {
-        bool = false;
+      console.log('RES    DATA', xmlDoc)
+      const definitionkEntries = xmlDoc.getElementsByTagName('entry_list')[0].childNodes;
+      const definitionkEntriesLength = xmlDoc.getElementsByTagName('entry_list')[0].childNodes.length;
+      console.log(`definitionkEntries[1]`, definitionkEntries[1].slice(1, 6))
+      if (definitionkEntriesLength <= 1) {
+        console.log(false, word, definitionkEntries);
+        return [false, word];
+      } else {
+        console.log(true, word, definitionkEntries);
+        return [true, word]
       }
     });
-    if (!bool) {
-      return "Challenge successful.  This game is not over";
-    } else {
-      return `All words are valid in Merriam-Webster's dictionary.`
-    }
+    // if (!bool) {
+    //   return "Challenge successful.  This game is not over";
+    // } else {
+    //   return `All words are valid in Merriam-Webster's dictionary.`
+    // }
   }
