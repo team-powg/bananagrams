@@ -40,8 +40,8 @@ export class OpponentsBoard extends Component {
   }
   render() {
     const squares = [];
-    for (let i = 0; i < 15; i++) {
-      for (let j = 0; j < 15; j++) {
+    for (let i = 1; i <= 15; i++) {
+      for (let j = 1; j <= 15; j++) {
         squares.push(this.renderSquare(i, j))
       }
     }
