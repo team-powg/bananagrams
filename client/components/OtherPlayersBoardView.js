@@ -12,7 +12,6 @@ class OtherPlayersBoardView extends Component {
         return key
       }
     })
-    console.log(numberOfPlayers)
     return (
       <div style={{
           height: '92%',
@@ -27,6 +26,7 @@ class OtherPlayersBoardView extends Component {
           numberOfPlayers && numberOfPlayers.map((player, i) => {
             return (
               <React.Fragment key={i}>
+                <div style={{textAlign: 'center', margin: '-1%'}}><b>{player[0]}</b></div>
                 <OpponentsBoard player={numberOfPlayers[i]} gameId={this.props.gameId} />
               </React.Fragment>
             )

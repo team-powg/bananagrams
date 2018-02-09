@@ -49,12 +49,12 @@ export class OpponentsBoard extends Component {
       <div style={{display: 'flex',
       flexDirection: 'column',
       flexWrap: 'wrap',
-      height: '33%',
-      width: '65%',
+      height: '32%',
+      width: '66%',
       border: '2px solid black',
       backgroundImage: `url('/opp.jpg')`,
       backgroundSize: 'cover',
-      margin: '1% 18% 0%',
+      margin: '0% 18% 0%',
       borderRadius: '10px',
       textAlign: 'center'
     }}>
