@@ -71,7 +71,7 @@ export class WinnersPage extends Component {
           </div>
           <img
             id="victory-image"
-            src="http://static1.squarespace.com/static/55806048e4b014e817c47363/t/5596b2ffe4b06cf8b4011515/1487970458150/?format=1500w"
+            src="http://static1.squarespace.com/static/55806048e4b014e817c47363/t/5596b2ffe4b06cf8b4011515/1487970458150/?format=1000w"
           />
           {/* <div id="challengediv">
             <h1>TESTTESTTESTTEST</h1>
