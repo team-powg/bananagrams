@@ -22,10 +22,13 @@ export class PlayerTilePouch extends Component {
     const player = `Player ${this.props.user.playerNumber}`
     return (
       <div style={{
-        backgroundColor: '#966F33',
-        border: '1px solid black',
-        width: '100%',
-        height: '65vh',
+        backgroundImage: `url('/side.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPositionX: '85%',
+        border: '2px solid black',
+        width: '96%',
+        padding: '2%',
+        height: '69vh',
         margin: '0px 0px 5px 5px',
         borderRadius: '10px'
       }}>
@@ -36,7 +39,7 @@ export class PlayerTilePouch extends Component {
           {this.props.createGame && player && this.props.user && this.props.user.sessionId && this.props.createGame.players[player].playerPot && this.props.createGame.players[player].playerPot.filter(tile => (!tile.x)).map(tile => {
             return (
               <div key={tile.id} onClick={() => this.clickHandler(tile)}>
-                <img style={{ height: '1.8rem', margin: '2px' }} src={tile.img} />
+                <img style={{ height: '1.8rem', margin: '2px', border: '1px solid black', boxShadow: '1px 1px 5px black' }} src={tile.img} />
               </div>
             )
           })

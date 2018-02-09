@@ -29,7 +29,7 @@ class WaitingRoom extends Component {
     if (!this.props.user.playerNumber && nextProps.createGame && (this.props.createGame !== nextProps.createGame)) {
       const userId = nextProps.user.sessionId
       const playersObj = await nextProps.createGame.players
-      const findNextUnassignedPlayerKey = Object.entries(playersObj).find(([key, value]) => {
+      const findNextUnassignedPlayerKey = await Object.entries(playersObj).find(([key, value]) => {
         if (value.id && value.id === userId) { return key }
       })
       let playerNumber = +(findNextUnassignedPlayerKey[0].slice(-1))
@@ -73,21 +73,21 @@ class WaitingRoom extends Component {
   async startGameHandler(evt) {
     evt.preventDefault()
     const gameId = this.props.createGame.currentGame;
-    //Tiles are dispersed among players
-    await this.disperseTiles();
     // Game started status on Firebase is updated to true for all players
     await this.props.changeGameStatusThunk(gameId, true)
+    //Tiles are dispersed among players
+    await this.disperseTiles();
     // Pushes all players screens to the game
     this.props.history.push(`/game/${gameId}`)
   }
 
   render() {
     return (
-      <div style={{width: '100%vw', height: '100vh', top: '0', left: '0', backgroundColor: '#27586B', overflow: 'hidden', position: 'fixed'}}>
+      <div style={{width: '100vw', height: '100vh', top: '0', left: '0', backgroundImage: 'url("/waitingroom1.jpg")', backgroundSize: 'cover', overflow: 'hidden', position: 'fixed'}}>
         <div style={{
           textAlign: 'center',
-          color: '#DDDD03',
-          backgroundColor: 'rgba(0, 0, 0, .7)', margin: '2%', padding: '1%'
+          color: 'yellow',
+          backgroundColor: 'rgba(0,0,0,0.7)', margin: '1%', padding: '1% 3% 1% 3%'
         }}>
           <div>
             <span><h1 style={{fontSize: '2.5em', margin: '1%'}}>Welcome to the Waiting Room!</h1></span>
@@ -104,7 +104,7 @@ class WaitingRoom extends Component {
             }
             {
               this.props.user &&
-                <div><span>You have been assigned player number {this.props.user.playerNumber}</span></div>
+                <div><span>You are Player {this.props.user.playerNumber}</span></div>
             }
               <div>
                 Currently, there are {this.state.numPlayersJoined} players in the room..
@@ -118,8 +118,8 @@ class WaitingRoom extends Component {
             </form>
           </div>
         </div>
-        <div style={{color: 'black', margin: '2% 15%'}}>
-          <span style={{fontSize: '1.5em', color: '#DDDD03'}}>Basic Rules</span>
+        <div style={{color: 'black', margin: '0% 15%'}}>
+          <span style={{fontSize: '1em', color: '#DDDD03'}}>Basic Rules</span>
           <ul style={{textAlign: 'left', fontSize: '1em', color: 'white'}}>
             <li>Start off by clicking tile you want and then clicking a spot on the board</li>
             <li>Have a tile you don't want? Select it first then hit the "Dump" button to take it out of your hand.  Remember, you will get three random tiles back! </li>

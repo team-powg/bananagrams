@@ -86,7 +86,7 @@ export class Square extends Component {
         }}
       >
         { this.props.tile ?
-            <img style={{ width: "98%" }} src={this.props.tile.img} />
+            <img style={{ width: "100%", border: '1px solid black', boxShadow: '1px 1px 5px black' }} src={this.props.tile.img} />
           : null
         }
       </div>
