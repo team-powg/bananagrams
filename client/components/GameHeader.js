@@ -5,18 +5,24 @@ const {gameId} = props
   return (
     <div style={{
       width: '100vw',
-      backgroundColor: 'rgba(0, 0, 0, .7)',
+      backgroundImage: `url('/outline.jpg')`,
+      backgroundPositionX: '85%',
       color: 'yellow',
       textAlign: 'center',
       margin: '0px 0px 5px 0px',
-      borderRadius: '10px'
     }}>
       <div className="text-blockUI-container" >
         <span className="text-blockUI">
         <img src="/banangrams-glamour.png" height="20"/>
         <img src="/banangrams-glamour.png" height="20"/>
         <img src="/banangrams-glamour.png" height="20"/>
-        Welcome to BananaGrams!  {`Game ID: ${gameId}`}
+        <img src="/banangrams-glamour.png" height="20"/>
+        <img src="/banangrams-glamour.png" height="20"/>
+        <img src="/banangrams-glamour.png" height="20"/>
+        Welcome to Bananagrams!  {`Game ID: ${gameId}`}
+        <img src="/banangrams-glamour.png" height="20"/>
+        <img src="/banangrams-glamour.png" height="20"/>
+        <img src="/banangrams-glamour.png" height="20"/>
         <img src="/banangrams-glamour.png" height="20"/>
         <img src="/banangrams-glamour.png" height="20"/>
         <img src="/banangrams-glamour.png" height="20"/>

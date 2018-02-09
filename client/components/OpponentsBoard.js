@@ -46,7 +46,17 @@ export class OpponentsBoard extends Component {
       }
     }
     return (
-      <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', height: '35%', width: '100%', border: '1px solid black', backgroundColor: '#966F33', margin: '0% 0% 1% 0%',  borderRadius: '10px'
+      <div style={{display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      height: '33%',
+      width: '65%',
+      border: '2px solid black',
+      backgroundImage: `url('/opp.jpg')`,
+      backgroundSize: 'cover',
+      margin: '2% 18% 0%',
+      borderRadius: '10px',
+      textAlign: 'center'
     }}>
         {squares}
      </div>

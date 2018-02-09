@@ -14,16 +14,19 @@ class OtherPlayersBoardView extends Component {
     })
     return (
       <div style={{
-          height: '90%',
-          backgroundColor: '#6D92A0',
-          border: '1px solid black',
-          margin: '0px 5px 5px 0px',
+          height: '92%',
+          backgroundImage: `url('/side.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPositionX: '85%',
+          border: '2px solid black',
+          margin: '0px 5px 5px 5px',
           borderRadius: '10px'
         }}>
         {
           numberOfPlayers && numberOfPlayers.map((player, i) => {
             return (
               <React.Fragment key={i}>
+                <div style={{textAlign: 'center'}}><b>{player[i]}</b></div>
                 <OpponentsBoard player={numberOfPlayers[i]} gameId={this.props.gameId} />
               </React.Fragment>
             )

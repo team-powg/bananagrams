@@ -106,7 +106,7 @@ export class MainMenu extends Component {
         flexDirection: 'column',
         alignItems: 'center'
       }}>
-        <div style={{ backgroundColor: 'rgba(0, 0, 0, .7)', padding: '0% 5% 6% 5%' }}>
+        <div style={{ backgroundColor: 'rgba(0, 0, 0, .8)', padding: '0% 5% 6% 5%' }}>
           <div style={{ fontSize: '3em', color: '#FCD71D', textAlign: 'center'}}>
             <h1>Bananagrams</h1>
           </div>

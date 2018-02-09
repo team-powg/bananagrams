@@ -6,6 +6,7 @@
 body {
   font-family: 'PT Sans Narrow', sans-serif;
   height: 100%;
+  background-color:#E3B772;
 }
 
 a {
@@ -43,41 +44,33 @@ form div {
   background-color: rgb(221, 221, 3)
 }
 
+#grab-tiles:disabled, #start-btn:disabled, #peel-tiles:disabled, #submit-tiles:disabled, #dump-tiles:disabled {
+  background: #504949;
+}
+
+#grab-tiles:disabled:hover, #start-btn:disabled:hover, #peel-tiles:disabled:hover, #submit-tiles:disabled:hover, #dump-tiles:disabled:hover {
+  background: #504949;
+}
+
 #grab-tiles, #dump-tiles, #peel-tiles, #submit-tiles, #challenge-winner {
   -webkit-border-radius: 3;
   -moz-border-radius: 3;
-  border-radius: 3px;
+  border-radius: 10px;
   font-family: Arial;
   font-weight: bold;
   color: black;
   font-size: 1em;
-  background: #68979B;
-  padding: 5%;
+  background:#EFC31A;
+  padding: 3%;
   text-decoration: none;
+  border: 2px solid black;
   outline: none;
   margin: 1px;
 }
 
-#peel-tiles {
-background:#EFC31A!important;
+#grab-tiles:hover, #start-btn:hover, #peel-tiles:hover, #submit-tiles:hover, #dump-tiles:hover {
+  background: green;
 }
-
-
-#grab-tiles:disabled, #start-btn:disabled, #peel-tiles:disabled, #submit-tiles:disabled, #dump-tiles:disabled {
-  -webkit-border-radius: 3;
-  -moz-border-radius: 3;
-  border-radius: 3px;
-  font-family: Arial;
-  font-weight: bold;
-  color: black;
-  font-size: 1em;
-  background: #504949;
-  padding: 5%;
-  text-decoration: none;
-  outline: none;
-  margin: 1px;
-}
-
 
 
 .btn {
@@ -87,7 +80,7 @@ background:#EFC31A!important;
   font-family: Arial;
   color: #ffffff;
   font-size: 15px;
-  background: #000000;
+  background:#504949;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   outline: none
@@ -266,6 +259,7 @@ background:#EFC31A!important;
   width: 100vw;
 }
 
+
 #bananas {
   display: flex;
   flex-wrap: wrap;
@@ -301,8 +295,7 @@ background:#EFC31A!important;
 
 .text-blockUI {
   position: relative;
-  -webkit-animation: fadeInOut 10s infinite;
-  animation: fadeInOut 2s infinite;
+  animation: fadeInOut 2s ease-in-out infinite;
 }
 
 /* .text-blockUI-2 {
@@ -314,7 +307,7 @@ background:#EFC31A!important;
 
 @-webkit-keyframes fadeInOut {
   0% {
-      opacity: 0;
+      opacity: 1;
       top: -.5em;
   }
   25% {
@@ -332,7 +325,7 @@ background:#EFC31A!important;
 }
 @keyframes fadeInOut {
   0% {
-      opacity: 0;
+      opacity: 1;
       top: -.5em;
   }
   25% {

@@ -155,7 +155,12 @@ export class Board extends Component {
           display: "flex",
           flexDirection: "column",
           height: "100vh",
-          backgroundColor: '#FCD71D'
+          backgroundColor: '#E3B772',
+          width: '100vw',
+          top: '0',
+          left: '0',
+          position: 'fixed',
+          overflow: 'hidden'
         }}
       >
         <WinnersPage style={{
@@ -176,12 +181,14 @@ export class Board extends Component {
           </div>
           <div
             style={{
-              backgroundImage: `url('/hardwoodbg.jpg')`,
+              backgroundImage: `url('/lightwood.jpg')`,
+              backgroundSize: 'cover',
+              backgroundPositionX: '85%',
               width: "50vw",
               height: "100%",
               margin: "0 auto",
               flexDirection: 'column',
-              border: "1px solid black",
+              border: "2px solid black",
               display: "flex",
               flexWrap: "wrap",
               borderRadius: '10px'
@@ -201,7 +208,6 @@ export class Board extends Component {
             >
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
               <button
-                className="btn"
                 id="dump-tiles"
                 refs="btn"
                 onClick={evt => this.dumpTiles(evt)}
@@ -211,8 +217,7 @@ export class Board extends Component {
               </button>
 
               <button
-                className="btn"
-                id="grab-tiles"
+                id="peel-tiles"
                 refs="btn"
                 onClick={evt => this.peel(evt)}
                 disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x)}
@@ -220,7 +225,6 @@ export class Board extends Component {
                 PEEL
               </button>
                 <button href={`/game/${this.props.createGame.currentGame}/winner`}
-                  className="btn"
                   id="submit-tiles"
                   refs="btn"
                   onClick={evt => this.handleSubmitGame(evt)}
