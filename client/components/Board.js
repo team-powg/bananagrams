@@ -82,7 +82,7 @@ export class Board extends Component {
         key={i + "-" + j}
         style={{
           width: "6.66%",
-          height: "6.66%",
+          height: "6.66%"
         }}
       >
         <Square position={{ x, y }} playersBoard={true} playerToListenTo={playerNumber} />
@@ -144,8 +144,8 @@ export class Board extends Component {
   render() {
     const player = 'Player ' + this.props.user.playerNumber
     const squares = [];
-    for (let i = 0; i < 15; i++) {
-      for (let j = 0; j < 15; j++) {
+    for (let i = 1; i <= 15; i++) {
+      for (let j = 1; j <= 15; j++) {
         squares.push(this.renderSquare(i, j));
       }
     }
@@ -203,7 +203,7 @@ export class Board extends Component {
               style={{
                 display: "flex",
                 flexDirection: "row",
-                margin: "0px 0px 0px 5px"
+                margin: "0px 3px 0px 5px"
               }}
             >
               {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
