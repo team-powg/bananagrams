@@ -54,7 +54,7 @@ export class OpponentsBoard extends Component {
       border: '2px solid black',
       backgroundImage: `url('/opp.jpg')`,
       backgroundSize: 'cover',
-      margin: '2% 18% 0%',
+      margin: '1% 18% 0%',
       borderRadius: '10px',
       textAlign: 'center'
     }}>

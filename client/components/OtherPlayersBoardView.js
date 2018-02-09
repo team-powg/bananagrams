@@ -12,6 +12,7 @@ class OtherPlayersBoardView extends Component {
         return key
       }
     })
+    console.log(numberOfPlayers)
     return (
       <div style={{
           height: '92%',
@@ -26,7 +27,6 @@ class OtherPlayersBoardView extends Component {
           numberOfPlayers && numberOfPlayers.map((player, i) => {
             return (
               <React.Fragment key={i}>
-                <div style={{textAlign: 'center'}}><b>{player[i]}</b></div>
                 <OpponentsBoard player={numberOfPlayers[i]} gameId={this.props.gameId} />
               </React.Fragment>
             )
@@ -44,3 +44,6 @@ const mapState = ({createGame, user}) => ({createGame, user})
 const mapDispatch = null
 
 export default connect(mapState, null)(OtherPlayersBoardView)
+
+
+// <div style={{textAlign: 'center'}}><b>{player[0]}</b></div>
