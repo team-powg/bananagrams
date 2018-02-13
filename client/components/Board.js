@@ -120,22 +120,30 @@ export class Board extends Component {
 
   async dumpTiles(evt) {
     evt.preventDefault();
+
     let player = 'Player ' + this.props.user.playerNumber
     let selectedTile = this.props.selectedTile;
     let playerPot = this.props.createGame.players[player].playerPot
     let index = playerPot.indexOf(selectedTile)
     playerPot.splice(index, 1)
     let globalPot = this.props.createGame.pot;
-    globalPot.push(selectedTile);
-    this.props.removeSelectedTile();
-    let count = 0;
-    while (count < 3) {
-      let randomLetter = await globalPot[0]
-      let pos = await globalPot.indexOf(randomLetter);
-      playerPot.push(randomLetter)
-      globalPot.splice(pos, 1);
-      count++;
+    let numberOfPlayers = Object.keys(this.props.createGame.players).length;
+    console.log("PLAYERS: ", numberOfPlayers)
+    if (globalPot.length > numberOfPlayers) {
+      globalPot.push(selectedTile);
+      this.props.removeSelectedTile();
+      let count = 0;
+      while (count < 3) {
+        let randomLetter = await globalPot[0]
+        let pos = await globalPot.indexOf(randomLetter);
+        playerPot.push(randomLetter)
+        globalPot.splice(pos, 1);
+        count++;
+      }
     }
+     else {
+       alert("There's not enough tiles left to dump. You must use what you have.")
+     }
     let gameId = this.props.createGame.currentGame;
     let swapTile = dumpTile(gameId, globalPot, player, playerPot);
     store.dispatch(swapTile);
@@ -165,8 +173,8 @@ export class Board extends Component {
       >
         <WinnersPage style={{
           display: 'none'
-          }
-          }/>
+        }
+        } />
         <GameHeader gameId={this.props.createGame.currentGame} />
         <div
           style={{
@@ -220,17 +228,17 @@ export class Board extends Component {
                 id="peel-tiles"
                 refs="btn"
                 onClick={evt => this.peel(evt)}
-                disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile =>  !tile.x)}
+                disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile => !tile.x)}
               >
                 PEEL
               </button>
-                <button href={`/game/${this.props.createGame.currentGame}/winner`}
-                  id="submit-tiles"
-                  refs="btn"
-                  onClick={evt => this.handleSubmitGame(evt)}
-                  disabled={this.props.createGame && this.props.createGame.players[player].playerPot && this.props.createGame.pot.length < 3 && this.props.createGame.players[player].playerPot.some(tile => !tile.x)}
-                >
-                  Submit Game
+              <button href={`/game/${this.props.createGame.currentGame}/winner`}
+                id="submit-tiles"
+                refs="btn"
+                onClick={evt => this.handleSubmitGame(evt)}
+                disabled={this.props.createGame && this.props.createGame.players[player].playerPot && this.props.createGame.pot.length < 3 && this.props.createGame.players[player].playerPot.some(tile => !tile.x)}
+              >
+                Submit Game
                 </button>
             </div>
           </div>
@@ -267,14 +275,14 @@ const mapStateToProps = ({
   playersPouch,
   user
 }) => ({
-  squareToSquareMove,
-  createGame,
-  selectedTile,
-  dumpTile,
-  playersPouch,
-  user,
-  updatePlayerPotThunk
-});
+    squareToSquareMove,
+    createGame,
+    selectedTile,
+    dumpTile,
+    playersPouch,
+    user,
+    updatePlayerPotThunk
+  });
 
 // Board = DragDropContext(HTML5Backend)(Board);
 // Board = connect(mapStateToProps, mapDispatchToProps)(Board);
