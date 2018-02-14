@@ -157,6 +157,6 @@ let gameLetter = [
   { id: 142, letter: 'Y', x: null, y: null, img: '/tiles/Y.png' },
   { id: 143, letter: 'Z', x: null, y: null, img: '/tiles/Z.png' },
   { id: 144, letter: 'Z', x: null, y: null, img: '/tiles/Z.png' }
-]
+ ]
 
 export default gameLetter;

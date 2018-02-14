@@ -3,8 +3,6 @@
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import Tile from "./Tile";
 // import { DragDropContext } from "react-dnd";
 // import HTML5Backend from "react-dnd-html5-backend";
 import { setTilePosition } from "../store/squareToSquareMove";
@@ -59,6 +57,7 @@ export class Board extends Component {
       }
     }
   }
+
 
   async handleSubmitGame(evt) {
     evt.preventDefault();
@@ -128,7 +127,6 @@ export class Board extends Component {
     playerPot.splice(index, 1)
     let globalPot = this.props.createGame.pot;
     let numberOfPlayers = Object.keys(this.props.createGame.players).length;
-    console.log("PLAYERS: ", numberOfPlayers)
     if (globalPot.length > numberOfPlayers) {
       globalPot.push(selectedTile);
       this.props.removeSelectedTile();
@@ -141,9 +139,6 @@ export class Board extends Component {
         count++;
       }
     }
-     else {
-       alert("There's not enough tiles left to dump. You must use what you have.")
-     }
     let gameId = this.props.createGame.currentGame;
     let swapTile = dumpTile(gameId, globalPot, player, playerPot);
     store.dispatch(swapTile);
@@ -151,6 +146,7 @@ export class Board extends Component {
 
   render() {
     const player = 'Player ' + this.props.user.playerNumber
+    //Creates board
     const squares = [];
     for (let i = 1; i <= 15; i++) {
       for (let j = 1; j <= 15; j++) {
@@ -214,7 +210,6 @@ export class Board extends Component {
                 margin: "0px 3px 0px 5px"
               }}
             >
-              {/* <button className="btn" id="grab-tiles" refs="btn" onClick={(evt) => this.grabTiles(evt)} disabled={this.state.disabled === true}>Grab Tiles</button> */}
               <button
                 id="dump-tiles"
                 refs="btn"
@@ -228,7 +223,7 @@ export class Board extends Component {
                 id="peel-tiles"
                 refs="btn"
                 onClick={evt => this.peel(evt)}
-                disabled={this.props.createGame && this.props.createGame.players && this.props.createGame.players[player] && this.props.createGame.players[player].playerPot && !!this.props.createGame.players[player].playerPot.some(tile => !tile.x)}
+                disabled={this.props.createGame.players[player].playerPot && this.props.createGame.pot.length > 3 && !this.props.createGame.players[player].playerPot.some(tile => !tile.x) ? false : true}
               >
                 PEEL
               </button>
@@ -236,7 +231,7 @@ export class Board extends Component {
                 id="submit-tiles"
                 refs="btn"
                 onClick={evt => this.handleSubmitGame(evt)}
-                disabled={this.props.createGame && this.props.createGame.players[player].playerPot && this.props.createGame.pot.length < 3 && this.props.createGame.players[player].playerPot.some(tile => !tile.x)}
+                disabled={this.props.createGame.pot.length < 3 && !this.props.createGame.players[player].playerPot.some(tile => !tile.x) ? false : true}
               >
                 Submit Game
                 </button>
