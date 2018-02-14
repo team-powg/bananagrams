@@ -7,8 +7,7 @@ class WaitingRoom extends Component {
     super(props)
     this.state = {
       numPlayersJoined: 1,
-      numPlayersExpecting: 1,
-      bool: false
+      numPlayersExpecting: 1
     }
     this.startGameHandler = this.startGameHandler.bind(this)
     this.disperseTiles = this.disperseTiles.bind(this);
@@ -44,7 +43,7 @@ class WaitingRoom extends Component {
       }
     }
     // When host starts game, all other players will be pushed to game view
-    if (nextProps.checkGameStartStatus === true) {
+    if (this.props.checkGameStartStatus === false && nextProps.checkGameStartStatus === true) {
       this.props.history.push(`/game/${nextProps.createGame.currentGame}`)
     }
   }
