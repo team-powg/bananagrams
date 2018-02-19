@@ -13,7 +13,7 @@ Redux - State management
 Node.js - JS runtime on the backend
 
 Team Members
-Yates Walker - Yates39
+Mike Walker - Yates39
 Tom Prete - TomPrete
 Amanda G - grimama
 Kevin O'Malley - omallek07
